@@ -1,0 +1,297 @@
+{
+  "info": {
+    "name": "Appointment Reminder Scheduler API",
+    "description": "Test endpoints for the appointment reminder email system and scheduler",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Scheduler Status",
+      "item": [
+        {
+          "name": "Get Scheduler Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "status"]
+            },
+            "description": "Check if the scheduler is running"
+          },
+          "response": [
+            {
+              "name": "Scheduler Running",
+              "originalRequest": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/status",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "status"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"status\": \"running\",\n  \"is_running\": true,\n  \"message\": \"Scheduler is operational\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Test Reminder Email",
+      "item": [
+        {
+          "name": "Test Send Reminder Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_email\": \"ramyayashva@gmail.com\",\n  \"patient_name\": \"Test Patient\",\n  \"doctor_name\": \"Dr. Sarah Johnson\",\n  \"appointment_date\": \"2025-10-28\",\n  \"appointment_time\": \"10:00:00\",\n  \"appointment_type\": \"Consultation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/test-reminder",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "test-reminder"]
+            },
+            "description": "Test sending a reminder email (does not create appointment, just tests email sending)"
+          },
+          "response": [
+            {
+              "name": "Email Sent Successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patient_email\": \"ramyayashva@gmail.com\",\n  \"patient_name\": \"Test Patient\",\n  \"doctor_name\": \"Dr. Sarah Johnson\",\n  \"appointment_date\": \"2025-10-28\",\n  \"appointment_time\": \"10:00:00\",\n  \"appointment_type\": \"Consultation\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/test-reminder",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "test-reminder"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Email sent successfully via smtp.gmail.com:465\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Manual Trigger",
+      "item": [
+        {
+          "name": "Trigger Appointment Check Now",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/trigger-check",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "trigger-check"]
+            },
+            "description": "Manually trigger the scheduler to check for upcoming appointments and send reminders immediately"
+          },
+          "response": [
+            {
+              "name": "Check Triggered Successfully",
+              "originalRequest": {
+                "method": "POST",
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/trigger-check",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "trigger-check"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Appointment check triggered successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Configuration",
+      "item": [
+        {
+          "name": "Get Scheduler Configuration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "config"]
+            },
+            "description": "Get current scheduler configuration"
+          },
+          "response": [
+            {
+              "name": "Configuration Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/config",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "config"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"config\": {\n    \"reminder_hours_before\": 24,\n    \"check_interval_minutes\": 60\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Scheduler Configuration",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reminder_hours_before\": 12,\n  \"check_interval_minutes\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/config",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "config"]
+            },
+            "description": "Update scheduler configuration (hours before reminder, check interval)"
+          },
+          "response": [
+            {
+              "name": "Configuration Updated",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reminder_hours_before\": 12,\n  \"check_interval_minutes\": 30\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/config",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "config"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Configuration updated successfully\",\n  \"config\": {\n    \"reminder_hours_before\": 12,\n    \"check_interval_minutes\": 30\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Email Example",
+      "item": [
+        {
+          "name": "Get Email Example",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/scheduler/email-example",
+              "host": ["{{baseUrl}}"],
+              "path": ["scheduler", "email-example"]
+            },
+            "description": "Get an example of the reminder email that will be sent to patients"
+          },
+          "response": [
+            {
+              "name": "Example Email",
+              "originalRequest": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/scheduler/email-example",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["scheduler", "email-example"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"example\": {\n    \"to\": \"patient@example.com\",\n    \"subject\": \"Appointment Reminder - Monday, October 28, 2024 at 10:00 AM\",\n    \"body\": \"Hello Test Patient,\\n\\nThis is a reminder for your upcoming appointment:\\n\\nDate: Monday, October 28, 2024\\nTime: 10:00 AM\\nType: Test Appointment\\nDoctor: Dr. Test Doctor\\n\\nPlease arrive 10 minutes early for check-in.\\n\\nIf you need to reschedule, please contact us.\\n\\nBest regards,\\nPatient Alert System Team\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,239 @@
+{
+  "info": {
+    "name": "🎤 Voice Interaction",
+    "description": "Voice transcription, AI responses, text-to-speech",
+    "_postman_id": "voice-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Voice Transcribe",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/voice/transcribe",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "transcribe"
+          ]
+        },
+        "description": "Transcribe audio (file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "audio",
+              "type": "file",
+              "src": []
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Voice Transcribe Base64",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/voice/transcribe-base64",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "transcribe-base64"
+          ]
+        },
+        "description": "Transcribe base64 (TranscribeBase64Schema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"audio\": \"base64_encoded_audio_data_here\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Voice AI Response",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/voice/ai-response",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "ai-response"
+          ]
+        },
+        "description": "Get AI response (AIResponseSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"What should I eat during pregnancy?\",\n  \"conversation_history\": [{\"role\": \"user\", \"content\": \"Hello\"}, {\"role\": \"assistant\", \"content\": \"Hi, how can I help?\"}]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Voice Text To Speech",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/voice/text-to-speech",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "text-to-speech"
+          ]
+        },
+        "description": "Convert text to speech (TextToSpeechSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Make sure to take your prenatal vitamins daily.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Voice Process",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/voice/process",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "process"
+          ]
+        },
+        "description": "Complete voice processing (ProcessVoiceSchema - file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "audio",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "enable_tts",
+              "value": "true",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Voice Service Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/voice/service-info",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "service-info"
+          ]
+        },
+        "description": "Get service info"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Voice Service Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/voice/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "voice",
+            "health"
+          ]
+        },
+        "description": "Get service health"
+      },
+      "response": []
+    }
+  ]
+}

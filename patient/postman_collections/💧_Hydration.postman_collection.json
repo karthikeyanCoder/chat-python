@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "💧 Hydration",
+    "description": "Water intake tracking, goals, reminders, analytics",
+    "_postman_id": "hydration-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Save Hydration Intake",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/intake",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "intake"]
+        },
+        "description": "Save hydration intake record (SaveHydrationIntakeSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_id\": \"PAT_12345\",\n  \"hydration_type\": \"Water\",\n  \"amount_ml\": 250.0,\n  \"temperature\": \"Cold\",\n  \"notes\": \"After morning workout\",\n  \"additives\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Hydration History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/history?days=7",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "history"],
+          "query": [
+            {"key": "days", "value": "7", "description": "Number of days (default: 7)"}
+          ]
+        },
+        "description": "Get hydration intake history"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Daily Hydration Stats",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/stats?date=",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "stats"],
+          "query": [
+            {"key": "date", "value": "", "description": "Optional: Specific date"}
+          ]
+        },
+        "description": "Get daily hydration statistics"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Set Hydration Goal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/goal",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "goal"]
+        },
+        "description": "Set or update hydration goal (SetHydrationGoalSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"daily_goal_ml\": 2500.0,\n  \"reminder_enabled\": true,\n  \"reminder_times\": [\"08:00\", \"12:00\", \"16:00\", \"20:00\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Hydration Goal",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/goal",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "goal"]
+        },
+        "description": "Get current hydration goal"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Create Hydration Reminder",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/reminder",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "reminder"]
+        },
+        "description": "Create hydration reminder (CreateHydrationReminderSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reminder_time\": \"10:00\",\n  \"message\": \"Time to drink water! Stay hydrated for you and your baby.\",\n  \"days_of_week\": [1, 2, 3, 4, 5, 6, 7]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Hydration Reminders",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/reminders",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "reminders"]
+        },
+        "description": "Get all hydration reminders"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get Hydration Analysis",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/analysis?days=7",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "analysis"],
+          "query": [
+            {"key": "days", "value": "7", "description": "Number of days (default: 7)"}
+          ]
+        },
+        "description": "Get hydration analysis and insights"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Get Weekly Hydration Report",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/report",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "report"]
+        },
+        "description": "Get weekly hydration report"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get Hydration Tips",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/hydration/tips",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hydration", "tips"]
+        },
+        "description": "Get personalized hydration tips"
+      },
+      "response": []
+    }
+  ]
+}

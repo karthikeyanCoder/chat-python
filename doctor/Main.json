@@ -1,0 +1,339 @@
+{
+  "info": {
+    "name": "Nurse Management API",
+    "description": "Complete API collection for Nurse Management System with role-based access control",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"doctor@hospital.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login to get JWT token. Use doctor credentials for nurse management."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Nurse Management - Doctor Only",
+      "item": [
+        {
+          "name": "Create Nurse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sarah Wilson\",\n  \"email\": \"sarah.wilson@hospital.com\",\n  \"phone\": \"+1234567890\",\n  \"department\": \"Emergency\",\n  \"shift\": \"Night\",\n  \"specialization\": \"Emergency Care\",\n  \"experience_years\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nurses",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses"]
+            },
+            "description": "Create a new nurse account. Only doctors can access this endpoint."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Nurses (by Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nurses",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses"]
+            },
+            "description": "Get list of all nurses assigned to the current doctor"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Nurse Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"new_password\": \"newSecurePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nurses/:nurseId/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses", ":nurseId", "reset-password"],
+              "variable": [
+                {
+                  "key": "nurseId",
+                  "value": "N000001",
+                  "description": "Nurse ID (format: N000001) or MongoDB ObjectId"
+                }
+              ]
+            },
+            "description": "Reset nurse password. Generates temporary password if no new_password provided."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Nurse by Email",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sarah.wilson@hospital.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nurses",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses"]
+            },
+            "description": "Delete nurse by email address. Only works for nurses assigned to the current doctor."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Create User (Role-based)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@hospital.com\",\n  \"password\": \"securePassword123\",\n  \"role\": \"nurse\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Create user with role-based access control. Admin can create any role, doctors can create nurses/patients."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users (Filtered by Role)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users?search=john",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "john",
+                  "description": "Optional search query"
+                }
+              ]
+            },
+            "description": "Get users list with role-based filtering. Admins see all, doctors see nurses/patients, nurses see patients only."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Smith\",\n  \"email\": \"john.smith@hospital.com\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "507f1f77bcf86cd799439011",
+                  "description": "User MongoDB ObjectId"
+                }
+              ]
+            },
+            "description": "Update user profile with role-based access control."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "507f1f77bcf86cd799439011",
+                  "description": "User MongoDB ObjectId"
+                }
+              ]
+            },
+            "description": "Delete user with role-based access control. Cannot delete own account."
+          },
+          "response": []
+        },
+        {
+          "name": "Reset User Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"new_password\": \"newSecurePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId", "reset-password"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "507f1f77bcf86cd799439011",
+                  "description": "User MongoDB ObjectId"
+                }
+              ]
+            },
+            "description": "Reset user password with role-based permissions."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId", "profile"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "507f1f77bcf86cd799439011",
+                  "description": "User MongoDB ObjectId"
+                }
+              ]
+            },
+            "description": "Get user profile with role-based access control."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

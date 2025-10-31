@@ -1,0 +1,44 @@
+{
+	"id": "trimester-module-environment",
+	"name": "Trimester Module Environment",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5002",
+			"description": "Base URL for the Patient App with Trimester Module",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "patient_id",
+			"value": "PAT123",
+			"description": "Mock patient ID for testing",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "week",
+			"value": "15",
+			"description": "Default pregnancy week for testing",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "trimester",
+			"value": "2",
+			"description": "Default trimester for testing",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"description": "JWT token for authenticated requests (if needed)",
+			"type": "secret",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}
+
+

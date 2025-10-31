@@ -1,0 +1,255 @@
+{
+  "info": {
+    "name": "🩺 Symptoms",
+    "description": "Symptom tracking, AI-powered analysis, knowledge base",
+    "_postman_id": "symptoms-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Symptoms Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/symptoms/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "health"
+          ]
+        },
+        "description": "Health check"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Symptom Assistance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/symptoms/assist",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "assist"
+          ]
+        },
+        "description": "Get AI assistance (SymptomAssistSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"symptoms\": \"Nausea, dizziness, and fatigue\",\n  \"pregnancy_week\": 16,\n  \"additional_context\": \"Symptoms worse in the morning\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Save Symptom Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/symptoms/save-symptom-log",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "save-symptom-log"
+          ]
+        },
+        "description": "Save symptom log (SaveSymptomLogSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"symptom_description\": \"Nausea and headache\",\n  \"severity\": \"moderate\",\n  \"timestamp\": \"2025-10-16T08:00:00Z\",\n  \"notes\": \"Morning sickness\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Save Symptom Analysis Report",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/symptoms/save-analysis-report",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "save-analysis-report"
+          ]
+        },
+        "description": "Save analysis report (SaveAnalysisReportSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"analysis\": {\"severity\": \"moderate\", \"recommendations\": \"Rest and hydration\", \"urgency\": \"normal\"},\n  \"symptom_description\": \"Morning sickness\",\n  \"timestamp\": \"2025-10-16T08:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Symptom History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/symptoms/get-symptom-history/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "get-symptom-history",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get symptom history"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Analysis Reports",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/symptoms/get-analysis-reports/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "get-analysis-reports",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get analysis reports"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Add Symptom Knowledge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/symptoms/knowledge/add",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "knowledge",
+            "add"
+          ]
+        },
+        "description": "Add knowledge (AddKnowledgeSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Morning sickness is common in first trimester and usually subsides by week 14\",\n  \"source\": \"Medical guidelines\",\n  \"trimester\": \"first\",\n  \"tags\": [\"nausea\", \"morning_sickness\", \"first_trimester\"],\n  \"triage\": \"normal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Add Symptom Knowledge Bulk",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/symptoms/knowledge/bulk",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "knowledge",
+            "bulk"
+          ]
+        },
+        "description": "Add multiple knowledge entries",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"knowledge_items\": [\n    {\"text\": \"Fatigue is common during first trimester\", \"source\": \"Medical guide\", \"trimester\": \"first\", \"tags\": [\"fatigue\"], \"triage\": \"normal\"}\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Ingest Symptom Knowledge",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/symptoms/ingest",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "symptoms",
+            "ingest"
+          ]
+        },
+        "description": "Ingest symptom knowledge from external source"
+      },
+      "response": []
+    }
+  ]
+}

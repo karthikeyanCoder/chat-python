@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "🔬 Medical Lab",
+    "description": "Lab results, OCR processing, medical document management",
+    "_postman_id": "medical_lab-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Medical Lab Upload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/medical-lab/upload",
+          "host": ["{{base_url}}"],
+          "path": ["api", "medical-lab", "upload"]
+        },
+        "description": "Upload and process medical documents (UploadMedicalLabSchema - file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Medical lab document (PDF/image/text)"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Medical Lab Base64",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/medical-lab/base64",
+          "host": ["{{base_url}}"],
+          "path": ["api", "medical-lab", "base64"]
+        },
+        "description": "Process base64 encoded image (ProcessBase64ImageSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"image\": \"base64_encoded_image_data_here\",\n  \"filename\": \"lab_results.pdf\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Medical Lab Formats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/medical-lab/formats",
+          "host": ["{{base_url}}"],
+          "path": ["api", "medical-lab", "formats"]
+        },
+        "description": "Get supported file formats"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Medical Lab Languages",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/medical-lab/languages",
+          "host": ["{{base_url}}"],
+          "path": ["api", "medical-lab", "languages"]
+        },
+        "description": "Get supported OCR languages"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Medical Lab Service Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/medical-lab/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "medical-lab", "health"]
+        },
+        "description": "Check medical lab service health"
+      },
+      "response": []
+    }
+  ]
+}

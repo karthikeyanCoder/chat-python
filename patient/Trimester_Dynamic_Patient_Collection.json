@@ -1,0 +1,369 @@
+{
+	"info": {
+		"_postman_id": "trimester-dynamic-patient",
+		"name": "🔐 Trimester Module - Dynamic Patient Endpoints",
+		"description": "Dynamic endpoints that automatically use the logged-in patient's pregnancy week.\n\n✅ Requires JWT Authentication\n✅ Automatically fetches patient's current pregnancy week\n✅ Uses patient's medical history for personalization\n\nPrerequisites:\n1. Login first to get JWT token\n2. Set jwt_token in environment\n3. Use these 'my-*' endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1️⃣ Authentication (Login First)",
+			"item": [
+				{
+					"name": "Login Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Save JWT token to environment",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.environment.set(\"jwt_token\", jsonData.token);",
+									"        pm.environment.set(\"patient_id\", jsonData.patient_id || jsonData.patientId);",
+									"        console.log(\"✅ JWT token saved to environment\");",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{patient_email}}\",\n    \"password\": \"{{patient_password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						},
+						"description": "Login to get JWT token. Token is auto-saved to environment."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2️⃣ Dynamic Endpoints (Auto Week)",
+			"item": [
+				{
+					"name": "Get My Current Week",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-week",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-week"]
+						},
+						"description": "Get your current pregnancy week from database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Week Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-data?use_openai=true&include_fruit_image=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-data"],
+							"query": [
+								{
+									"key": "use_openai",
+									"value": "true",
+									"description": "Use OpenAI for enhanced info"
+								},
+								{
+									"key": "include_fruit_image",
+									"value": "true",
+									"description": "Include real fruit image"
+								}
+							]
+						},
+						"description": "Get pregnancy data for YOUR current week (automatic)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Baby Image (Stream)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-baby-image?format=stream",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "stream",
+									"description": "stream or base64"
+								}
+							]
+						},
+						"description": "Get baby size image for YOUR current week (automatic)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Enhanced Data (RAG + AI)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-enhanced?use_mock_data=false&include_rag_analysis=true&image_method=all",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-enhanced"],
+							"query": [
+								{
+									"key": "use_mock_data",
+									"value": "false",
+									"description": "Use real patient data"
+								},
+								{
+									"key": "include_rag_analysis",
+									"value": "true",
+									"description": "Include RAG personalization"
+								},
+								{
+									"key": "image_method",
+									"value": "all",
+									"description": "all, rag, openai, traditional"
+								}
+							]
+						},
+						"description": "Get comprehensive enhanced data for YOUR current week"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My RAG Personalized",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-rag?use_ai=true&use_mock_data=false",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-rag"],
+							"query": [
+								{
+									"key": "use_ai",
+									"value": "true",
+									"description": "Use AI personalization"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "false",
+									"description": "Use real patient medical history"
+								}
+							]
+						},
+						"description": "Get RAG personalized info for YOUR current week based on YOUR medical history"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Symptoms",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-symptoms",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-symptoms"]
+						},
+						"description": "Get AI symptoms for YOUR current week"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Nutrition Tips",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-nutrition",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-nutrition"]
+						},
+						"description": "Get AI nutrition tips for YOUR current week"
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Wellness Tips",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/my-wellness",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "my-wellness"]
+						},
+						"description": "Get AI wellness tips for YOUR current week"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3️⃣ Static Endpoints (No Auth)",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/health",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specific Week (Week 20)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/20?use_openai=false&include_fruit_image=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "20"],
+							"query": [
+								{
+									"key": "use_openai",
+									"value": "false"
+								},
+								{
+									"key": "include_fruit_image",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get data for a specific week (no auth needed)"
+					},
+					"response": []
+				},
+				{
+					"name": "Semantic Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/search?query=nutrition+tips&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "nutrition+tips"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Semantic search (no auth needed)"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5002",
+			"type": "string"
+		},
+		{
+			"key": "patient_email",
+			"value": "test@example.com",
+			"type": "string",
+			"description": "Patient email for login"
+		},
+		{
+			"key": "patient_password",
+			"value": "password123",
+			"type": "string",
+			"description": "Patient password for login"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string",
+			"description": "JWT token (auto-filled after login)"
+		},
+		{
+			"key": "patient_id",
+			"value": "",
+			"type": "string",
+			"description": "Patient ID (auto-filled after login)"
+		}
+	]
+}
+
+

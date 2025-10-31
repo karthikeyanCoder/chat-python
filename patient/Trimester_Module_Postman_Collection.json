@@ -1,0 +1,486 @@
+{
+	"info": {
+		"_postman_id": "trimester-module-collection",
+		"name": "Trimester Module API Collection",
+		"description": "Complete collection for the new Trimester Module integrated into the Patient App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Root Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pregnancy Week",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/10?use_openai=true&include_fruit_image=true",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"10"
+					],
+					"query": [
+						{
+							"key": "use_openai",
+							"value": "true"
+						},
+						{
+							"key": "include_fruit_image",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Enhanced Week Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/15/enhanced?patient_id=PAT123&use_mock_data=true&include_rag_analysis=true&image_method=all",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"15",
+						"enhanced"
+					],
+					"query": [
+						{
+							"key": "patient_id",
+							"value": "PAT123"
+						},
+						{
+							"key": "use_mock_data",
+							"value": "true"
+						},
+						{
+							"key": "include_rag_analysis",
+							"value": "true"
+						},
+						{
+							"key": "image_method",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Pregnancy Weeks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/weeks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"weeks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Week Developments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/20/developments",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"20",
+						"developments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Trimester Weeks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/trimester/2?include_fruit_images=true",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"trimester",
+						"2"
+					],
+					"query": [
+						{
+							"key": "include_fruit_images",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Baby Size (OpenAI)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/25/baby-size",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"25",
+						"baby-size"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get OpenAI Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/openai/status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"openai",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Baby Size Image (Stream)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/30/baby-image?format=stream",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"30",
+						"baby-image"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "stream"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Baby Size Image (Base64)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/30/baby-image?format=base64",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"30",
+						"baby-image"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "base64"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Symptoms Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/12/symptoms",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"12",
+						"symptoms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Screening Information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/16/screening",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"16",
+						"screening"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Wellness Tips",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/22/wellness",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"22",
+						"wellness"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Nutrition Tips",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/week/28/nutrition",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"week",
+						"28",
+						"nutrition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Semantic Search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/search?query=pregnancy nutrition tips&limit=5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "pregnancy nutrition tips"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get RAG Personalized Developments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/patient/18/rag?patient_id=PAT123&use_ai=true&use_mock_data=true",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"patient",
+						"18",
+						"rag"
+					],
+					"query": [
+						{
+							"key": "patient_id",
+							"value": "PAT123"
+						},
+						{
+							"key": "use_ai",
+							"value": "true"
+						},
+						{
+							"key": "use_mock_data",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Trimester Fruit Recommendations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/trimester/trimester/3/fruit-recommendations?patient_id=PAT123&use_mock_data=true",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"trimester",
+						"trimester",
+						"3",
+						"fruit-recommendations"
+					],
+					"query": [
+						{
+							"key": "patient_id",
+							"value": "PAT123"
+						},
+						{
+							"key": "use_mock_data",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5002",
+			"type": "string"
+		}
+	]
+}
+
+

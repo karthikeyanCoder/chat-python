@@ -1,0 +1,137 @@
+[
+  {
+    "type": "pregnancy",
+    "trimester": "first",
+    "category": "general_care",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "1e0657c3fb4053f5",
+    "added_at": "2025-10-22T12:12:41.202649"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "first",
+    "category": "symptoms",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "38c7d6a8b2748ef5",
+    "added_at": "2025-10-22T12:12:41.637941"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "first",
+    "category": "nutrition",
+    "source": "ACOG Guidelines",
+    "priority": "critical",
+    "chunk_id": "99c5aa14dd63678f",
+    "added_at": "2025-10-22T12:12:42.308462"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "second",
+    "category": "general_care",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "e68ed3d57c969ac8",
+    "added_at": "2025-10-22T12:12:42.393120"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "second",
+    "category": "monitoring",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "45988f064fcda4d9",
+    "added_at": "2025-10-22T12:12:42.568635"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "third",
+    "category": "general_care",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "d2034e7d7ea8cb7e",
+    "added_at": "2025-10-22T12:12:42.690169"
+  },
+  {
+    "type": "pregnancy",
+    "trimester": "third",
+    "category": "symptoms",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "bee94b89cf16c82f",
+    "added_at": "2025-10-22T12:12:42.786133"
+  },
+  {
+    "type": "medications",
+    "category": "safety",
+    "source": "FDA Guidelines",
+    "priority": "critical",
+    "chunk_id": "923d7d24c751d35a",
+    "added_at": "2025-10-22T12:12:43.029321"
+  },
+  {
+    "type": "medications",
+    "category": "safety",
+    "source": "FDA Guidelines",
+    "priority": "high",
+    "chunk_id": "49d549c9c2aaa247",
+    "added_at": "2025-10-22T12:12:43.269084"
+  },
+  {
+    "type": "nutrition",
+    "category": "general",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "22ac14afb626c225",
+    "added_at": "2025-10-22T12:12:43.335819"
+  },
+  {
+    "type": "nutrition",
+    "category": "safety",
+    "source": "CDC Guidelines",
+    "priority": "critical",
+    "chunk_id": "b064bb47204c9371",
+    "added_at": "2025-10-22T12:12:43.422114"
+  },
+  {
+    "type": "emergency",
+    "category": "warning_signs",
+    "source": "ACOG Guidelines",
+    "priority": "critical",
+    "chunk_id": "643090febaea43e4",
+    "added_at": "2025-10-22T12:12:43.543073"
+  },
+  {
+    "type": "emergency",
+    "category": "preterm_labor",
+    "source": "ACOG Guidelines",
+    "priority": "critical",
+    "chunk_id": "17a1c23e5d37b73c",
+    "added_at": "2025-10-22T12:12:43.609581"
+  },
+  {
+    "type": "mental_health",
+    "category": "general",
+    "source": "ACOG Guidelines",
+    "priority": "high",
+    "chunk_id": "eb171b4985b90007",
+    "added_at": "2025-10-22T12:12:43.675732"
+  },
+  {
+    "type": "exercise",
+    "category": "general",
+    "source": "ACOG Guidelines",
+    "priority": "medium",
+    "chunk_id": "88f95b8d4fb8d60a",
+    "added_at": "2025-10-22T12:12:43.788125"
+  },
+  {
+    "type": "sleep",
+    "category": "general",
+    "source": "ACOG Guidelines",
+    "priority": "medium",
+    "chunk_id": "c090c9538a503657",
+    "added_at": "2025-10-22T12:12:43.938179"
+  }
+]

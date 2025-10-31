@@ -1,0 +1,44 @@
+==========================================
+EXACT POSTMAN REQUEST TO USE
+==========================================
+
+METHOD: POST
+URL: http://localhost:5002/payments/verify-payment
+HEADERS:
+  Content-Type: application/json
+
+BODY (raw JSON):
+{
+  "paymentId": "payment_12345",
+  "razorpay_order_id": "order_RYugoQGfXQxzu5",
+  "razorpay_payment_id": "pay_TEST123",
+  "razorpay_signature": "test_signature_12345"
+}
+
+==========================================
+KEY POINTS:
+==========================================
+
+1. Use the EXACT order_id from your create-order response
+   Example: order_RYugoQGfXQxzu5 (from line 609 in your terminal)
+
+2. Use the EXACT paymentId from your create-order response
+   (Check the response from create-order)
+
+3. Leave razorpay_signature as ANY value (works in test mode)
+
+4. Check server console for debug output showing what it received
+
+5. Make sure ALLOW_TEST_MODE=true is in your .env file
+
+==========================================
+TO CHECK .env:
+==========================================
+
+cd patient
+Get-Content .env | Select-String "ALLOW_TEST_MODE"
+
+Should show: ALLOW_TEST_MODE=true
+
+==========================================
+

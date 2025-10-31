@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "🔧 Profile Utils",
+    "description": "Profile utilities and helper functions",
+    "_postman_id": "profile_utils-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Patient Profile By Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/get-patient-profile-by-email/{{email}}",
+          "host": ["{{base_url}}"],
+          "path": ["get-patient-profile-by-email", "{{email}}"]
+        },
+        "description": "Get patient profile by email"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Patient Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/get-patient-profile/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["get-patient-profile", "{{patient_id}}"]
+        },
+        "description": "Get patient profile by patient ID"
+      },
+      "response": []
+    }
+  ]
+}

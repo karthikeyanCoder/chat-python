@@ -1,0 +1,68 @@
+{
+  "id": "doctor-availability-env-20250129",
+  "name": "Doctor Availability Environment",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "doctor_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "test_date",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "availability_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "slot_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "appointment_id",
+      "value": "",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "doctor_email",
+      "value": "doctor@example.com",
+      "type": "default",
+      "enabled": true
+    },
+    {
+      "key": "doctor_password",
+      "value": "password123",
+      "type": "secret",
+      "enabled": true
+    },
+    {
+      "key": "appointment_type",
+      "value": "Consultation",
+      "type": "default",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment"
+}
+

@@ -1,0 +1,740 @@
+{
+  "info": {
+    "_postman_id": "3dbf1583-9f5b-4c4d-9b79-fdb4fa21f192",
+    "name": "Patient Chat API Collection",
+    "description": "Complete API collection for Patient-Doctor Chat functionality including real-time messaging, file uploads, and chat room management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33164476"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login as Patient",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.data.token);",
+                  "        pm.collectionVariables.set('patient_id', response.data.user.patient_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"patient@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login to get authentication token for patient chat operations"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chat Management",
+      "item": [
+        {
+          "name": "Get Chat Rooms",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.rooms && response.data.rooms.length > 0) {",
+                  "        pm.collectionVariables.set('room_id', response.data.rooms[0].room_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/rooms?patient_id={{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "rooms"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "{{patient_id}}",
+                  "description": "Patient ID to get chat rooms for"
+                }
+              ]
+            },
+            "description": "Get all chat rooms for a specific patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Start New Chat",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.room) {",
+                  "        pm.collectionVariables.set('room_id', response.data.room.room_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"doctor_id\": \"{{doctor_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/start",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "start"]
+            },
+            "description": "Start a new chat conversation with a doctor"
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.message) {",
+                  "        pm.collectionVariables.set('message_id', response.data.message.message_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"message_content\": \"Hello doctor, I have a question about my medication.\",\n  \"message_type\": \"text\",\n  \"is_urgent\": false,\n  \"priority\": \"normal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/send",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "send"]
+            },
+            "description": "Send a message to a doctor"
+          },
+          "response": []
+        },
+        {
+          "name": "Send Urgent Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"message_content\": \"URGENT: I need immediate medical attention!\",\n  \"message_type\": \"text\",\n  \"is_urgent\": true,\n  \"priority\": \"urgent\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/send",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "send"]
+            },
+            "description": "Send an urgent message to a doctor"
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message with Attachment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"message_content\": \"Please review this medical report.\",\n  \"message_type\": \"file\",\n  \"is_urgent\": false,\n  \"priority\": \"normal\",\n  \"attachment\": {\n    \"file_name\": \"medical_report.pdf\",\n    \"file_type\": \"document\",\n    \"file_url\": \"https://example.s3.amazonaws.com/medical_report.pdf\",\n    \"file_size\": 2048576\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/send",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "send"]
+            },
+            "description": "Send a message with file attachment"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/messages?patient_id={{patient_id}}&room_id={{room_id}}&page=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "messages"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "{{patient_id}}"
+                },
+                {
+                  "key": "room_id",
+                  "value": "{{room_id}}"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get messages from a specific chat room with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Messages as Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"room_id\": \"{{room_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/mark-read",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "mark-read"]
+            },
+            "description": "Mark all messages in a room as read"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Specific Message as Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"room_id\": \"{{room_id}}\",\n  \"message_id\": \"{{message_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/mark-read",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "mark-read"]
+            },
+            "description": "Mark a specific message as read"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/unread-count?patient_id={{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "unread-count"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "{{patient_id}}"
+                }
+              ]
+            },
+            "description": "Get total unread message count for a patient"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Messages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"search_query\": \"medication\",\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/search",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "search"]
+            },
+            "description": "Search messages containing specific text"
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Message",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"message_id\": \"{{message_id}}\",\n  \"new_content\": \"Updated message content\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/edit",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "edit"]
+            },
+            "description": "Edit a previously sent message"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Message",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"message_id\": \"{{message_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/delete",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "delete"]
+            },
+            "description": "Delete a message (soft delete)"
+          },
+          "response": []
+        },
+        {
+          "name": "Chat Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/health",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "health"]
+            },
+            "description": "Check if chat module is healthy and operational"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "File Upload",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "description": "Select an image file to upload (jpg, jpeg, png, gif, webp)",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "file_type",
+                  "value": "image",
+                  "description": "File type must be 'image'"
+                },
+                {
+                  "key": "user_id",
+                  "value": "{{patient_id}}",
+                  "description": "Patient ID for authorization"
+                },
+                {
+                  "key": "chat_room_id",
+                  "value": "{{room_id}}",
+                  "description": "Chat room ID where the image will be attached"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/upload",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "upload"]
+            },
+            "description": "Upload an image file for chat (jpg, jpeg, png, gif, webp). Maximum size depends on configuration."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "description": "Select a document file to upload (pdf, doc, docx, txt)",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "file_type",
+                  "value": "document",
+                  "description": "File type must be 'document'"
+                },
+                {
+                  "key": "user_id",
+                  "value": "{{patient_id}}",
+                  "description": "Patient ID for authorization"
+                },
+                {
+                  "key": "chat_room_id",
+                  "value": "{{room_id}}",
+                  "description": "Chat room ID where the document will be attached"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/upload",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "upload"]
+            },
+            "description": "Upload a document file for chat (pdf, doc, docx, txt). Maximum size depends on configuration."
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Voice",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "description": "Select a voice/audio file to upload (mp3, wav, ogg, webm, m4a)",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "file_type",
+                  "value": "voice",
+                  "description": "File type must be 'voice'"
+                },
+                {
+                  "key": "user_id",
+                  "value": "{{patient_id}}",
+                  "description": "Patient ID for authorization"
+                },
+                {
+                  "key": "chat_room_id",
+                  "value": "{{room_id}}",
+                  "description": "Chat room ID where the voice file will be attached"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/upload",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "upload"]
+            },
+            "description": "Upload a voice/audio file for chat (mp3, wav, ogg, webm, m4a). Maximum size depends on configuration."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete File",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_key\": \"example-s3-key-here\",\n  \"user_id\": \"{{patient_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/files/delete",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "files", "delete"]
+            },
+            "description": "Delete an uploaded file by its S3 key. Requires user_id for authorization."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upload Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/info",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "info"]
+            },
+            "description": "Retrieve file upload configuration, limits, and allowed formats."
+          },
+          "response": []
+        },
+        {
+          "name": "File Upload Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/health",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "health"]
+            },
+            "description": "Check the health status of the file upload service."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "item": [
+        {
+          "name": "Invalid Patient ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/rooms?patient_id=INVALID_PATIENT",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "rooms"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "INVALID_PATIENT"
+                }
+              ]
+            },
+            "description": "Test error handling for invalid patient ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Missing Authentication",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "description": "Remove or make invalid"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/chat/rooms?patient_id={{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "rooms"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "{{patient_id}}"
+                }
+              ]
+            },
+            "description": "Test error handling for missing authentication"
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Message Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"message_content\": \"\",\n  \"message_type\": \"invalid_type\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/send",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "send"]
+            },
+            "description": "Test validation errors for invalid message data"
+          },
+          "response": []
+        },
+        {
+          "name": "File Too Large",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "description": "Select a file larger than allowed size",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "file_type",
+                  "value": "document"
+                },
+                {
+                  "key": "user_id",
+                  "value": "{{patient_id}}"
+                },
+                {
+                  "key": "chat_room_id",
+                  "value": "{{room_id}}"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/chat/upload",
+              "host": ["{{base_url}}"],
+              "path": ["chat", "upload"]
+            },
+            "description": "Test file upload with file exceeding size limits"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "// Add timestamp to prevent caching",
+          "pm.globals.set('timestamp', new Date().getTime());"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5002",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patient_id",
+      "value": "PAT175820015455746A",
+      "type": "string"
+    },
+    {
+      "key": "doctor_id",
+      "value": "D17587977877042848",
+      "type": "string"
+    },
+    {
+      "key": "room_id",
+      "value": "ROOM3DAB44151C9E4983",
+      "type": "string"
+    },
+    {
+      "key": "message_id",
+      "value": "MSG9462844EA108467B",
+      "type": "string"
+    }
+  ]
+}

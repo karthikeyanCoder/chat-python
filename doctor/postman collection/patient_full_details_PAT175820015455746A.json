@@ -1,0 +1,470 @@
+{
+  "health_data": {
+    "appointments": [
+      {
+        "appointment_date": "2025-09-30",
+        "appointment_id": "68d57db552eb7b568d9a0849",
+        "appointment_status": "scheduled",
+        "appointment_time": "15:00",
+        "appointment_type": "General",
+        "created_at": "2025-09-25T23:06:53.178262",
+        "doctor_id": "",
+        "notes": "",
+        "status": "active",
+        "updated_at": "2025-09-25T23:06:53.178280"
+      }
+    ],
+    "food_data": [
+      {
+        "analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 45,
+            "estimated_calories": 250,
+            "fat_grams": 3,
+            "fiber_grams": 6,
+            "protein_grams": 8
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "Helps in digestion",
+              "Provides energy",
+              "Aids in blood production",
+              "Boosts immunity"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Fiber",
+              "Vitamin C",
+              "Folate"
+            ],
+            "week_specific_advice": "At week 4, focus on consuming nutrient-dense foods like sambar rice to support early embryonic development."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook the lentils thoroughly to increase digestibility",
+              "Use a variety of vegetables to enhance nutrient content"
+            ],
+            "food_safety_tips": [
+              "Ensure the food is freshly prepared and served hot",
+              "Avoid consuming leftover sambar rice as it may lead to food poisoning"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Drink at least 8-10 glasses of water a day to stay hydrated. Include fresh fruit juices and soups to increase fluid intake.",
+            "next_meal_suggestions": [
+              "A fruit salad for dessert can help in digestion",
+              "A glass of low-fat milk before bed can provide additional calcium"
+            ]
+          }
+        },
+        "created_at": "Thu, 18 Sep 2025 13:09:06 GMT",
+        "food_input": "I eat sambar rice",
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T13:09:06.296498",
+        "type": "gpt4_analysis"
+      },
+      {
+        "analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 36,
+            "estimated_calories": 210,
+            "fat_grams": 3,
+            "fiber_grams": 4,
+            "protein_grams": 6
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "Helps in digestion",
+              "Provides energy",
+              "Boosts immunity",
+              "Supports blood health"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Fiber",
+              "Vitamin C",
+              "Vitamin A",
+              "Folate"
+            ],
+            "week_specific_advice": "At week 4, it's important to consume foods rich in folate, like sambar rice, to support neural tube development."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook the lentils thoroughly to reduce the risk of bacterial contamination",
+              "Use fresh vegetables and wash them properly before cooking"
+            ],
+            "food_safety_tips": [
+              "Ensure the sambar rice is freshly prepared and hot",
+              "Avoid if it has been sitting out for a long time to prevent foodborne illness"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Stay hydrated by drinking at least 8-10 glasses of water a day, and more if you are active or live in a hot climate.",
+            "next_meal_suggestions": [
+              "A fruit salad for a light snack",
+              "A protein-rich meal like grilled chicken with vegetables for dinner"
+            ]
+          }
+        },
+        "created_at": "Thu, 18 Sep 2025 13:09:12 GMT",
+        "food_input": "I eat sambar rice",
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T13:09:12.617151",
+        "type": "gpt4_analysis"
+      },
+      {
+        "created_at": "Thu, 18 Sep 2025 13:09:17 GMT",
+        "food_details": "I eat sambar rice",
+        "food_input": "I eat sambar rice",
+        "gpt4_analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 36,
+            "estimated_calories": 210,
+            "fat_grams": 3,
+            "fiber_grams": 4,
+            "protein_grams": 6
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "Helps in digestion",
+              "Provides energy",
+              "Boosts immunity",
+              "Supports blood health"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Fiber",
+              "Vitamin C",
+              "Vitamin A",
+              "Folate"
+            ],
+            "week_specific_advice": "At week 4, it's important to consume foods rich in folate, like sambar rice, to support neural tube development."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook the lentils thoroughly to reduce the risk of bacterial contamination",
+              "Use fresh vegetables and wash them properly before cooking"
+            ],
+            "food_safety_tips": [
+              "Ensure the sambar rice is freshly prepared and hot",
+              "Avoid if it has been sitting out for a long time to prevent foodborne illness"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Stay hydrated by drinking at least 8-10 glasses of water a day, and more if you are active or live in a hot climate.",
+            "next_meal_suggestions": [
+              "A fruit salad for a light snack",
+              "A protein-rich meal like grilled chicken with vegetables for dinner"
+            ]
+          }
+        },
+        "meal_type": "breakfast",
+        "notes": "",
+        "nutritional_breakdown": {
+          "carbohydrates_grams": 36,
+          "estimated_calories": 210,
+          "fat_grams": 3,
+          "fiber_grams": 4,
+          "protein_grams": 6
+        },
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T18:39:19.079409",
+        "transcribed_text": "",
+        "type": "basic_entry"
+      },
+      {
+        "analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 40,
+            "estimated_calories": 250,
+            "fat_grams": 3,
+            "fiber_grams": 3,
+            "protein_grams": 8
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "High in fiber which aids digestion",
+              "Low in fat and calories which helps in maintaining weight",
+              "Rich in antioxidants which boosts immunity"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Vitamin C",
+              "Folic Acid",
+              "Iron"
+            ],
+            "week_specific_advice": "At week 4, folic acid is crucial for the baby's neural tube development. Tomato chutney and idli provide a good source of this."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook idli thoroughly to ensure it is easily digestible",
+              "Use fresh tomatoes and ingredients for the chutney"
+            ],
+            "food_safety_tips": [
+              "Ensure the chutney is freshly prepared to avoid bacterial growth",
+              "Avoid consuming if the chutney has been left out for long periods"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Stay hydrated by drinking at least 8-10 glasses of water a day. You can also include fresh fruit juices and coconut water in your diet.",
+            "next_meal_suggestions": [
+              "A light salad with lean protein like chicken or tofu",
+              "A bowl of mixed fruits",
+              "Whole grain toast with avocado"
+            ]
+          }
+        },
+        "created_at": "Thu, 18 Sep 2025 13:31:48 GMT",
+        "food_input": "Tomato chutney with idli.",
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T13:31:48.008906",
+        "type": "gpt4_analysis"
+      },
+      {
+        "analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 40,
+            "estimated_calories": 250,
+            "fat_grams": 3,
+            "fiber_grams": 4,
+            "protein_grams": 7
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "Helps in digestion",
+              "Keeps blood pressure under control",
+              "Boosts immunity",
+              "Provides energy"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Fiber",
+              "Vitamin C",
+              "Vitamin A",
+              "Potassium"
+            ],
+            "week_specific_advice": "At week 4, the embryo is starting to receive nutrients from your body. The protein in this meal supports early embryonic development. The fiber can help with pregnancy-related constipation."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook the tomatoes well to reduce acidity",
+              "Steam the idli instead of frying to keep it low in fat"
+            ],
+            "food_safety_tips": [
+              "Ensure the chutney is freshly made to avoid bacterial contamination",
+              "Make sure the idli is properly cooked"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Stay hydrated by drinking at least 8-10 glasses of water a day. You can also include other fluids like coconut water or homemade fruit juices.",
+            "next_meal_suggestions": [
+              "A protein-rich meal like lentil soup or a chicken salad",
+              "A calcium-rich snack like a yogurt parfait or a glass of milk"
+            ]
+          }
+        },
+        "created_at": "Thu, 18 Sep 2025 13:31:54 GMT",
+        "food_input": "Tomato chutney with idli.",
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T13:31:54.777554",
+        "type": "gpt4_analysis"
+      },
+      {
+        "created_at": "Thu, 18 Sep 2025 13:32:04 GMT",
+        "food_details": "Tomato chutney with idli.",
+        "food_input": "Tomato chutney with idli.",
+        "gpt4_analysis": {
+          "nutritional_breakdown": {
+            "carbohydrates_grams": 40,
+            "estimated_calories": 250,
+            "fat_grams": 3,
+            "fiber_grams": 4,
+            "protein_grams": 7
+          },
+          "pregnancy_benefits": {
+            "benefits_for_mother": [
+              "Helps in digestion",
+              "Keeps blood pressure under control",
+              "Boosts immunity",
+              "Provides energy"
+            ],
+            "nutrients_for_fetal_development": [
+              "Protein",
+              "Fiber",
+              "Vitamin C",
+              "Vitamin A",
+              "Potassium"
+            ],
+            "week_specific_advice": "At week 4, the embryo is starting to receive nutrients from your body. The protein in this meal supports early embryonic development. The fiber can help with pregnancy-related constipation."
+          },
+          "safety_considerations": {
+            "cooking_recommendations": [
+              "Cook the tomatoes well to reduce acidity",
+              "Steam the idli instead of frying to keep it low in fat"
+            ],
+            "food_safety_tips": [
+              "Ensure the chutney is freshly made to avoid bacterial contamination",
+              "Make sure the idli is properly cooked"
+            ]
+          },
+          "smart_recommendations": {
+            "hydration_tips": "Stay hydrated by drinking at least 8-10 glasses of water a day. You can also include other fluids like coconut water or homemade fruit juices.",
+            "next_meal_suggestions": [
+              "A protein-rich meal like lentil soup or a chicken salad",
+              "A calcium-rich snack like a yogurt parfait or a glass of milk"
+            ]
+          }
+        },
+        "meal_type": "breakfast",
+        "notes": "",
+        "nutritional_breakdown": {
+          "carbohydrates_grams": 40,
+          "estimated_calories": 250,
+          "fat_grams": 3,
+          "fiber_grams": 4,
+          "protein_grams": 7
+        },
+        "pregnancy_week": 4,
+        "timestamp": "2025-09-18T19:02:06.403480",
+        "transcribed_text": "N8N Response: {\"output\":\"Tomato chutney with idli.\"}",
+        "type": "basic_entry"
+      }
+    ],
+    "kick_logs": [],
+    "medication_logs": [],
+    "mental_health_logs": [
+      {
+        "_id": "68cc04dac03db5cde53dc5e7",
+        "created_at": "2025-09-18T13:10:50.992780",
+        "date": "2025-09-18",
+        "mood": "Tired",
+        "note": "",
+        "patient_id": "PAT175820015455746A",
+        "timestamp": "2025-09-18T13:10:50.992776",
+        "type": "mood_checkin"
+      }
+    ],
+    "prescription_documents": [],
+    "symptom_analysis_reports": [
+      {
+        "ai_analysis": {
+          "additional_recommendations": [
+            "Take prenatal vitamins as prescribed",
+            "Avoid alcohol, smoking, and recreational drugs",
+            "Get plenty of rest - your body is working hard",
+            "Eat a balanced diet rich in folic acid",
+            "Always consult your healthcare provider for persistent or severe symptoms",
+            "Keep a symptom diary to track patterns",
+            "Stay hydrated and maintain a healthy diet",
+            "Get regular prenatal care and follow your doctor's recommendations",
+            "Trust your instincts - you know your body best"
+          ],
+          "analysis_method": "llm_fallback",
+          "disclaimer": "This information is educational and not a medical diagnosis. If you have red-flag symptoms such as heavy bleeding, severe pain, high fever, severe headache with vision changes, reduced fetal movement, or feeling very unwell, seek urgent care immediately.",
+          "knowledge_base_suggestions_count": 0,
+          "primary_recommendation": "I'm sorry to hear you're experiencing a severe headache. Here are some self-care suggestions for your first trimester:\n\n1. **Hydration**: Ensure you're drinking plenty of water throughout the day, as dehydration can contribute to headaches.\n\n2. **Rest**: Take breaks and rest in a quiet, dark room to help alleviate headache symptoms.\n\n3. **Cold Compress**: Apply a cold compress or ice pack to your forehead for 15-20 minutes to help reduce pain.\n\n4. **Relaxation Techniques**: Practice deep breathing, meditation, or gentle yoga to help relieve tension.\n\n5. **Nutrition**: Eat small, balanced meals regularly to maintain stable blood sugar levels.\n\n**Red Flags**: Seek urgent care if you experience any of the following:\n- Headache that is sudden and severe\n- Accompanied by visual disturbances, confusion, or weakness\n- Accompanied by swelling in your hands or face\n- Persistent headache that does not improve with rest or hydration\n\n**Medical Disclaimer**: This information is not a substitute for professional medical advice. Always consult your healthcare provider for concerns regarding your health and pregnancy.",
+          "red_flags_detected": [],
+          "urgency_level": "moderate"
+        },
+        "analysis_date": "19/9/2025",
+        "createdAt": "Fri, 19 Sep 2025 05:56:13 GMT",
+        "notes": "",
+        "patient_context": {
+          "additional_notes": "",
+          "pregnancy_week": 4,
+          "severity_level": "severe Head ache",
+          "symptom_date": "19/9/2025",
+          "trimester": "First Trimester"
+        },
+        "report_id": "68ccf07de56cffc38a2496bd",
+        "severity": "severe Head ache",
+        "source": "flutter_app_quantum_llm",
+        "symptom_text": "I have a severe headache.",
+        "timestamp": "2025-09-19T05:56:13.064966",
+        "trimester": "First",
+        "version": "1.0",
+        "weeks_pregnant": 4
+      },
+      {
+        "ai_analysis": {
+          "additional_recommendations": [
+            "Take prenatal vitamins as prescribed",
+            "Avoid alcohol, smoking, and recreational drugs",
+            "Get plenty of rest - your body is working hard",
+            "Eat a balanced diet rich in folic acid",
+            "Always consult your healthcare provider for persistent or severe symptoms",
+            "Keep a symptom diary to track patterns",
+            "Stay hydrated and maintain a healthy diet",
+            "Get regular prenatal care and follow your doctor's recommendations",
+            "Trust your instincts - you know your body best"
+          ],
+          "analysis_method": "llm_fallback",
+          "disclaimer": "This information is educational and not a medical diagnosis. If you have red-flag symptoms such as heavy bleeding, severe pain, high fever, severe headache with vision changes, reduced fetal movement, or feeling very unwell, seek urgent care immediately.",
+          "knowledge_base_suggestions_count": 0,
+          "primary_recommendation": "Your description suggests potential red flags (fever) \u2014 please seek urgent care or contact your provider immediately.",
+          "red_flags_detected": [
+            "fever"
+          ],
+          "urgency_level": "moderate"
+        },
+        "analysis_date": "19/9/2025",
+        "createdAt": "Fri, 19 Sep 2025 05:57:23 GMT",
+        "notes": "",
+        "patient_context": {
+          "additional_notes": "",
+          "pregnancy_week": 4,
+          "severity_level": "severe Head ache",
+          "symptom_date": "19/9/2025",
+          "trimester": "First Trimester"
+        },
+        "report_id": "68ccf0c3e56cffc38a2496be",
+        "severity": "severe Head ache",
+        "source": "flutter_app_quantum_llm",
+        "symptom_text": "There is a lot of fever.",
+        "timestamp": "2025-09-19T05:57:23.198115",
+        "trimester": "First",
+        "version": "1.0",
+        "weeks_pregnant": 4
+      }
+    ],
+    "tablet_logs": [],
+    "vital_signs_logs": []
+  },
+  "patient_id": "PAT175820015455746A",
+  "patient_info": {
+    "address": "",
+    "age": 35,
+    "allergies": [],
+    "blood_type": "B+",
+    "city": "",
+    "created_at": "Thu, 18 Sep 2025 12:53:06 GMT",
+    "current_medications": [],
+    "date_of_birth": "1989-12-13",
+    "email": "umaperiasamy4@gmail.com",
+    "emergency_contact": {
+      "name": "Srinivasan",
+      "phone": "994663892",
+      "relationship": "Spose"
+    },
+    "full_name": "",
+    "gender": "",
+    "is_pregnant": true,
+    "medical_history": [],
+    "mobile": "7502769767",
+    "pincode": "",
+    "state": "",
+    "status": "active"
+  },
+  "success": true,
+  "summary": {
+    "total_appointments": 1,
+    "total_food_entries": 6,
+    "total_kick_logs": 0,
+    "total_medications": 0,
+    "total_mental_health": 1,
+    "total_prescriptions": 0,
+    "total_symptoms": 2,
+    "total_tablet_logs": 0,
+    "total_vital_signs": 0
+  }
+}

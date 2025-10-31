@@ -1,0 +1,718 @@
+{
+  "info": {
+    "name": "🏥 Patient Appointments with Availability",
+    "description": "Complete patient appointment management with doctor availability slots, scheduling, and booking workflow",
+    "_postman_id": "patient-appointments-availability-20250129",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "1. Patient Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.token) {",
+                  "        pm.environment.set('auth_token', response.token);",
+                  "        pm.environment.set('patient_id', response.patient_id);",
+                  "        console.log('✅ Login successful - Token saved');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login_identifier\": \"patient@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login patient to get JWT token for authenticated requests"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Patient Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Logout patient and invalidate JWT token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👨‍⚕️ Doctor Discovery",
+      "item": [
+        {
+          "name": "1. Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctors/doctors?specialty=&location=&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "doctors"],
+              "query": [
+                {"key": "specialty", "value": "", "description": "Filter by specialization"},
+                {"key": "location", "value": "", "description": "Filter by location"},
+                {"key": "limit", "value": "50", "description": "Number of results"},
+                {"key": "offset", "value": "0", "description": "Pagination offset"}
+              ]
+            },
+            "description": "Get list of all available doctors with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Get Doctor Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctors/doctor/profile/{{doctor_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "doctor", "profile", "{{doctor_id}}"]
+            },
+            "description": "Get detailed profile of a specific doctor"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📅 Doctor Availability",
+      "item": [
+        {
+          "name": "1. Get Doctor Availability",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.availability) {",
+                  "        console.log('✅ Doctor availability retrieved');",
+                  "        console.log('Available slots:', response.availability.slots?.length || 0);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctors/doctor/{{doctor_id}}/availability/{{appointment_date}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "doctor", "{{doctor_id}}", "availability", "{{appointment_date}}"]
+            },
+            "description": "Get doctor's availability for a specific date"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Get Available Slots by Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.available_slots) {",
+                  "        console.log('✅ Available slots retrieved');",
+                  "        console.log('Slots count:', response.available_slots.length);",
+                  "        if (response.available_slots.length > 0) {",
+                  "            pm.environment.set('slot_id', response.available_slots[0].slot_id);",
+                  "            console.log('First slot ID:', response.available_slots[0].slot_id);",
+                  "        }",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctors/doctor/{{doctor_id}}/availability/{{appointment_date}}/{{appointment_type}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "doctor", "{{doctor_id}}", "availability", "{{appointment_date}}", "{{appointment_type}}"]
+            },
+            "description": "Get available slots for specific appointment type (consultation, follow-up, first-visit, etc.)"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Get Availability Slots (Enhanced)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.slots) {",
+                  "        console.log('✅ Enhanced slots retrieved');",
+                  "        console.log('Total slots:', response.total_slots);",
+                  "        console.log('Available slots:', response.available_slots);",
+                  "        if (response.slots.length > 0) {",
+                  "            pm.environment.set('slot_id', response.slots[0].slot_id);",
+                  "            console.log('First slot:', response.slots[0]);",
+                  "        }",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctors/doctor/{{doctor_id}}/slots/{{appointment_date}}?appointment_type={{appointment_type}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "doctor", "{{doctor_id}}", "slots", "{{appointment_date}}"],
+              "query": [
+                {"key": "appointment_type", "value": "{{appointment_type}}", "description": "Filter by appointment type"}
+              ]
+            },
+            "description": "Get enhanced availability slots with detailed information"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 Appointment Management",
+      "item": [
+        {
+          "name": "1. Get Patient Appointments",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.appointments) {",
+                  "        console.log('✅ Patient appointments retrieved');",
+                  "        console.log('Appointments count:', response.appointments.length);",
+                  "        if (response.appointments.length > 0) {",
+                  "            pm.environment.set('appointment_id', response.appointments[0]._id);",
+                  "            console.log('First appointment ID:', response.appointments[0]._id);",
+                  "        }",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments?date=&status=&type=&appointment_type=",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments"],
+              "query": [
+                {"key": "date", "value": "", "description": "Filter by date (YYYY-MM-DD)"},
+                {"key": "status", "value": "", "description": "Filter by status (scheduled, confirmed, completed, cancelled)"},
+                {"key": "type", "value": "", "description": "Filter by consultation type"},
+                {"key": "appointment_type", "value": "", "description": "Filter by appointment type (in-person, video-call)"}
+              ]
+            },
+            "description": "Get all appointments for authenticated patient with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Appointment (with Slot)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.appointment_id) {",
+                  "        pm.environment.set('appointment_id', response.appointment_id);",
+                  "        console.log('✅ Appointment created successfully');",
+                  "        console.log('Appointment ID:', response.appointment_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_date\": \"{{appointment_date}}\",\n  \"appointment_time\": \"10:00\",\n  \"type\": \"consultation\",\n  \"appointment_type\": \"in-person\",\n  \"slot_id\": \"{{slot_id}}\",\n  \"notes\": \"Regular checkup appointment\",\n  \"patient_notes\": \"Feeling good, no urgent concerns\",\n  \"doctor_id\": \"{{doctor_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments"]
+            },
+            "description": "Create new appointment with specific slot booking"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Create Video Call Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.appointment_id) {",
+                  "        pm.environment.set('appointment_id', response.appointment_id);",
+                  "        console.log('✅ Video call appointment created');",
+                  "        console.log('Appointment ID:', response.appointment_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_date\": \"{{appointment_date}}\",\n  \"appointment_time\": \"14:00\",\n  \"type\": \"follow-up\",\n  \"appointment_type\": \"video-call\",\n  \"slot_id\": \"{{slot_id}}\",\n  \"notes\": \"Follow-up consultation via video call\",\n  \"patient_notes\": \"Discuss medication changes\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"video_link\": \"https://meet.google.com/abc-defg-hij\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments"]
+            },
+            "description": "Create video call appointment with meeting link"
+          },
+          "response": []
+        },
+        {
+          "name": "4. Get Specific Appointment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Get details of a specific appointment"
+          },
+          "response": []
+        },
+        {
+          "name": "5. Update Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success) {",
+                  "        console.log('✅ Appointment updated successfully');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_time\": \"15:00\",\n  \"appointment_status\": \"rescheduled\",\n  \"notes\": \"Updated appointment time - patient requested change\",\n  \"patient_notes\": \"Need to reschedule due to work conflict\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Update existing appointment details"
+          },
+          "response": []
+        },
+        {
+          "name": "6. Cancel Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success) {",
+                  "        console.log('✅ Appointment cancelled successfully');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Cancel/delete an appointment"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📊 Appointment Analytics",
+      "item": [
+        {
+          "name": "1. Get Upcoming Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/upcoming",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "upcoming"]
+            },
+            "description": "Get upcoming appointments for the patient"
+          },
+          "response": []
+        },
+        {
+          "name": "2. Get Appointment History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/history",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "history"]
+            },
+            "description": "Get appointment history for the patient"
+          },
+          "response": []
+        },
+        {
+          "name": "3. Get Appointment Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/appointments/patient/appointments/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "patient", "appointments", "statistics"]
+            },
+            "description": "Get appointment statistics and analytics"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔍 Slot Validation",
+      "item": [
+        {
+          "name": "1. Validate Slot Availability",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success) {",
+                  "        console.log('✅ Slot validation successful');",
+                  "        console.log('Slot available:', response.available);",
+                  "    } else {",
+                  "        console.log('❌ Slot validation failed:', response.error);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"appointment_date\": \"{{appointment_date}}\",\n  \"slot_id\": \"{{slot_id}}\",\n  \"appointment_type\": \"{{appointment_type}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/appointments/validate-slot",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "validate-slot"]
+            },
+            "description": "Validate if a specific slot is still available before booking"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set default values if not already set",
+          "if (!pm.environment.get('base_url')) {",
+          "    pm.environment.set('base_url', 'http://localhost:5002');",
+          "}",
+          "",
+          "if (!pm.environment.get('doctor_id')) {",
+          "    pm.environment.set('doctor_id', 'D17597286260221902');",
+          "}",
+          "",
+          "if (!pm.environment.get('appointment_date')) {",
+          "    // Set tomorrow's date",
+          "    const tomorrow = new Date();",
+          "    tomorrow.setDate(tomorrow.getDate() + 1);",
+          "    pm.environment.set('appointment_date', tomorrow.toISOString().split('T')[0]);",
+          "}",
+          "",
+          "if (!pm.environment.get('appointment_type')) {",
+          "    pm.environment.set('appointment_type', 'consultation');",
+          "}",
+          "",
+          "console.log('🔧 Environment variables set:');",
+          "console.log('Base URL:', pm.environment.get('base_url'));",
+          "console.log('Doctor ID:', pm.environment.get('doctor_id'));",
+          "console.log('Appointment Date:', pm.environment.get('appointment_date'));",
+          "console.log('Appointment Type:', pm.environment.get('appointment_type'));"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script for all requests",
+          "console.log('📊 Response Status:', pm.response.code);",
+          "console.log('⏱️ Response Time:', pm.response.responseTime + 'ms');",
+          "",
+          "// Check for common errors",
+          "if (pm.response.code === 401) {",
+          "    console.log('🔐 Authentication required - Please login first');",
+          "} else if (pm.response.code === 404) {",
+          "    console.log('❌ Resource not found');",
+          "} else if (pm.response.code >= 500) {",
+          "    console.log('🚨 Server error occurred');",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5002",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patient_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "doctor_id",
+      "value": "D17597286260221902",
+      "type": "string"
+    },
+    {
+      "key": "appointment_date",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appointment_type",
+      "value": "consultation",
+      "type": "string"
+    },
+    {
+      "key": "slot_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appointment_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

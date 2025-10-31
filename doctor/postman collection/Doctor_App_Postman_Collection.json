@@ -1,0 +1,909 @@
+{
+  "info": {
+    "name": "Doctor App API Collection",
+    "description": "Complete API collection for Doctor Patient Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "D17587987732214",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "PAT175820015455746A",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-26T12:00:00.000Z\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Doctor Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ramyayashva@gmail.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctor-login",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor-login"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"ramyayashva@gmail.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/doctor-login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor-login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful\",\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"doctor_id\": \"D17587987732214\",\n  \"email\": \"ramyayashva@gmail.com\",\n  \"username\": \"Dr. Ramya\",\n  \"user\": {\n    \"id\": \"D17587987732214\",\n    \"email\": \"ramyayashva@gmail.com\",\n    \"username\": \"Dr. Ramya\",\n    \"role\": \"doctor\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Doctor Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"Dr. John Smith\",\n  \"email\": \"john.smith@hospital.com\",\n  \"mobile\": \"+1234567890\",\n  \"password\": \"securePassword123\",\n  \"role\": \"doctor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctor-signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor-signup"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Doctor Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/dashboard-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "dashboard-stats"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/dashboard-stats",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "dashboard-stats"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"stats\": {\n    \"total_patients\": 15,\n    \"total_appointments\": 8,\n    \"today_appointments\": 2,\n    \"pending_appointments\": 3,\n    \"completed_appointments\": 5,\n    \"revenue_today\": 0.00,\n    \"revenue_month\": 0.00\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patients?doctor_id={{doctorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patients"],
+              "query": [
+                {
+                  "key": "doctor_id",
+                  "value": "{{doctorId}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patients?doctor_id={{doctorId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patients"],
+                  "query": [
+                    {
+                      "key": "doctor_id",
+                      "value": "{{doctorId}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"patients\": [\n    {\n      \"patient_id\": \"PAT175820015455746A\",\n      \"name\": \"Sarah Johnson\",\n      \"email\": \"sarah.johnson@email.com\",\n      \"mobile\": \"+1234567890\",\n      \"blood_type\": \"O+\",\n      \"age\": 28,\n      \"gender\": \"F\",\n      \"is_pregnant\": true,\n      \"status\": \"active\",\n      \"created_at\": \"2025-09-20T10:30:00Z\"\n    }\n  ],\n  \"total_count\": 15,\n  \"message\": \"Patients retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/appointments?doctor_id={{doctorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "appointments"],
+              "query": [
+                {
+                  "key": "doctor_id",
+                  "value": "{{doctorId}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/appointments?doctor_id={{doctorId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "appointments"],
+                  "query": [
+                    {
+                      "key": "doctor_id",
+                      "value": "{{doctorId}}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"appointments\": [\n    {\n      \"appointment_id\": \"APT123456789\",\n      \"patient_id\": \"PAT175820015455746A\",\n      \"patient_name\": \"Sarah Johnson\",\n      \"appointment_date\": \"2025-09-27\",\n      \"appointment_time\": \"10:00 AM\",\n      \"appointment_type\": \"Prenatal Checkup\",\n      \"appointment_status\": \"scheduled\",\n      \"notes\": \"Regular checkup\",\n      \"created_at\": \"2025-09-26T12:00:00Z\"\n    }\n  ],\n  \"total_count\": 8,\n  \"message\": \"Appointments retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patientId}}\",\n  \"appointment_date\": \"2025-09-28\",\n  \"appointment_time\": \"2:00 PM\",\n  \"appointment_type\": \"Follow-up\",\n  \"notes\": \"Follow-up appointment\",\n  \"doctor_id\": \"{{doctorId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctor/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "appointments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patient_id\": \"{{patientId}}\",\n  \"appointment_date\": \"2025-09-28\",\n  \"appointment_time\": \"2:00 PM\",\n  \"appointment_type\": \"Follow-up\",\n  \"notes\": \"Follow-up appointment\",\n  \"doctor_id\": \"{{doctorId}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/appointments",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "appointments"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"appointment_id\": \"APT987654321\",\n  \"message\": \"Appointment created successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patient Details",
+      "item": [
+        {
+          "name": "Get Patient Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patient/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patient", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patient/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patient", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"patient\": {\n    \"patient_id\": \"PAT175820015455746A\",\n    \"full_name\": \"Sarah Johnson\",\n    \"email\": \"sarah.johnson@email.com\",\n    \"mobile\": \"+1234567890\",\n    \"blood_type\": \"O+\",\n    \"age\": 28,\n    \"gender\": \"F\",\n    \"is_pregnant\": true,\n    \"pregnancy_due_date\": \"2025-12-15\",\n    \"address\": \"123 Main St, City, State\",\n    \"emergency_contact\": {\n      \"name\": \"John Johnson\",\n      \"phone\": \"+1987654321\",\n      \"relation\": \"Husband\"\n    },\n    \"medical_history\": [\"Diabetes\", \"High Blood Pressure\"],\n    \"allergies\": [\"Penicillin\"],\n    \"current_medications\": [\"Folic Acid\", \"Prenatal Vitamins\"],\n    \"mental_health_logs\": [\n      {\n        \"mood\": \"Happy\",\n        \"date\": \"2025-09-25\",\n        \"notes\": \"Feeling good today\"\n      }\n    ]\n  },\n  \"message\": \"Patient details retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Full Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/full-details",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patient", "{{patientId}}", "full-details"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/full-details",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patient", "{{patientId}}", "full-details"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patient_id\": \"PAT175820015455746A\",\n  \"patient_info\": {\n    \"full_name\": \"Sarah Johnson\",\n    \"email\": \"sarah.johnson@email.com\",\n    \"mobile\": \"+1234567890\",\n    \"age\": 28,\n    \"blood_type\": \"O+\",\n    \"gender\": \"F\",\n    \"is_pregnant\": true,\n    \"status\": \"active\",\n    \"created_at\": \"2025-09-20T10:30:00Z\",\n    \"address\": \"123 Main St, City, State\",\n    \"emergency_contact\": {\n      \"name\": \"John Johnson\",\n      \"phone\": \"+1987654321\",\n      \"relation\": \"Husband\"\n    }\n  },\n  \"health_data\": {\n    \"medication_logs\": [],\n    \"symptom_analysis_reports\": [\n      {\n        \"symptom_text\": \"Morning sickness\",\n        \"severity\": \"Moderate\",\n        \"timestamp\": \"2025-09-25T08:00:00Z\"\n      }\n    ],\n    \"food_data\": [\n      {\n        \"food_input\": \"Oatmeal with fruits\",\n        \"meal_type\": \"Breakfast\",\n        \"timestamp\": \"2025-09-25T08:30:00Z\"\n      }\n    ],\n    \"mental_health_logs\": [\n      {\n        \"mood\": \"Happy\",\n        \"date\": \"2025-09-25\",\n        \"notes\": \"Feeling good today\"\n      }\n    ],\n    \"appointments\": [\n      {\n        \"appointment_date\": \"2025-09-27\",\n        \"appointment_time\": \"10:00 AM\",\n        \"appointment_type\": \"Prenatal Checkup\"\n      }\n    ]\n  },\n  \"summary\": {\n    \"total_medications\": 0,\n    \"total_symptoms\": 1,\n    \"total_food_entries\": 1,\n    \"total_mental_health\": 1,\n    \"total_appointments\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient AI Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/ai-summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patient", "{{patientId}}", "ai-summary"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/ai-summary",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patient", "{{patientId}}", "ai-summary"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patient_id\": \"PAT175820015455746A\",\n  \"patient_name\": \"Sarah Johnson\",\n  \"ai_summary\": \"Based on the patient data analysis, Sarah Johnson is a 28-year-old pregnant patient with O+ blood type. She has been experiencing morning sickness with moderate severity. Her mental health appears stable with positive mood reports. The patient has been maintaining regular nutrition with healthy breakfast choices. Key recommendations include continued prenatal care monitoring and addressing any persistent morning sickness symptoms.\",\n  \"summary_stats\": {\n    \"total_medications\": 0,\n    \"total_symptoms\": 1,\n    \"total_food_entries\": 1,\n    \"total_mental_health\": 1,\n    \"total_appointments\": 1\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Data Endpoints",
+      "item": [
+        {
+          "name": "Get Medication History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/medication/get-medication-history/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["medication", "get-medication-history", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/medication/get-medication-history/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["medication", "get-medication-history", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"medication_logs\": [],\n  \"totalEntries\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Symptom Analysis Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/symptoms/get-analysis-reports/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["symptoms", "get-analysis-reports", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/symptoms/get-analysis-reports/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["symptoms", "get-analysis-reports", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"analysis_reports\": [\n    {\n      \"symptom_text\": \"Morning sickness\",\n      \"severity\": \"Moderate\",\n      \"timestamp\": \"2025-09-25T08:00:00Z\",\n      \"analysis\": \"Common pregnancy symptom\"\n    }\n  ],\n  \"totalReports\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Food Entries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/nutrition/get-food-entries/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["nutrition", "get-food-entries", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/nutrition/get-food-entries/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["nutrition", "get-food-entries", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"user_id\": \"PAT175820015455746A\",\n  \"food_data\": [\n    {\n      \"food_input\": \"Oatmeal with fruits\",\n      \"meal_type\": \"Breakfast\",\n      \"timestamp\": \"2025-09-25T08:30:00Z\",\n      \"calories\": 350\n    },\n    {\n      \"food_input\": \"Grilled chicken salad\",\n      \"meal_type\": \"Lunch\",\n      \"timestamp\": \"2025-09-25T13:00:00Z\",\n      \"calories\": 450\n    }\n  ],\n  \"total_entries\": 2\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Mental Health History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/mental-health/history/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["mental-health", "history", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mental-health/history/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["mental-health", "history", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"patient_id\": \"PAT175820015455746A\",\n    \"mood_history\": [\n      {\n        \"mood\": \"Happy\",\n        \"date\": \"2025-09-25\",\n        \"notes\": \"Feeling good today\",\n        \"timestamp\": \"2025-09-25T10:00:00Z\"\n      }\n    ],\n    \"assessment_history\": [],\n    \"total_mood_entries\": 1,\n    \"total_assessment_entries\": 0\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Kick Count History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kick-count/get-kick-history/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["kick-count", "get-kick-history", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/kick-count/get-kick-history/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["kick-count", "get-kick-history", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"kick_logs\": [],\n  \"totalEntries\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Prescription Documents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/prescription/documents/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["prescription", "documents", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/prescription/documents/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["prescription", "documents", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"prescription_documents\": [],\n  \"totalDocuments\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Vital Signs History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/vital-signs/history/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["vital-signs", "history", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/vital-signs/history/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["vital-signs", "history", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"vital_signs_logs\": [],\n  \"totalEntries\": 0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/profile/{{patientId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["profile", "{{patientId}}"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patientId\": \"PAT175820015455746A\",\n  \"profile\": {\n    \"patient_id\": \"PAT175820015455746A\",\n    \"username\": \"sarah_johnson\",\n    \"email\": \"sarah.johnson@email.com\",\n    \"first_name\": \"Sarah\",\n    \"last_name\": \"Johnson\",\n    \"full_name\": \"Sarah Johnson\",\n    \"date_of_birth\": \"1997-03-15\",\n    \"blood_type\": \"O+\",\n    \"mobile\": \"+1234567890\",\n    \"address\": \"123 Main St, City, State\",\n    \"is_pregnant\": true,\n    \"pregnancy_due_date\": \"2025-12-15\",\n    \"is_profile_complete\": true,\n    \"status\": \"active\",\n    \"created_at\": \"2025-09-20T10:30:00Z\",\n    \"last_login\": \"2025-09-26T12:00:00Z\",\n    \"object_id\": \"64f8a1b2c3d4e5f6a7b8c9d0\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

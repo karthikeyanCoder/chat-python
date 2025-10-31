@@ -1,0 +1,947 @@
+{
+  "info": {
+    "name": "Complete Doctor Patient Management System",
+    "description": "Comprehensive API collection for all endpoints including authentication, patient CRUD, doctor operations, appointments, and health data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "doctorId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-26T18:41:36.247325\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Doctor Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ramyayashva@gmail.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          },
+          "response": [
+            {
+              "name": "Login Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"ramyayashva@gmail.com\",\n  \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Login successful\",\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"doctor_id\": \"D17587987732214\",\n  \"doctor\": {\n    \"doctor_id\": \"D17587987732214\",\n    \"first_name\": \"Dr. Ramya\",\n    \"last_name\": \"Yashva\",\n    \"email\": \"ramyayashva@gmail.com\",\n    \"specialization\": \"General Medicine\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Doctor Profile Update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Dr. Ramya\",\n  \"last_name\": \"Yashva\",\n  \"specialization\": \"General Medicine\",\n  \"license_number\": \"MED123456\",\n  \"experience_years\": 10,\n  \"hospital_name\": \"City General Hospital\",\n  \"address\": \"123 Medical Center\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"consultation_fee\": 150,\n  \"profile_url\": \"https://example.com/doctor-profile\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctor/{{doctorId}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "{{doctorId}}", "profile"]
+            }
+          },
+          "response": [
+            {
+              "name": "Profile Updated Successfully",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"Dr. Ramya\",\n  \"last_name\": \"Yashva\",\n  \"specialization\": \"General Medicine\",\n  \"license_number\": \"MED123456\",\n  \"experience_years\": 10,\n  \"hospital_name\": \"City General Hospital\",\n  \"address\": \"123 Medical Center\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"consultation_fee\": 150,\n  \"profile_url\": \"https://example.com/doctor-profile\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/{{doctorId}}/profile",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "{{doctorId}}", "profile"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Profile updated successfully\",\n  \"doctor_id\": \"D17587987732214\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patient CRUD Operations",
+      "item": [
+        {
+          "name": "Create New Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"assigned_doctor_id\": \"{{doctorId}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "response": [
+            {
+              "name": "Patient Created Successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"assigned_doctor_id\": \"D17587987732214\",\n  \"is_active\": true\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/patients",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Patient created successfully\",\n  \"patient_id\": \"PAT1758894320123456\",\n  \"status\": \"success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Patient Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"patient\": {\n    \"_id\": \"675a1b2c3d4e5f6789012345\",\n    \"patient_id\": \"PAT1758894320123456\",\n    \"full_name\": \"John Doe\",\n    \"date_of_birth\": \"15/03/1985\",\n    \"contact_number\": \"9876543210\",\n    \"email\": \"john.doe@example.com\",\n    \"gender\": \"Male\",\n    \"address\": \"123 Main Street\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pincode\": \"10001\",\n    \"emergency_contact_name\": \"Jane Doe\",\n    \"emergency_contact_number\": \"9876543211\",\n    \"medical_notes\": \"No known conditions\",\n    \"allergies\": \"None\",\n    \"blood_type\": \"O+\",\n    \"assigned_doctor_id\": \"D17587987732214\",\n    \"is_active\": true,\n    \"created_at\": \"2025-09-26T18:41:36.247325Z\",\n    \"updated_at\": \"2025-09-26T18:41:36.247325Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=1&limit=10&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Patients Retrieved Successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/patients?page=1&limit=10&search=",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients"],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758894320123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\",\n  \"allergies\": \"Pollen, Dust\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Patient Updated Successfully",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\",\n  \"allergies\": \"Pollen, Dust\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Patient updated successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          },
+          "response": [
+            {
+              "name": "Patient Deleted Successfully",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Patient deleted successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Doctor Dashboard & Patient Data",
+      "item": [
+        {
+          "name": "Get Doctor Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/{{doctorId}}/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "{{doctorId}}", "dashboard"]
+            }
+          },
+          "response": [
+            {
+              "name": "Dashboard Stats Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/D17587987732214/dashboard",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "D17587987732214", "dashboard"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"dashboard\": {\n    \"total_patients\": 25,\n    \"today_appointments\": 5,\n    \"pending_appointments\": 3,\n    \"recent_patients\": [\n      {\n        \"patient_id\": \"PAT1758894320123456\",\n        \"full_name\": \"John Doe\",\n        \"last_visit\": \"2025-09-26T10:30:00Z\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Full Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/full-details",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patient", "{{patientId}}", "full-details"]
+            }
+          },
+          "response": [
+            {
+              "name": "Full Patient Details Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patient/PAT1758894320123456/full-details",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patient", "PAT1758894320123456", "full-details"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"patient_info\": {\n    \"patient_id\": \"PAT1758894320123456\",\n    \"full_name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"contact_number\": \"9876543210\",\n    \"date_of_birth\": \"15/03/1985\",\n    \"gender\": \"Male\",\n    \"blood_type\": \"O+\",\n    \"allergies\": \"None\",\n    \"medical_notes\": \"No known conditions\"\n  },\n  \"health_data\": {\n    \"medication_history\": [],\n    \"symptom_reports\": [\n      {\n        \"symptom_id\": \"SYM001\",\n        \"symptoms\": [\"Headache\", \"Fever\"],\n        \"severity\": \"Moderate\",\n        \"date\": \"2025-09-25T14:30:00Z\",\n        \"analysis\": \"Possible viral infection\"\n      }\n    ],\n    \"food_entries\": [\n      {\n        \"food_id\": \"FOOD001\",\n        \"food_name\": \"Apple\",\n        \"quantity\": \"1 medium\",\n        \"calories\": 95,\n        \"timestamp\": \"2025-09-26T08:00:00Z\"\n      }\n    ],\n    \"mental_health_logs\": [\n      {\n        \"log_id\": \"MH001\",\n        \"mood\": \"Good\",\n        \"stress_level\": 3,\n        \"notes\": \"Feeling positive today\",\n        \"timestamp\": \"2025-09-26T09:00:00Z\"\n      }\n    ],\n    \"kick_count_logs\": [],\n    \"vital_signs_logs\": [\n      {\n        \"log_id\": \"VS001\",\n        \"blood_pressure\": \"120/80\",\n        \"heart_rate\": 72,\n        \"temperature\": 98.6,\n        \"timestamp\": \"2025-09-26T10:00:00Z\"\n      }\n    ]\n  },\n  \"summary\": {\n    \"total_medications\": 0,\n    \"total_symptoms\": 1,\n    \"total_food_entries\": 1,\n    \"total_mental_health_logs\": 1,\n    \"total_kick_counts\": 0,\n    \"total_vital_signs\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get AI Summary for Patient",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/patient/{{patientId}}/ai-summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "patient", "{{patientId}}", "ai-summary"]
+            }
+          },
+          "response": [
+            {
+              "name": "AI Summary Generated",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/patient/PAT1758894320123456/ai-summary",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "patient", "PAT1758894320123456", "ai-summary"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"ai_summary\": \"Patient John Doe is a 40-year-old male with blood type O+. Recent health data shows: 1 symptom report indicating possible viral infection with headache and fever. Patient maintains good mental health with positive mood and low stress levels. Dietary habits include healthy choices like apples. Vital signs are within normal range (BP: 120/80, HR: 72, Temp: 98.6°F). No current medications or allergies reported. Overall health status appears stable with no immediate concerns.\",\n  \"patient_id\": \"PAT1758894320123456\",\n  \"generated_at\": \"2025-09-26T18:45:00Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Appointment Management",
+      "item": [
+        {
+          "name": "Create Appointment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patientId}}\",\n  \"appointment_date\": \"2025-09-28T10:00:00Z\",\n  \"appointment_time\": \"10:00 AM\",\n  \"appointment_type\": \"Consultation\",\n  \"notes\": \"Regular checkup\",\n  \"status\": \"scheduled\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Appointment Created Successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patient_id\": \"PAT1758894320123456\",\n  \"appointment_date\": \"2025-09-28T10:00:00Z\",\n  \"appointment_time\": \"10:00 AM\",\n  \"appointment_type\": \"Consultation\",\n  \"notes\": \"Regular checkup\",\n  \"status\": \"scheduled\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/appointments",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["appointments"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"message\": \"Appointment created successfully\",\n  \"appointment_id\": \"APT1758894320123456\",\n  \"appointment\": {\n    \"appointment_id\": \"APT1758894320123456\",\n    \"patient_id\": \"PAT1758894320123456\",\n    \"doctor_id\": \"D17587987732214\",\n    \"appointment_date\": \"2025-09-28T10:00:00Z\",\n    \"appointment_time\": \"10:00 AM\",\n    \"appointment_type\": \"Consultation\",\n    \"notes\": \"Regular checkup\",\n    \"status\": \"scheduled\",\n    \"created_at\": \"2025-09-26T18:45:00Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Doctor Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/doctor/{{doctorId}}/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctor", "{{doctorId}}", "appointments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Appointments Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/doctor/D17587987732214/appointments",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["doctor", "D17587987732214", "appointments"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"appointments\": [\n    {\n      \"appointment_id\": \"APT1758894320123456\",\n      \"patient_id\": \"PAT1758894320123456\",\n      \"patient_name\": \"John Doe\",\n      \"appointment_date\": \"2025-09-28T10:00:00Z\",\n      \"appointment_time\": \"10:00 AM\",\n      \"appointment_type\": \"Consultation\",\n      \"notes\": \"Regular checkup\",\n      \"status\": \"scheduled\",\n      \"created_at\": \"2025-09-26T18:45:00Z\"\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Data Endpoints",
+      "item": [
+        {
+          "name": "Get Patient Medications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/medications",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", "medications"]
+            }
+          },
+          "response": [
+            {
+              "name": "Medications Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456/medications",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456", "medications"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"medications\": [\n    {\n      \"medication_id\": \"MED001\",\n      \"medication_name\": \"Paracetamol\",\n      \"dosage\": \"500mg\",\n      \"frequency\": \"Twice daily\",\n      \"start_date\": \"2025-09-20T00:00:00Z\",\n      \"end_date\": \"2025-09-30T00:00:00Z\",\n      \"prescribed_by\": \"D17587987732214\",\n      \"notes\": \"For headache relief\"\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Symptoms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/symptoms",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", "symptoms"]
+            }
+          },
+          "response": [
+            {
+              "name": "Symptoms Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456/symptoms",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456", "symptoms"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"symptoms\": [\n    {\n      \"symptom_id\": \"SYM001\",\n      \"symptoms\": [\"Headache\", \"Fever\"],\n      \"severity\": \"Moderate\",\n      \"description\": \"Patient experiencing persistent headache with low-grade fever\",\n      \"date\": \"2025-09-25T14:30:00Z\",\n      \"analysis\": \"Possible viral infection. Recommend rest and hydration.\",\n      \"recommendations\": [\"Take prescribed medication\", \"Get adequate rest\", \"Monitor temperature\"]\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Food Entries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/food-entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", "food-entries"]
+            }
+          },
+          "response": [
+            {
+              "name": "Food Entries Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456/food-entries",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456", "food-entries"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"food_entries\": [\n    {\n      \"food_id\": \"FOOD001\",\n      \"food_name\": \"Apple\",\n      \"quantity\": \"1 medium\",\n      \"calories\": 95,\n      \"protein\": 0.5,\n      \"carbs\": 25,\n      \"fat\": 0.3,\n      \"timestamp\": \"2025-09-26T08:00:00Z\",\n      \"meal_type\": \"Breakfast\"\n    },\n    {\n      \"food_id\": \"FOOD002\",\n      \"food_name\": \"Grilled Chicken\",\n      \"quantity\": \"150g\",\n      \"calories\": 250,\n      \"protein\": 35,\n      \"carbs\": 0,\n      \"fat\": 12,\n      \"timestamp\": \"2025-09-26T13:00:00Z\",\n      \"meal_type\": \"Lunch\"\n    }\n  ],\n  \"total\": 2\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Mental Health Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/mental-health",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", "mental-health"]
+            }
+          },
+          "response": [
+            {
+              "name": "Mental Health Logs Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456/mental-health",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456", "mental-health"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"mental_health_logs\": [\n    {\n      \"log_id\": \"MH001\",\n      \"mood\": \"Good\",\n      \"stress_level\": 3,\n      \"anxiety_level\": 2,\n      \"sleep_quality\": \"Good\",\n      \"energy_level\": 7,\n      \"notes\": \"Feeling positive today, had a good night's sleep\",\n      \"timestamp\": \"2025-09-26T09:00:00Z\"\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Vital Signs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}/vital-signs",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}", "vital-signs"]
+            }
+          },
+          "response": [
+            {
+              "name": "Vital Signs Retrieved",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{authToken}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/patients/PAT1758894320123456/vital-signs",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["patients", "PAT1758894320123456", "vital-signs"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"vital_signs\": [\n    {\n      \"log_id\": \"VS001\",\n      \"blood_pressure_systolic\": 120,\n      \"blood_pressure_diastolic\": 80,\n      \"heart_rate\": 72,\n      \"temperature\": 98.6,\n      \"weight\": 70.5,\n      \"height\": 175,\n      \"bmi\": 23.0,\n      \"oxygen_saturation\": 98,\n      \"timestamp\": \"2025-09-26T10:00:00Z\",\n      \"notes\": \"All vital signs within normal range\"\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

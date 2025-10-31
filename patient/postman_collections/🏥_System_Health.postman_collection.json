@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "🏥 System Health",
+    "description": "System health checks, database status, diagnostics",
+    "_postman_id": "system_health-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Check Database Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health/database",
+          "host": ["{{base_url}}"],
+          "path": ["health", "database"]
+        },
+        "description": "Check database connection health"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Force Database Reconnect",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health/database/reconnect",
+          "host": ["{{base_url}}"],
+          "path": ["health", "database", "reconnect"]
+        },
+        "description": "Force database reconnection (no body required)"
+      },
+      "response": []
+    }
+  ]
+}

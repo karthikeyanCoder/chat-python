@@ -1,0 +1,1009 @@
+{
+  "info": {
+    "name": "Patient Alert System - Complete API Collection",
+    "description": "Complete collection for Authentication, Doctor Management, Appointments, and Patient Selection APIs",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "description": "Base URL for the API"
+    },
+    {
+      "key": "signup_token",
+      "value": "",
+      "description": "JWT token from signup for OTP verification"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "description": "JWT access token for authenticated requests"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "description": "JWT refresh token"
+    },
+    {
+      "key": "reset_token",
+      "value": "",
+      "description": "JWT token for password reset"
+    },
+    {
+      "key": "doctor_id",
+      "value": "D17597286260221902",
+      "description": "Sample doctor ID for testing"
+    },
+    {
+      "key": "patient_id",
+      "value": "PAT17576730523DFD2A",
+      "description": "Sample patient ID for testing"
+    },
+    {
+      "key": "appointment_id",
+      "value": "",
+      "description": "Appointment ID from create response"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Doctor Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('signup_token', jsonData.signup_token);",
+                  "    console.log('Signup token saved:', jsonData.signup_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"TestDoctor\",\n  \"email\": \"test.doctor@example.com\",\n  \"mobile\": \"9876543210\",\n  \"password\": \"TestPass123!\",\n  \"role\": \"doctor\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-signup",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-signup"]
+            },
+            "description": "Register a new doctor and receive OTP via email"
+          }
+        },
+        {
+          "name": "Doctor Verify OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('access_token', jsonData.access_token);",
+                  "    pm.environment.set('refresh_token', jsonData.refresh_token);",
+                  "    pm.environment.set('doctor_id', jsonData.doctor_id);",
+                  "    console.log('Tokens saved');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test.doctor@example.com\",\n  \"otp\": \"123456\",\n  \"jwt_token\": \"{{signup_token}}\",\n  \"role\": \"doctor\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-verify-otp",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-verify-otp"]
+            },
+            "description": "Verify OTP and create doctor account"
+          }
+        },
+        {
+          "name": "Doctor Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('access_token', jsonData.token);",
+                  "    pm.environment.set('doctor_id', jsonData.doctor_id);",
+                  "    console.log('Login successful, token saved');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test.doctor@example.com\",\n  \"password\": \"TestPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-login",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-login"]
+            },
+            "description": "Login with doctor credentials"
+          }
+        },
+        {
+          "name": "Doctor Forgot Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('reset_token', jsonData.jwt_token);",
+                  "    console.log('Reset token saved:', jsonData.jwt_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test.doctor@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-forgot-password"]
+            },
+            "description": "Request password reset OTP"
+          }
+        },
+        {
+          "name": "Doctor Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test.doctor@example.com\",\n  \"otp\": \"123456\",\n  \"jwt_token\": \"{{reset_token}}\",\n  \"new_password\": \"NewPassword123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-reset-password"]
+            },
+            "description": "Reset password using OTP"
+          }
+        },
+        {
+          "name": "Patient Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"TestPatient\",\n  \"email\": \"test.patient@example.com\",\n  \"mobile\": \"9876543211\",\n  \"password\": \"TestPass123!\",\n  \"role\": \"patient\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patient/signup",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "signup"]
+            },
+            "description": "Register a new patient account"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Doctor Profile",
+      "item": [
+        {
+          "name": "Get Doctor Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/profile/{{doctor_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "profile", "{{doctor_id}}"]
+            },
+            "description": "Get detailed doctor profile by ID"
+          }
+        },
+        {
+          "name": "Update Doctor Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Smith\",\n  \"specialization\": \"Cardiology\",\n  \"experience_years\": 10,\n  \"hospital_name\": \"City Hospital\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/profile/{{doctor_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "profile", "{{doctor_id}}"]
+            },
+            "description": "Update doctor profile information"
+          }
+        },
+        {
+          "name": "Complete Doctor Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"personal_info\": {\n    \"first_name\": \"John\",\n    \"last_name\": \"Smith\",\n    \"mobile\": \"9876543210\"\n  },\n  \"professional_info\": {\n    \"specialization\": \"Cardiology\",\n    \"experience_years\": 10,\n    \"license_number\": \"MD123456\"\n  },\n  \"practice_info\": {\n    \"hospital_name\": \"City Hospital\",\n    \"consultation_fee\": 500\n  },\n  \"address_info\": {\n    \"address\": \"123 Medical Street\",\n    \"city\": \"Mumbai\",\n    \"state\": \"Maharashtra\",\n    \"pincode\": \"400001\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-complete-profile",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-complete-profile"]
+            },
+            "description": "Complete doctor profile with all required information"
+          }
+        },
+        {
+          "name": "Get Doctor Profile Fields",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctor-profile-fields",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-profile-fields"]
+            },
+            "description": "Get available fields for doctor profile completion"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Patient Selection (NEW)",
+      "item": [
+        {
+          "name": "Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["doctors"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Results per page"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search in name, email, specialization",
+                  "disabled": true
+                },
+                {
+                  "key": "specialization",
+                  "value": "",
+                  "description": "Filter by specialization",
+                  "disabled": true
+                },
+                {
+                  "key": "city",
+                  "value": "",
+                  "description": "Filter by city",
+                  "disabled": true
+                },
+                {
+                  "key": "min_patients",
+                  "value": "",
+                  "description": "Minimum patient count",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all doctors with patient count for patient selection"
+          }
+        },
+        {
+          "name": "Search Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/search?specialization=cardiology&city=mumbai&min_patients=10",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "search"],
+              "query": [
+                {
+                  "key": "specialization",
+                  "value": "cardiology"
+                },
+                {
+                  "key": "city",
+                  "value": "mumbai"
+                },
+                {
+                  "key": "min_patients",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Search doctors with advanced filters"
+          }
+        },
+        {
+          "name": "Get Public Doctor Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctors/{{doctor_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctors", "{{doctor_id}}"]
+            },
+            "description": "Get public doctor profile with patient count"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Appointments CRUD",
+      "item": [
+        {
+          "name": "Get All Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "",
+                  "description": "Filter by patient ID",
+                  "disabled": true
+                },
+                {
+                  "key": "date",
+                  "value": "",
+                  "description": "Filter by date (YYYY-MM-DD)",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Filter by status",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all appointments with optional filters"
+          }
+        },
+        {
+          "name": "Get Patient Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments?patient_id={{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments"],
+              "query": [
+                {
+                  "key": "patient_id",
+                  "value": "{{patient_id}}"
+                }
+              ]
+            },
+            "description": "Get all appointments for a specific patient"
+          }
+        },
+        {
+          "name": "Get Single Appointment by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Get a specific appointment by its appointment_id"
+          }
+        },
+        {
+          "name": "Create Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('appointment_id', jsonData.appointment_id);",
+                  "    console.log('Appointment created:', jsonData.appointment_id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"appointment_date\": \"2024-01-15\",\n  \"appointment_time\": \"10:00 AM\",\n  \"appointment_type\": \"General\",\n  \"appointment_mode\": \"in-person\",\n  \"notes\": \"Regular checkup\",\n  \"doctor_id\": \"{{doctor_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments"]
+            },
+            "description": "Create a new appointment"
+          }
+        },
+        {
+          "name": "Create Video Call Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('appointment_id', jsonData.appointment_id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_id\": \"{{patient_id}}\",\n  \"appointment_date\": \"2024-01-16\",\n  \"appointment_time\": \"2:00 PM\",\n  \"appointment_type\": \"Follow-up\",\n  \"appointment_mode\": \"video-call\",\n  \"video_link\": \"https://meet.google.com/abc-defg-hij\",\n  \"notes\": \"Online consultation\",\n  \"doctor_id\": \"{{doctor_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments"]
+            },
+            "description": "Create a video call appointment"
+          }
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointment_date\": \"2024-01-16\",\n  \"appointment_time\": \"2:00 PM\",\n  \"appointment_status\": \"rescheduled\",\n  \"notes\": \"Updated appointment time\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Update an existing appointment"
+          }
+        },
+        {
+          "name": "Delete Appointment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "appointments", "{{appointment_id}}"]
+            },
+            "description": "Delete an appointment"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Doctor Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/dashboard-stats",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "dashboard-stats"]
+            },
+            "description": "Get doctor dashboard statistics"
+          }
+        },
+        {
+          "name": "Get Doctor Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patients",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patients"]
+            },
+            "description": "Get all patients for the doctor"
+          }
+        },
+        {
+          "name": "Get Patient Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}"]
+            },
+            "description": "Get detailed patient information"
+          }
+        },
+        {
+          "name": "Get Patient Full Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/full-details",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "full-details"]
+            },
+            "description": "Get comprehensive patient details with health data"
+          }
+        },
+        {
+          "name": "Get Patient AI Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/ai-summary",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "ai-summary"]
+            },
+            "description": "Get AI-generated patient health summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Patient Health Data",
+      "item": [
+        {
+          "name": "Get Medication History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/medication/get-medication-history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["medication", "get-medication-history", "{{patient_id}}"]
+            },
+            "description": "Get medication history for a patient"
+          }
+        },
+        {
+          "name": "Get Food Entries (Nutrition)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/nutrition/get-food-entries/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["nutrition", "get-food-entries", "{{patient_id}}"]
+            },
+            "description": "Get nutrition/food entries for a patient"
+          }
+        },
+        {
+          "name": "Get Mental Health History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mental-health/history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mental-health", "history", "{{patient_id}}"]
+            },
+            "description": "Get mental health history for a patient"
+          }
+        },
+        {
+          "name": "Get Kick Count History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/kick-count/get-kick-history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["kick-count", "get-kick-history", "{{patient_id}}"]
+            },
+            "description": "Get kick count history for a patient"
+          }
+        },
+        {
+          "name": "Get Prescription Documents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/prescription/documents/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["prescription", "documents", "{{patient_id}}"]
+            },
+            "description": "Get prescription documents for a patient"
+          }
+        },
+        {
+          "name": "Get Vital Signs History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vital-signs/history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["vital-signs", "history", "{{patient_id}}"]
+            },
+            "description": "Get vital signs history for a patient"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Patient CRUD",
+      "item": [
+        {
+          "name": "Get All Patients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patients?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all patients with pagination"
+          }
+        },
+        {
+          "name": "Get Patient by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patients/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "{{patient_id}}"]
+            },
+            "description": "Get specific patient by ID"
+          }
+        },
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"NewPatient\",\n  \"email\": \"new.patient@example.com\",\n  \"mobile\": \"9876543212\",\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"date_of_birth\": \"1990-01-01\",\n  \"blood_type\": \"O+\",\n  \"gender\": \"Female\",\n  \"is_pregnant\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patients",
+              "host": ["{{base_url}}"],
+              "path": ["patients"]
+            },
+            "description": "Create a new patient"
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"mobile\": \"9876543213\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"Mumbai\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/patients/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "{{patient_id}}"]
+            },
+            "description": "Update patient information"
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patients/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["patients", "{{patient_id}}"]
+            },
+            "description": "Delete a patient (soft delete)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Health Check",
+      "item": [
+        {
+          "name": "Root Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Get API information and available endpoints"
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health status"
+          }
+        }
+      ]
+    }
+  ]
+}

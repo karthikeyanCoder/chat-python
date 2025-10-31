@@ -1,0 +1,480 @@
+{
+  "info": {
+    "name": "🤰 Pregnancy Tracking",
+    "description": "Pregnancy week tracking, baby development, kick counter, wellness tips",
+    "_postman_id": "pregnancy-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Pregnancy Week",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}"
+          ]
+        },
+        "description": "Get specific pregnancy week information"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get All Pregnancy Weeks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/weeks",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "weeks"
+          ]
+        },
+        "description": "Get all pregnancy weeks"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Trimester Weeks",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/trimester/{{trimester}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "trimester",
+            "{{trimester}}"
+          ]
+        },
+        "description": "Get weeks for specific trimester"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Baby Size Image",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/baby-image?style=matplotlib",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "baby-image"
+          ],
+          "query": [
+            {
+              "key": "style",
+              "value": "matplotlib"
+            }
+          ]
+        },
+        "description": "Get baby size image"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get AI Baby Size",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/baby-size",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "baby-size"
+          ]
+        },
+        "description": "Get AI-generated baby size comparison"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Early Symptoms",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/symptoms",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "symptoms"
+          ]
+        },
+        "description": "Get early pregnancy symptoms for week"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Prenatal Screening",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/screening",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "screening"
+          ]
+        },
+        "description": "Get prenatal screening info"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get Wellness Tips",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/wellness",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "wellness"
+          ]
+        },
+        "description": "Get wellness tips"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Get Nutrition Tips",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/week/{{week}}/nutrition",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "week",
+            "{{week}}",
+            "nutrition"
+          ]
+        },
+        "description": "Get nutrition tips"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get OpenAI Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/openai/status",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "openai",
+            "status"
+          ]
+        },
+        "description": "Check OpenAI service status"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Save Pregnancy Tracking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/tracking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "tracking"
+          ]
+        },
+        "description": "Save pregnancy tracking (MilestoneSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"milestone_type\": \"first_ultrasound\",\n  \"milestone_date\": \"2025-10-16\",\n  \"description\": \"First ultrasound scan completed\",\n  \"notes\": \"Baby looks healthy, heartbeat detected\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Get Pregnancy Tracking History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/tracking/history",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "tracking",
+            "history"
+          ]
+        },
+        "description": "Get tracking history"
+      },
+      "response": []
+    },
+    {
+      "name": "13. Calculate Pregnancy Progress",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/progress",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "progress"
+          ]
+        },
+        "description": "Calculate pregnancy progress"
+      },
+      "response": []
+    },
+    {
+      "name": "14. Update Patient Pregnancy Week",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/update-week/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "update-week",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Update pregnancy week (UpdateWeekSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"pregnancy_week\": 24,\n  \"last_period_date\": \"2025-04-15\",\n  \"expected_delivery_date\": \"2026-01-20\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "15. Save Kick Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/save-kick-session",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "save-kick-session"
+          ]
+        },
+        "description": "Save kick count session (KickCountSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"kick_count\": 10,\n  \"duration_minutes\": 30,\n  \"notes\": \"Baby very active after breakfast\",\n  \"timestamp\": \"2025-10-16T10:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "16. Get Kick History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/get-kick-history/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "get-kick-history",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get kick count history"
+      },
+      "response": []
+    },
+    {
+      "name": "17. Get Current Pregnancy Week",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/pregnancy/get-current-pregnancy-week/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "pregnancy",
+            "get-current-pregnancy-week",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get current pregnancy week"
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "info": {
+    "name": "Patient Endpoints + Doctor Availability (with Login)",
+    "_postman_id": "c8b7a6e2-1111-4444-8888-cccccccccccc",
+    "description": "Patient appointment endpoints (no /appointments prefix) and doctor availability, with login flows.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Patient Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": ["{{base_url}}"],
+          "path": ["login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{patient_email}}\",\n  \"password\": \"{{patient_password}}\"\n}"
+        },
+        "description": "Logs in a patient and returns JWT to use as Authorization: Bearer {{auth_token}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Doctor Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{doctor_base_url}}/doctor-login",
+          "host": ["{{doctor_base_url}}"],
+          "path": ["doctor-login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{doctor_email}}\",\n  \"password\": \"{{doctor_password}}\",\n  \"role\": \"doctor\"\n}"
+        },
+        "description": "Logs in a doctor and returns JWT to use as Authorization: Bearer {{doctor_token}}"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Patient Appointment",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/patient/appointments",
+          "host": ["{{base_url}}"],
+          "path": ["patient", "appointments"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-11-01\",\n  \"appointment_time\": \"09:00\",\n  \"type\": \"Consultation\",\n  \"appointment_type\": \"In-person\",\n  \"doctor_id\": \"{{doctor_id}}\",\n  \"notes\": \"Lower back pain\",\n  \"patient_notes\": \"Prefer morning\",\n  \"slot_id\": \"{{slot_id}}\"\n}"
+        },
+        "description": "Creates a new patient appointment. If slot_id is provided and valid, the slot is booked and status may change to 'booked'."
+      },
+      "response": []
+    },
+    {
+      "name": "Update (Reschedule) Patient Appointment",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" },
+          { "key": "Authorization", "value": "Bearer {{auth_token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/patient/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["patient", "appointments", "{{appointment_id}}"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-11-02\",\n  \"appointment_time\": \"15:00\",\n  \"slot_id\": \"{{new_slot_id}}\",\n  \"notes\": \"Rescheduling due to conflict\",\n  \"patient_notes\": \"Need afternoon slot\"\n}"
+        },
+        "description": "Reschedules an existing appointment. Handles releasing old slot and booking a new slot if provided."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Patient Appointment (by id)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{auth_token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{base_url}}/patient/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["patient", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Fetches a single appointment from the authenticated patient's record."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Doctor Availability (by date)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{auth_token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{doctor_base_url}}/doctor/{{doctor_id}}/availability/{{date}}",
+          "host": ["{{doctor_base_url}}"],
+          "path": ["doctor", "{{doctor_id}}", "availability", "{{date}}"]
+        },
+        "description": "Returns availability for a specific date (YYYY-MM-DD)."
+      },
+      "response": []
+    },
+    {
+      "name": "Create Doctor Availability (doctor)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" },
+          { "key": "Authorization", "value": "Bearer {{doctor_token}}", "type": "text" }
+        ],
+        "url": {
+          "raw": "{{doctor_base_url}}/doctor/{{doctor_id}}/availability",
+          "host": ["{{doctor_base_url}}"],
+          "path": ["doctor", "{{doctor_id}}", "availability"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"date\": \"{{date}}\",\n  \"work_hours\": { \"start_time\": \"09:00\", \"end_time\": \"17:00\" },\n  \"consultation_type\": \"In-Person\",\n  \"breaks\": [ { \"start_time\": \"13:00\", \"end_time\": \"14:00\", \"reason\": \"Lunch\" } ],\n  \"types\": [\n    {\n      \"type\": \"Consultation\",\n      \"duration_mins\": 20,\n      \"price\": 500,\n      \"currency\": \"INR\",\n      \"slots\": [\n        { \"start_time\": \"09:00\", \"end_time\": \"09:20\", \"is_booked\": false },\n        { \"start_time\": \"09:20\", \"end_time\": \"09:40\", \"is_booked\": false }\n      ]\n    },\n    {\n      \"type\": \"Follow-up\",\n      \"duration_mins\": 10,\n      \"slots\": [ { \"start_time\": \"15:00\", \"end_time\": \"15:10\", \"is_booked\": false } ]\n    }\n  ]\n}"
+        },
+        "description": "Creates availability for a doctor for a specific date. Requires a valid doctor access token."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000" },
+    { "key": "doctor_base_url", "value": "http://localhost:5001" },
+    { "key": "auth_token", "value": "" },
+    { "key": "doctor_token", "value": "" },
+    { "key": "patient_email", "value": "patient@example.com" },
+    { "key": "patient_password", "value": "password123" },
+    { "key": "doctor_email", "value": "doctor@example.com" },
+    { "key": "doctor_password", "value": "password123" },
+    { "key": "doctor_id", "value": "D123456" },
+    { "key": "date", "value": "2025-11-01" },
+    { "key": "appointment_id", "value": "APPT_ID_PLACEHOLDER" },
+    { "key": "slot_id", "value": "SLOT_CONSULT_001" },
+    { "key": "new_slot_id", "value": "SLOT_CONSULT_002" }
+  ]
+}
+
+

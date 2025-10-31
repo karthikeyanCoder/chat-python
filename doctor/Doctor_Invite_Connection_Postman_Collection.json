@@ -1,0 +1,900 @@
+{
+	"info": {
+		"_postman_id": "doctor-invite-connection-001",
+		"name": "👨‍⚕️ Doctor Invite & Connection Management",
+		"description": "Complete API collection for Doctor-Patient Invite & Connection System\n\n**Features:**\n- Generate invite codes for patients\n- Verify invite codes (public)\n- View connection requests from patients\n- Accept connection requests (2 methods):\n  - By connection ID (dashboard)\n  - By invite code (email)\n- Reject connection requests\n- Remove patient connections\n- View all connected patients\n\n**New in v2.1:**\n- **Dual Acceptance Methods**: Accept using either connection_id or invite_code\n- **Email Integration**: Use invite codes directly from email notifications\n- **Enhanced Validation**: Invite code expiration and usage tracking\n\n**Authentication:** Most endpoints require doctor Bearer token\n**Base URL:** http://localhost:5000",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"version": "2.1.0"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{doctor_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "doctor_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "doctor_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "invite_code",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "connection_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "0. Authentication",
+			"item": [
+				{
+					"name": "Doctor Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('doctor_token', jsonData.token);",
+									"        console.log('Doctor token saved');",
+									"    }",
+									"    if (jsonData.doctor_id) {",
+									"        pm.collectionVariables.set('doctor_id', jsonData.doctor_id);",
+									"        console.log('Doctor ID saved:', jsonData.doctor_id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login_identifier\": \"doctor@example.com\",\n  \"password\": \"YourPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor-login",
+							"host": ["{{base_url}}"],
+							"path": ["doctor-login"]
+						},
+						"description": "Login as doctor to get authentication token. Token is auto-saved for use in other requests."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "1. Invite Management",
+			"item": [
+				{
+					"name": "Generate Invite Code",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.invite && jsonData.invite.invite_code) {",
+									"        pm.collectionVariables.set('invite_code', jsonData.invite.invite_code);",
+									"        console.log('Invite code saved:', jsonData.invite.invite_code);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patient_email\": \"patient@example.com\",\n  \"expires_in_days\": 7,\n  \"message\": \"I would like to invite you for prenatal care consultation.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/generate-invite",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "generate-invite"]
+						},
+						"description": "**Generate invite code for a patient**\n\nDoctor creates a unique invite code (format: ABC-XYZ-123) for a specific patient email.\n\n**Request Body:**\n- `patient_email` (required): Patient's email address\n- `expires_in_days` (optional, default: 7): Code validity in days\n- `message` (optional): Personal message to patient\n\n**Response:**\n- Invite code (ABC-XYZ-123 format)\n- Expiration date\n- Deep link for mobile app\n\n**Business Logic:**\n- Validates email format\n- Checks if connection already exists\n- Generates unique code\n- Stores in database with security features\n- Auto-expires after specified days"
+					},
+					"response": [
+						{
+							"name": "Success - Invite Generated",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"patient_email\": \"patient@example.com\",\n  \"expires_in_days\": 7,\n  \"message\": \"I would like to invite you for prenatal care consultation.\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/generate-invite",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "generate-invite"]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Invite code generated for patient@example.com\",\n  \"invite\": {\n    \"invite_code\": \"A1B-C2D-E3F\",\n    \"patient_email\": \"patient@example.com\",\n    \"expires_at\": \"2025-10-28T10:30:00Z\",\n    \"status\": \"active\",\n    \"usage_limit\": 1,\n    \"deep_link\": \"myapp://invite/A1B-C2D-E3F\"\n  }\n}"
+						},
+						{
+							"name": "Error - Connection Already Exists",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"patient_email\": \"existing@example.com\",\n  \"expires_in_days\": 7\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/generate-invite",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "generate-invite"]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"error\": \"Connection already exists with this patient\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Invite Code (Public)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/invite/verify/{{invite_code}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "invite", "verify", "{{invite_code}}"]
+						},
+						"description": "**Verify if invite code is valid** (No authentication required)\n\nPublic endpoint that patients can use to check if an invite code is valid before accepting.\n\n**Path Parameter:**\n- `invite_code`: The invite code (format: ABC-XYZ-123)\n\n**Response:**\n- Validity status\n- Doctor information\n- Expiration date\n- Custom message\n\n**Validation:**\n- Checks code format\n- Verifies status (active/expired/used)\n- Checks expiration date\n- Verifies usage limits"
+					},
+					"response": [
+						{
+							"name": "Success - Valid Code",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/invite/verify/A1B-C2D-E3F",
+									"host": ["{{base_url}}"],
+									"path": ["api", "invite", "verify", "A1B-C2D-E3F"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"valid\": true,\n  \"message\": \"Valid invite code\",\n  \"doctor\": {\n    \"name\": \"Dr. John Smith\",\n    \"specialty\": \"Obstetrics & Gynecology\",\n    \"hospital\": \"City General Hospital\"\n  },\n  \"invite_info\": {\n    \"expires_at\": \"2025-10-28T10:30:00Z\",\n    \"remaining_uses\": 1,\n    \"custom_message\": \"I would like to invite you for prenatal care consultation.\"\n  }\n}"
+						},
+						{
+							"name": "Error - Expired Code",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/invite/verify/OLD-EXP-IRE",
+									"host": ["{{base_url}}"],
+									"path": ["api", "invite", "verify", "OLD-EXP-IRE"]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"valid\": false,\n  \"message\": \"Invite code has expired\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get My Invites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/doctor/invites?status=active",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "invites"],
+							"query": [
+								{
+									"key": "status",
+									"value": "active",
+									"description": "Filter by status: active, expired, used (leave empty for all)"
+								}
+							]
+						},
+						"description": "**Get all invites generated by doctor**\n\nReturns list of all invite codes created by the authenticated doctor.\n\n**Query Parameters:**\n- `status` (optional): Filter by status\n  - `active` - Active invites\n  - `expired` - Expired invites\n  - `used` - Used invites\n  - Leave empty for all invites\n\n**Response:**\n- List of invites with details\n- Patient emails\n- Status and usage count\n- Creation and expiration dates"
+					},
+					"response": [
+						{
+							"name": "Success - Active Invites",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/doctor/invites?status=active",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "invites"],
+									"query": [
+										{
+											"key": "status",
+											"value": "active"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"invites\": [\n    {\n      \"invite_code\": \"A1B-C2D-E3F\",\n      \"patient_email\": \"patient1@example.com\",\n      \"custom_message\": \"Looking forward to working with you\",\n      \"status\": \"active\",\n      \"usage_count\": 0,\n      \"usage_limit\": 1,\n      \"created_at\": \"2025-10-21T10:00:00Z\",\n      \"expires_at\": \"2025-10-28T10:00:00Z\",\n      \"sent_via\": \"api\"\n    },\n    {\n      \"invite_code\": \"X9Y-Z8W-V7U\",\n      \"patient_email\": \"patient2@example.com\",\n      \"custom_message\": \"\",\n      \"status\": \"active\",\n      \"usage_count\": 0,\n      \"usage_limit\": 1,\n      \"created_at\": \"2025-10-20T15:30:00Z\",\n      \"expires_at\": \"2025-10-27T15:30:00Z\",\n      \"sent_via\": \"api\"\n    }\n  ],\n  \"total_count\": 2,\n  \"filter\": \"active\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "2. Connection Requests",
+			"item": [
+				{
+					"name": "Get Connection Requests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.requests && jsonData.requests.length > 0) {",
+									"        pm.collectionVariables.set('connection_id', jsonData.requests[0].connection_id);",
+									"        console.log('Connection ID saved:', jsonData.requests[0].connection_id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/doctor/connection-requests?status=pending",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "connection-requests"],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending",
+									"description": "Filter: pending, active, rejected, all"
+								}
+							]
+						},
+						"description": "**View connection requests from patients**\n\nDoctor views all connection requests sent by patients.\n\n**Query Parameters:**\n- `status` (optional, default: pending):\n  - `pending` - Awaiting doctor approval\n  - `active` - Accepted connections\n  - `rejected` - Rejected requests\n  - `all` - All connections\n\n**Response:**\n- List of connection requests\n- Patient details (name, email, mobile, photo)\n- Request message\n- Patient health info (age, blood type, pregnancy status)\n- Request timestamp\n\n**Use Case:**\nDoctor reviews pending requests and decides to accept or reject."
+					},
+					"response": [
+						{
+							"name": "Success - Pending Requests",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/doctor/connection-requests?status=pending",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "connection-requests"],
+									"query": [
+										{
+											"key": "status",
+											"value": "pending"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"requests\": [\n    {\n      \"connection_id\": \"CONN1729871524000123\",\n      \"request_id\": \"CONN1729871524000123\",\n      \"patient_id\": \"PAT175975384628ED6C\",\n      \"patient_name\": \"Jane Doe\",\n      \"patient_email\": \"jane.doe@example.com\",\n      \"patient_mobile\": \"9876543210\",\n      \"patient_photo\": null,\n      \"message\": \"Hello Doctor, I would like to connect with you for my pregnancy care.\",\n      \"connection_type\": \"primary\",\n      \"status\": \"pending\",\n      \"requested_at\": \"2025-10-21T14:30:00Z\",\n      \"patient_info\": {\n        \"age\": 28,\n        \"blood_type\": \"O+\",\n        \"is_pregnant\": true,\n        \"pregnancy_week\": 12\n      }\n    }\n  ],\n  \"total_count\": 1,\n  \"status_filter\": \"pending\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Accept Connection Request (by ID)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"connection_id\": \"{{connection_id}}\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome! I look forward to helping you with your pregnancy care.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/respond-to-request",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "respond-to-request"]
+						},
+						"description": "**Accept patient's connection request using connection ID**\n\nDoctor approves a pending connection request from a patient using the connection ID from the dashboard.\n\n**Request Body:**\n- `connection_id` (required): ID of the connection request\n- `action` (required): Must be \"accept\"\n- `message` (optional): Welcome message to patient\n\n**Response:**\n- Connection status updated to \"active\"\n- Doctor's patient count incremented\n- Method used: \"connection_id\"\n- Patient receives notification\n\n**Business Logic:**\n- Validates connection exists and is pending\n- Verifies doctor owns this request\n- Updates status to active\n- Sets connection timestamp\n- Updates doctor statistics"
+					},
+					"response": [
+						{
+							"name": "Success - Request Accepted",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"connection_id\": \"CONN1729871524000123\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome! I look forward to helping you with your pregnancy care.\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/respond-to-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "respond-to-request"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Patient connection accepted\",\n  \"method\": \"connection_id\",\n  \"connection\": {\n    \"connection_id\": \"CONN1729871524000123\",\n    \"status\": \"active\",\n    \"updated_at\": \"2025-10-21T15:00:00Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Accept Connection Request (by Invite Code)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"invite_code\": \"{{invite_code}}\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome! I look forward to helping you with your pregnancy care.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/respond-to-request",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "respond-to-request"]
+						},
+						"description": "**Accept patient's connection request using invite code**\n\nDoctor approves a pending connection request from a patient using the invite code from the email notification.\n\n**Request Body:**\n- `invite_code` (required): Invite code from patient's request email\n- `action` (required): Must be \"accept\"\n- `message` (optional): Welcome message to patient\n\n**Response:**\n- Connection status updated to \"active\"\n- Doctor's patient count incremented\n- Method used: \"invite_code\"\n- Invite code marked as \"used\"\n- Patient receives notification\n\n**Business Logic:**\n- Validates invite code exists and is active\n- Checks invite code is not expired\n- Finds pending connection using invite data\n- Verifies doctor owns this request\n- Updates status to active\n- Marks invite code as used\n- Sets connection timestamp\n- Updates doctor statistics"
+					},
+					"response": [
+						{
+							"name": "Success - Request Accepted via Invite Code",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"invite_code\": \"ABC-XYZ-123\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome! I look forward to helping you with your pregnancy care.\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/respond-to-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "respond-to-request"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Patient connection accepted\",\n  \"method\": \"invite_code\",\n  \"invite_code\": \"ABC-XYZ-123\",\n  \"connection\": {\n    \"connection_id\": \"CONN1729871524000123\",\n    \"status\": \"active\",\n    \"updated_at\": \"2025-10-21T15:00:00Z\"\n  }\n}"
+						},
+						{
+							"name": "Error - Invalid Invite Code",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"invite_code\": \"INVALID-CODE\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome!\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/respond-to-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "respond-to-request"]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"error\": \"Invalid invite code\"\n}"
+						},
+						{
+							"name": "Error - Expired Invite Code",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"invite_code\": \"EXPIRED-CODE\",\n  \"action\": \"accept\",\n  \"message\": \"Welcome!\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/respond-to-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "respond-to-request"]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"error\": \"Invite code has expired\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Reject Connection Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"connection_id\": \"{{connection_id}}\",\n  \"action\": \"reject\",\n  \"message\": \"Sorry, I am not accepting new patients at this time.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/respond-to-request",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "respond-to-request"]
+						},
+						"description": "**Reject patient's connection request**\n\nDoctor declines a pending connection request from a patient.\n\n**Request Body:**\n- `connection_id` (required): ID of the connection request\n- `action` (required): Must be \"reject\"\n- `message` (optional): Reason for rejection\n\n**Response:**\n- Connection status updated to \"rejected\"\n- Patient receives notification\n\n**Business Logic:**\n- Validates connection exists and is pending\n- Verifies doctor owns this request\n- Updates status to rejected\n- Stores rejection reason\n- Sends notification to patient"
+					},
+					"response": [
+						{
+							"name": "Success - Request Rejected",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"connection_id\": \"CONN1729871524000123\",\n  \"action\": \"reject\",\n  \"message\": \"Sorry, I am not accepting new patients at this time.\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/respond-to-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "respond-to-request"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Patient connection rejected\",\n  \"connection\": {\n    \"connection_id\": \"CONN1729871524000123\",\n    \"status\": \"rejected\",\n    \"updated_at\": \"2025-10-21T15:00:00Z\"\n  }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "3. Connection Management",
+			"item": [
+				{
+					"name": "Get Connected Patients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/doctor/connected-patients",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "connected-patients"]
+						},
+						"description": "**Get all connected patients**\n\nReturns list of all patients who have an active connection with the doctor.\n\n**Query Parameters:** None\n\n**Response:**\n- List of connected patients\n- Patient profile information\n- Pregnancy information\n- Connection details (since when, type)\n- Connection statistics\n- Summary (total count, active pregnancies)\n\n**Use Case:**\nDoctor dashboard showing all connected patients for care management."
+					},
+					"response": [
+						{
+							"name": "Success - Connected Patients List",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/doctor/connected-patients",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "connected-patients"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"patients\": [\n    {\n      \"connection_id\": \"CONN1729871524000123\",\n      \"patient_id\": \"PAT175975384628ED6C\",\n      \"name\": \"Jane Doe\",\n      \"age\": 28,\n      \"email\": \"jane.doe@example.com\",\n      \"mobile\": \"9876543210\",\n      \"profile_photo\": null,\n      \"pregnancy_info\": {\n        \"is_pregnant\": true,\n        \"pregnancy_week\": 12,\n        \"expected_delivery_date\": \"2026-05-15\"\n      },\n      \"connection_info\": {\n        \"connected_since\": \"2025-10-15T10:30:00Z\",\n        \"connection_type\": \"primary\",\n        \"status\": \"active\"\n      },\n      \"statistics\": {\n        \"total_appointments\": 3,\n        \"completed_appointments\": 1,\n        \"cancelled_appointments\": 0\n      }\n    }\n  ],\n  \"summary\": {\n    \"total_count\": 1,\n    \"active_pregnancies\": 1\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Cancel Connection Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"connection_id\": \"{{connection_id}}\",\n  \"reason\": \"Patient requested cancellation\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/cancel-request",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "cancel-request"]
+						},
+						"description": "**Doctor cancels a pending connection request**\n\nDoctor cancels a pending connection request before patient responds.\n\n**Request Body:**\n- `connection_id` (required): ID of the connection request to cancel\n- `reason` (optional): Reason for cancellation\n\n**Response:**\n- Request status updated to \"cancelled\"\n- Cancellation reason and timestamp stored\n- Added to audit log\n\n**Business Logic:**\n- Validates connection exists\n- Verifies doctor owns this connection\n- Checks request is in pending status\n- Updates status to cancelled\n- Stores cancellation info\n- Adds to audit log"
+					},
+					"response": [
+						{
+							"name": "Success - Request Cancelled",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"connection_id\": \"CONN1729871524000123\",\n  \"reason\": \"Patient requested cancellation\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/cancel-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "cancel-request"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Connection request cancelled successfully\",\n  \"request\": {\n    \"connection_id\": \"CONN1729871524000123\",\n    \"status\": \"cancelled\",\n    \"cancelled_at\": \"2025-01-27T10:30:00.000Z\"\n  }\n}"
+						},
+						{
+							"name": "Error - Request Not Found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"connection_id\": \"INVALID_ID\",\n  \"reason\": \"Test cancellation\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/cancel-request",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "cancel-request"]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"error\": \"Connection request not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Remove Patient Connection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"connection_id\": \"{{connection_id}}\",\n  \"reason\": \"Patient has relocated to another city and requested connection termination.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/doctor/remove-connection",
+							"host": ["{{base_url}}"],
+							"path": ["api", "doctor", "remove-connection"]
+						},
+						"description": "**Remove connection with patient**\n\nDoctor ends connection with a patient. Optional reason can be provided.\n\n**Request Body:**\n- `connection_id` (required): ID of the connection to remove\n- `reason` (optional): Reason for removing connection\n\n**Response:**\n- Connection status updated to \"removed\"\n- Doctor's active patient count decremented\n- Patient receives notification\n\n**Business Logic:**\n- Validates connection exists\n- Verifies doctor owns this connection\n- Updates status to removed\n- Stores removal reason and timestamp\n- Updates doctor statistics\n- Adds to audit log"
+					},
+					"response": [
+						{
+							"name": "Success - Connection Removed",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{doctor_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"connection_id\": \"CONN1729871524000123\",\n  \"reason\": \"Patient has relocated to another city.\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/doctor/remove-connection",
+									"host": ["{{base_url}}"],
+									"path": ["api", "doctor", "remove-connection"]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Connection removed successfully\",\n  \"connection\": {\n    \"connection_id\": \"CONN1729871524000123\",\n    \"status\": \"removed\"\n  }\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Ensure doctor token is set",
+					"if (!pm.collectionVariables.get('doctor_token')) {",
+					"    console.warn('⚠️ Doctor token not set. Please login first using Doctor Login request.');",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-parse JSON responses",
+					"if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {",
+					"    try {",
+					"        const jsonData = pm.response.json();",
+					"        pm.test('Response has success field', function () {",
+					"            pm.expect(jsonData).to.have.property('success');",
+					"        });",
+					"    } catch (e) {",
+					"        console.error('Failed to parse JSON:', e);",
+					"    }",
+					"}"
+				]
+			}
+		}
+	]
+}
+
+

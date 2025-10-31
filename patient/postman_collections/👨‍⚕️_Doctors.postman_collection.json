@@ -1,0 +1,76 @@
+{
+  "info": {
+    "name": "👨‍⚕️ Doctors",
+    "description": "Doctor profiles, search, and information",
+    "_postman_id": "doctors-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Doctor Profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/doctors/doctor/profile",
+          "host": ["{{base_url}}"],
+          "path": ["doctors", "doctor", "profile"]
+        },
+        "description": "Get doctor profile details from doctor_v2 collection"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Doctor Profile By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/doctors/doctor/profile/{{doctor_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["doctors", "doctor", "profile", "{{doctor_id}}"]
+        },
+        "description": "Get specific doctor profile by doctor_id"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get All Doctors",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/doctors/doctors?specialty=&location=&limit=50&offset=0",
+          "host": ["{{base_url}}"],
+          "path": ["doctors", "doctors"],
+          "query": [
+            {"key": "specialty", "value": "", "description": "Optional: Filter by specialty"},
+            {"key": "location", "value": "", "description": "Optional: Filter by location"},
+            {"key": "limit", "value": "50", "description": "Limit results (default: 50)"},
+            {"key": "offset", "value": "0", "description": "Offset for pagination (default: 0)"}
+          ]
+        },
+        "description": "Get all doctors with optional filters (GetDoctorsSchema)"
+      },
+      "response": []
+    }
+  ]
+}

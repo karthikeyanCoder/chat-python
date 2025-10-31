@@ -1,0 +1,691 @@
+{
+	"info": {
+		"_postman_id": "trimester-rag-complete",
+		"name": "🤖 Trimester Module with RAG - Complete Collection",
+		"description": "Complete Postman collection for Trimester Module with RAG features.\n\nRAG Features:\n- ✅ Qdrant Vector Search\n- ✅ OpenAI Personalization\n- ✅ Medical History Integration\n- ✅ Semantic Search\n- ✅ Risk Assessment\n\nServer: http://localhost:5002\nEndpoints: 18 routes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "🏥 Health & Status",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/health",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "health"]
+						},
+						"description": "Check if the trimester module is running"
+					},
+					"response": []
+				},
+				{
+					"name": "API Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", ""]
+						},
+						"description": "Get API information including RAG features status"
+					},
+					"response": []
+				},
+				{
+					"name": "OpenAI Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/openai/status",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "openai", "status"]
+						},
+						"description": "Check OpenAI service availability"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🤖 RAG Features (Main)",
+			"item": [
+				{
+					"name": "RAG Personalized - Diabetes Patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Contains personalized developments\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.personalized_developments).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Contains medical advisories\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.medical_advisories).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/patient/15/rag?patient_id=PAT_DIABETES_123&use_ai=true&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "patient", "15", "rag"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT_DIABETES_123",
+									"description": "Diabetes patient profile"
+								},
+								{
+									"key": "use_ai",
+									"value": "true",
+									"description": "Use OpenAI for personalization"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true",
+									"description": "Use mock patient data"
+								}
+							]
+						},
+						"description": "Get personalized pregnancy information for diabetes patient with RAG"
+					},
+					"response": []
+				},
+				{
+					"name": "RAG Personalized - Hypertension Patient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/patient/20/rag?patient_id=PAT_HYPERTENSION_456&use_ai=true&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "patient", "20", "rag"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT_HYPERTENSION_456",
+									"description": "Hypertension patient"
+								},
+								{
+									"key": "use_ai",
+									"value": "true"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Personalized recommendations for hypertension patient"
+					},
+					"response": []
+				},
+				{
+					"name": "RAG Personalized - Cancer History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/patient/25/rag?patient_id=PAT_CANCER_789&use_ai=true&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "patient", "25", "rag"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT_CANCER_789",
+									"description": "Cancer history patient"
+								},
+								{
+									"key": "use_ai",
+									"value": "true"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Personalized recommendations for cancer history patient"
+					},
+					"response": []
+				},
+				{
+					"name": "RAG Personalized - Healthy Patient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/patient/30/rag?patient_id=PAT_HEALTHY_001&use_ai=true&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "patient", "30", "rag"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT_HEALTHY_001"
+								},
+								{
+									"key": "use_ai",
+									"value": "true"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Standard recommendations for healthy patient"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🔍 Semantic Search (Qdrant)",
+			"item": [
+				{
+					"name": "Search - Baby Development",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Returns search results\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.success).to.be.true;",
+									"    pm.expect(jsonData.results).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/search?query=baby+development&limit=3",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "baby+development",
+									"description": "Natural language query"
+								},
+								{
+									"key": "limit",
+									"value": "3",
+									"description": "Number of results"
+								}
+							]
+						},
+						"description": "Semantic search for baby development using Qdrant vector search"
+					},
+					"response": []
+				},
+				{
+					"name": "Search - Nutrition Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/search?query=nutrition+tips+for+pregnancy&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "nutrition+tips+for+pregnancy"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Search for pregnancy nutrition information"
+					},
+					"response": []
+				},
+				{
+					"name": "Search - Second Trimester",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/search?query=second+trimester+symptoms&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "second+trimester+symptoms"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Search for second trimester symptoms"
+					},
+					"response": []
+				},
+				{
+					"name": "Search - Exercise During Pregnancy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/search?query=safe+exercise+during+pregnancy&limit=3",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "safe+exercise+during+pregnancy"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Search for exercise recommendations"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📊 Week Data",
+			"item": [
+				{
+					"name": "Get Week 10 (Basic)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/10?use_openai=false&include_fruit_image=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "10"],
+							"query": [
+								{
+									"key": "use_openai",
+									"value": "false"
+								},
+								{
+									"key": "include_fruit_image",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get basic week 10 data with fruit image"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Week 20 (With OpenAI)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/20?use_openai=true&include_fruit_image=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "20"],
+							"query": [
+								{
+									"key": "use_openai",
+									"value": "true"
+								},
+								{
+									"key": "include_fruit_image",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get week 20 data with OpenAI enhancement"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Week 15 Enhanced (RAG + AI)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/15/enhanced?patient_id=PAT123&use_mock_data=true&include_rag_analysis=true&image_method=all",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "15", "enhanced"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT123"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true"
+								},
+								{
+									"key": "include_rag_analysis",
+									"value": "true"
+								},
+								{
+									"key": "image_method",
+									"value": "all",
+									"description": "all, rag, openai, traditional"
+								}
+							]
+						},
+						"description": "Get enhanced week data with RAG analysis and all image types"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Weeks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/weeks",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "weeks"]
+						},
+						"description": "Get all 40 weeks of pregnancy data"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Week Developments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/25/developments",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "25", "developments"]
+						},
+						"description": "Get only key developments for week 25"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🍊 Trimester Data",
+			"item": [
+				{
+					"name": "Get Trimester 1 Weeks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/trimester/1?include_fruit_images=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "trimester", "1"],
+							"query": [
+								{
+									"key": "include_fruit_images",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get all weeks in trimester 1 with fruit images"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trimester 2 Weeks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/trimester/2?include_fruit_images=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "trimester", "2"],
+							"query": [
+								{
+									"key": "include_fruit_images",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get all weeks in trimester 2"
+					},
+					"response": []
+				},
+				{
+					"name": "Trimester Fruit Recommendations (RAG)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/trimester/3/fruit-recommendations?patient_id=PAT123&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "trimester", "3", "fruit-recommendations"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT123"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Get RAG-based fruit recommendations for trimester 3"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🤖 AI Features (OpenAI)",
+			"item": [
+				{
+					"name": "AI Baby Size",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/18/baby-size",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "18", "baby-size"]
+						},
+						"description": "Get AI-powered baby size information"
+					},
+					"response": []
+				},
+				{
+					"name": "AI Symptoms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/12/symptoms",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "12", "symptoms"]
+						},
+						"description": "Get AI-powered symptoms analysis"
+					},
+					"response": []
+				},
+				{
+					"name": "AI Screening",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/16/screening",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "16", "screening"]
+						},
+						"description": "Get AI-powered screening information"
+					},
+					"response": []
+				},
+				{
+					"name": "AI Wellness Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/22/wellness",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "22", "wellness"]
+						},
+						"description": "Get AI-powered wellness tips"
+					},
+					"response": []
+				},
+				{
+					"name": "AI Nutrition Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/28/nutrition",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "28", "nutrition"]
+						},
+						"description": "Get AI-powered nutrition tips"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🖼️ Image Generation",
+			"item": [
+				{
+					"name": "Baby Image - Stream (PNG)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/15/baby-image?format=stream",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "15", "baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "stream",
+									"description": "Returns raw PNG image"
+								}
+							]
+						},
+						"description": "Get baby size image as PNG stream (for <img> tags)"
+					},
+					"response": []
+				},
+				{
+					"name": "Baby Image - Base64 (JSON)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/15/baby-image?format=base64",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "15", "baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "base64",
+									"description": "Returns JSON with base64 data"
+								}
+							]
+						},
+						"description": "Get baby size image as base64 in JSON"
+					},
+					"response": []
+				},
+				{
+					"name": "Baby Image - Regenerate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/trimester/week/20/baby-image?format=base64&regenerate=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "trimester", "week", "20", "baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "base64"
+								},
+								{
+									"key": "regenerate",
+									"value": "true",
+									"description": "Force regenerate from OpenAI"
+								}
+							]
+						},
+						"description": "Force regenerate image from OpenAI DALL-E"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"console.log('🤖 Trimester Module with RAG - Request starting...');"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"console.log('✅ Response received');"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5002",
+			"type": "string"
+		},
+		{
+			"key": "patient_id",
+			"value": "PAT123",
+			"type": "string"
+		},
+		{
+			"key": "week",
+			"value": "15",
+			"type": "string"
+		}
+	]
+}

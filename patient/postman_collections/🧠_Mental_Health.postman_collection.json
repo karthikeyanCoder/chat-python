@@ -1,0 +1,464 @@
+{
+  "info": {
+    "name": "🧠 Mental Health",
+    "description": "Mood tracking, mental health assessments, AI chat support",
+    "_postman_id": "mental_health-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Submit Mood Checkin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/mental-health/mood-checkin",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "mental-health",
+            "mood-checkin"
+          ]
+        },
+        "description": "Submit mood check-in (MoodCheckinSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"mood\": \"happy\",\n  \"note\": \"Feeling great today!\",\n  \"date\": \"2025-10-16\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Mental Health History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mental-health/mental-health/history/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "mental-health",
+            "history",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get mental health history"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Submit Mental Health Assessment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/mental-health/assessment",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "mental-health",
+            "assessment"
+          ]
+        },
+        "description": "Submit assessment (MentalHealthAssessmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"score\": 7.5,\n  \"date\": \"2025-10-16\",\n  \"questions\": [\"How have you been feeling?\", \"Any anxiety symptoms?\"],\n  \"answers\": [\"Generally good\", \"Mild anxiety occasionally\"],\n  \"notes\": \"Overall positive mental state\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Generate Mental Health Story",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/generate-story",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "generate-story"
+          ]
+        },
+        "description": "Generate story (GenerateStorySchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"story_type\": \"relaxation\",\n  \"scenario\": \"peaceful_garden\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Assess Mental Health",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/assess",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "assess"
+          ]
+        },
+        "description": "Assess based on responses (AssessMentalHealthSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"answers\": [\"I feel relaxed\", \"My mood is positive\", \"Sleep is good\"],\n  \"story_id\": \"story_123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Generate Mental Health Audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/generate-audio",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "generate-audio"
+          ]
+        },
+        "description": "Generate Tamil audio for story",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"story_type\": \"meditation\",\n  \"scenario\": \"breathing_exercise\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Mental Health Story Types",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/story-types",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "story-types"
+          ]
+        },
+        "description": "Get available story types"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Mental Health Service Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "health"
+          ]
+        },
+        "description": "Check service health"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Mental Health Chat",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/chat",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "chat"
+          ]
+        },
+        "description": "AI chat (MentalHealthChatSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"message\": \"I'm feeling anxious about the upcoming delivery\",\n  \"context\": \"pregnancy_anxiety\",\n  \"mood\": \"worried\",\n  \"session_id\": \"session_789\",\n  \"user_profile\": {\"pregnancy_week\": 36, \"first_pregnancy\": true}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get Mental Health Chat History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/chat/history?limit=50&offset=0",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "chat",
+            "history"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "50"
+            },
+            {
+              "key": "offset",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "Get chat history"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Start Mental Health Chat Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/chat/session",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "chat",
+            "session"
+          ]
+        },
+        "description": "Start chat session (StartChatSessionSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"initial_mood\": \"calm\",\n  \"user_profile\": {\"pregnancy_week\": 20, \"concerns\": [\"stress\", \"sleep\"]}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. End Mental Health Chat Session",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/chat/session/{{session_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "chat",
+            "session",
+            "{{session_id}}"
+          ]
+        },
+        "description": "End chat session"
+      },
+      "response": []
+    },
+    {
+      "name": "13. Get Mental Health Assessments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/assessments?limit=10&offset=0",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "assessments"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "offset",
+              "value": "0"
+            }
+          ]
+        },
+        "description": "Get assessments"
+      },
+      "response": []
+    },
+    {
+      "name": "14. Debug Mental Health Database",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/mental-health/api/mental-health/debug",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mental-health",
+            "api",
+            "mental-health",
+            "debug"
+          ]
+        },
+        "description": "Debug database status"
+      },
+      "response": []
+    }
+  ]
+}

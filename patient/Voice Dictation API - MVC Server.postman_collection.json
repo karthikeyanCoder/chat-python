@@ -1,0 +1,1092 @@
+{
+	"info": {
+		"_postman_id": "266a1c3a-65dc-43f4-bcc6-17eba5386c5b",
+		"name": "Voice Dictation API - MVC Server",
+		"description": "Complete API collection for Voice Dictation MVC Server (run_mvc_server.py)\n\nBase URL: [http://localhost:8000](http://localhost:8000)  \nServer: FastAPI with MVC architecture  \nFeatures: Real-time transcription, conversation management, WebSocket support, mobile API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31889053",
+		"_collection_link": "https://grey-star-23299.postman.co/workspace/My-Workspace~21baabbf-bf78-4b15-84fb-7b288b1dc6bb/collection/31889053-266a1c3a-65dc-43f4-bcc6-17eba5386c5b?action=share&source=collection_link&creator=31889053"
+	},
+	"item": [
+		{
+			"name": "1. Health Checks",
+			"item": [
+				{
+					"name": "Basic Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health",
+								""
+							]
+						},
+						"description": "Basic health check endpoint to verify server is running"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/health/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"health",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"healthy\",\n  \"service\": \"voice-dictation-api\",\n  \"version\": \"1.0.0\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Detailed Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health/detailed",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"health",
+								"detailed"
+							]
+						},
+						"description": "Detailed health check with database and WebSocket connection status"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/health/detailed",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"health",
+										"detailed"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"healthy\",\n  \"service\": \"voice-dictation-api\",\n  \"version\": \"1.0.0\",\n  \"database\": \"connected\",\n  \"websocket_connections\": 0,\n  \"microservices_enabled\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Mobile API Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/health",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"health"
+							]
+						},
+						"description": "Health check endpoint for mobile applications"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/health",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"health"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"status\": \"healthy\",\n    \"mobile_support\": true,\n    \"features\": {\n      \"real_time_transcription\": true,\n      \"offline_mode\": true,\n      \"cloud_sync\": true,\n      \"push_notifications\": true,\n      \"audio_upload\": true\n    },\n    \"api_version\": \"mobile/v1\",\n    \"timestamp\": \"2025-01-27T10:30:00Z\"\n  },\n  \"message\": \"Mobile API is healthy\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "2. Conversation Management",
+			"item": [
+				{
+					"name": "Create Conversation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Medical Consultation - Patient Visit\",\n  \"language\": \"en\",\n  \"extra_data\": {\n    \"patient_id\": \"P12345\",\n    \"doctor\": \"Dr. Smith\",\n    \"department\": \"Cardiology\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								""
+							]
+						},
+						"description": "Create a new conversation with title, language, and optional extra data"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Medical Consultation - Patient Visit\",\n  \"language\": \"en\",\n  \"extra_data\": {\n    \"patient_id\": \"P12345\",\n    \"doctor\": \"Dr. Smith\",\n    \"department\": \"Cardiology\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 1,\n  \"title\": \"Medical Consultation - Patient Visit\",\n  \"language\": \"en\",\n  \"is_active\": true,\n  \"duration_seconds\": 0.0,\n  \"audio_file_path\": null,\n  \"extra_data\": {\n    \"patient_id\": \"P12345\",\n    \"doctor\": \"Dr. Smith\",\n    \"department\": \"Cardiology\"\n  },\n  \"created_at\": \"2025-01-27T10:30:00.123456\",\n  \"updated_at\": \"2025-01-27T10:30:00.123456\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Conversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/?skip=0&limit=100&is_active=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								""
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0",
+									"description": "Number of records to skip (pagination)"
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"description": "Maximum number of records to return"
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"description": "Filter by active status (optional)"
+								},
+								{
+									"key": "language",
+									"value": "en",
+									"description": "Filter by language (optional)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Get all conversations with pagination and optional filters"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/?skip=0&limit=100",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										""
+									],
+									"query": [
+										{
+											"key": "skip",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": 1,\n    \"title\": \"Medical Consultation - Patient Visit\",\n    \"language\": \"en\",\n    \"is_active\": true,\n    \"duration_seconds\": 120.5,\n    \"audio_file_path\": null,\n    \"extra_data\": {\n      \"patient_id\": \"P12345\",\n      \"doctor\": \"Dr. Smith\"\n    },\n    \"created_at\": \"2025-01-27T10:30:00.123456\",\n    \"updated_at\": \"2025-01-27T10:32:00.123456\"\n  },\n  {\n    \"id\": 2,\n    \"title\": \"Follow-up Consultation\",\n    \"language\": \"en\",\n    \"is_active\": true,\n    \"duration_seconds\": 95.0,\n    \"audio_file_path\": null,\n    \"extra_data\": {},\n    \"created_at\": \"2025-01-27T11:00:00.123456\",\n    \"updated_at\": \"2025-01-27T11:01:35.123456\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Conversation by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}"
+							]
+						},
+						"description": "Get a specific conversation by its ID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 1,\n  \"title\": \"Medical Consultation - Patient Visit\",\n  \"language\": \"en\",\n  \"is_active\": true,\n  \"duration_seconds\": 120.5,\n  \"audio_file_path\": null,\n  \"extra_data\": {\n    \"patient_id\": \"P12345\",\n    \"doctor\": \"Dr. Smith\",\n    \"department\": \"Cardiology\"\n  },\n  \"created_at\": \"2025-01-27T10:30:00.123456\",\n  \"updated_at\": \"2025-01-27T10:32:00.123456\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Conversation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Medical Consultation\",\n  \"language\": \"en\",\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}"
+							]
+						},
+						"description": "Update conversation title, language, or active status"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Updated Medical Consultation\",\n  \"is_active\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 1,\n  \"title\": \"Updated Medical Consultation\",\n  \"language\": \"en\",\n  \"is_active\": true,\n  \"duration_seconds\": 120.5,\n  \"audio_file_path\": null,\n  \"extra_data\": {\n    \"patient_id\": \"P12345\"\n  },\n  \"created_at\": \"2025-01-27T10:30:00.123456\",\n  \"updated_at\": \"2025-01-27T10:35:00.123456\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Conversation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}"
+							]
+						},
+						"description": "Delete a conversation by ID"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Conversation deleted successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Conversation Transcriptions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}/transcriptions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}",
+								"transcriptions"
+							]
+						},
+						"description": "Get all transcriptions for a specific conversation"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1/transcriptions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1",
+										"transcriptions"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"conversation_id\": 1,\n  \"transcriptions\": [\n    {\n      \"id\": 1,\n      \"text\": \"Patient reported feeling faint\",\n      \"confidence\": 0.95,\n      \"start_time\": 0.0,\n      \"end_time\": 3.0,\n      \"speaker_id\": \"doctor\",\n      \"created_at\": \"2025-01-27T10:30:05Z\"\n    },\n    {\n      \"id\": 2,\n      \"text\": \"and experiencing mild contractions\",\n      \"confidence\": 0.92,\n      \"start_time\": 3.0,\n      \"end_time\": 6.0,\n      \"speaker_id\": \"doctor\",\n      \"created_at\": \"2025-01-27T10:30:08Z\"\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Activate Conversation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}/activate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}",
+								"activate"
+							]
+						},
+						"description": "Activate a conversation for recording"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1/activate",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1",
+										"activate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Conversation activated\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Deactivate Conversation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/conversations/{{conversation_id}}/deactivate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"conversations",
+								"{{conversation_id}}",
+								"deactivate"
+							]
+						},
+						"description": "Deactivate a conversation to stop recording"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/conversations/1/deactivate",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"conversations",
+										"1",
+										"deactivate"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Conversation deactivated\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "3. Mobile API - Conversations",
+			"item": [
+				{
+					"name": "Get Mobile Config",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/config?platform=android&version=1.0.0",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"config"
+							],
+							"query": [
+								{
+									"key": "platform",
+									"value": "android",
+									"description": "Platform: android or ios"
+								},
+								{
+									"key": "version",
+									"value": "1.0.0",
+									"description": "App version"
+								}
+							]
+						},
+						"description": "Get mobile app configuration including features and endpoints"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/config?platform=android&version=1.0.0",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"config"
+									],
+									"query": [
+										{
+											"key": "platform",
+											"value": "android"
+										},
+										{
+											"key": "version",
+											"value": "1.0.0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"app_name\": \"Voice Dictation\",\n    \"version\": \"1.0.0\",\n    \"min_supported_version\": \"1.0.0\",\n    \"features\": {\n      \"real_time_transcription\": true,\n      \"offline_mode\": true,\n      \"cloud_sync\": true,\n      \"push_notifications\": true,\n      \"audio_compression\": true,\n      \"multi_language\": true\n    },\n    \"api_endpoints\": {\n      \"base_url\": \"http://localhost:8000/\",\n      \"websocket_url\": \"ws://127.0.0.1:8000/ws\",\n      \"upload_endpoint\": \"/api/mobile/v1/audio/upload\",\n      \"transcription_endpoint\": \"/api/mobile/v1/transcription\"\n    },\n    \"sync_settings\": {\n      \"auto_sync_interval\": 300,\n      \"max_offline_items\": 1000,\n      \"conflict_resolution\": \"server_wins\"\n    }\n  },\n  \"message\": \"Mobile configuration retrieved successfully\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Mobile Conversation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Mobile Consultation\",\n  \"language\": \"en\",\n  \"device_info\": {\n    \"device_id\": \"device_12345\",\n    \"device_type\": \"android\",\n    \"os_version\": \"13\",\n    \"app_version\": \"1.0.0\",\n    \"model\": \"Samsung Galaxy S21\",\n    \"manufacturer\": \"Samsung\"\n  },\n  \"auto_save\": true,\n  \"sync_enabled\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/conversation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"conversation"
+							]
+						},
+						"description": "Create a new conversation from mobile app with device info"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Mobile Consultation\",\n  \"language\": \"en\",\n  \"device_info\": {\n    \"device_id\": \"device_12345\",\n    \"device_type\": \"android\",\n    \"os_version\": \"13\",\n    \"app_version\": \"1.0.0\"\n  },\n  \"auto_save\": true,\n  \"sync_enabled\": true\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/conversation",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"conversation"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"conversation_id\": 1,\n    \"title\": \"Mobile Consultation\",\n    \"language\": \"en\",\n    \"is_active\": true,\n    \"duration_seconds\": 0.0,\n    \"transcription_count\": 0,\n    \"created_at\": \"2025-01-27T10:30:00.123456\",\n    \"updated_at\": \"2025-01-27T10:30:00.123456\",\n    \"sync_status\": \"synced\"\n  },\n  \"message\": \"Conversation created successfully\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Mobile Conversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/conversations?skip=0&limit=50",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"conversations"
+							],
+							"query": [
+								{
+									"key": "skip",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "50"
+								}
+							]
+						},
+						"description": "Get all conversations for mobile with pagination"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/conversations?skip=0&limit=50",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"conversations"
+									],
+									"query": [
+										{
+											"key": "skip",
+											"value": "0"
+										},
+										{
+											"key": "limit",
+											"value": "50"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"conversation_id\": 1,\n      \"title\": \"Mobile Consultation\",\n      \"language\": \"en\",\n      \"is_active\": true,\n      \"duration_seconds\": 120.5,\n      \"transcription_count\": 5,\n      \"created_at\": \"2025-01-27T10:30:00Z\",\n      \"updated_at\": \"2025-01-27T10:32:00Z\",\n      \"sync_status\": \"synced\"\n    }\n  ],\n  \"message\": \"Conversations retrieved successfully\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "4. Mobile API - Transcriptions",
+			"item": [
+				{
+					"name": "Create Mobile Transcription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"conversation_id\": 1,\n  \"audio_data\": \"UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=\",\n  \"chunk_index\": 0,\n  \"is_final\": false,\n  \"language\": \"en\",\n  \"timestamp\": 1640995200.0,\n  \"device_info\": {\n    \"device_id\": \"device_12345\",\n    \"device_type\": \"android\",\n    \"os_version\": \"13\",\n    \"app_version\": \"1.0.0\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/transcription",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"transcription"
+							]
+						},
+						"description": "Create a transcription from mobile app with audio data"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"conversation_id\": 1,\n  \"audio_data\": \"UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=\",\n  \"chunk_index\": 0,\n  \"is_final\": false,\n  \"language\": \"en\",\n  \"timestamp\": 1640995200.0\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/transcription",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"transcription"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"transcription_id\": 1,\n    \"conversation_id\": 1,\n    \"text\": \"Patient reported feeling faint\",\n    \"confidence\": 0.95,\n    \"is_final\": false,\n    \"start_time\": 0.0,\n    \"end_time\": 3.0,\n    \"language\": \"en\",\n    \"speaker_id\": \"doctor\",\n    \"processing_time\": 0.123,\n    \"created_at\": \"2025-01-27T10:30:00Z\"\n  },\n  \"message\": \"Transcription created successfully\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Upload Audio File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "conversation_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "audio_file",
+									"type": "file",
+									"src": "/path/to/audio.wav"
+								},
+								{
+									"key": "language",
+									"value": "en",
+									"type": "text"
+								},
+								{
+									"key": "speaker_id",
+									"value": "doctor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/mobile/v1/audio/upload",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"mobile",
+								"v1",
+								"audio",
+								"upload"
+							]
+						},
+						"description": "Upload audio file for transcription from mobile app"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "conversation_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "audio_file",
+											"value": "",
+											"type": "file"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/api/mobile/v1/audio/upload",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"mobile",
+										"v1",
+										"audio",
+										"upload"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"data\": {\n    \"file_path\": \"/uploads/audio_1640995200.wav\",\n    \"duration\": 120.5,\n    \"size_bytes\": 1024000,\n    \"format\": \"wav\",\n    \"sample_rate\": 16000\n  },\n  \"message\": \"Audio file uploaded successfully\",\n  \"timestamp\": \"2025-01-27T10:30:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "5. WebSocket Connection",
+			"item": [
+				{
+					"name": "WebSocket Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/ws/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"ws",
+								"1"
+							]
+						},
+						"description": "WebSocket endpoint for real-time audio transcription.\n\n**Connection URL:** `ws://localhost:8000/ws/{conversation_id}`\n\n**Send Message Format:**\n```json\n{\n  \"type\": \"audio_chunk\",\n  \"data\": {\n    \"conversation_id\": 1,\n    \"audio_data\": \"base64_encoded_audio\",\n    \"chunk_index\": 0,\n    \"timestamp\": 1640995200.0\n  }\n}\n```\n\n**Receive Message Format:**\n```json\n{\n  \"type\": \"transcription\",\n  \"data\": {\n    \"text\": \"Patient reported feeling faint\",\n    \"is_final\": false,\n    \"chunk_index\": 0,\n    \"confidence\": 0.95\n  }\n}\n```\n\n**Note:** This is a WebSocket endpoint. Use a WebSocket client to connect."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "conversation_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "transcription_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

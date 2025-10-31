@@ -1,0 +1,372 @@
+{
+  "info": {
+    "name": "❤️ Vital Signs",
+    "description": "Blood pressure, heart rate, temperature tracking and analysis",
+    "_postman_id": "vital_signs-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Record Vital Sign",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/vitals/record",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "record"
+          ]
+        },
+        "description": "Record vital signs (SaveVitalSignsSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"blood_pressure_systolic\": 120,\n  \"blood_pressure_diastolic\": 80,\n  \"heart_rate\": 75,\n  \"temperature\": 98.6,\n  \"respiratory_rate\": 16,\n  \"oxygen_saturation\": 98.0,\n  \"weight\": 65.5,\n  \"notes\": \"Routine checkup\",\n  \"timestamp\": \"2025-10-16T14:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Vital Signs History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/history/{{patient_id}}?days=30",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "history",
+            "{{patient_id}}"
+          ],
+          "query": [
+            {
+              "key": "days",
+              "value": "30"
+            }
+          ]
+        },
+        "description": "Get history"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Analyze Vital Signs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/vitals/analyze",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "analyze"
+          ]
+        },
+        "description": "Analyze vitals (AnalyzeVitalSignsSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"vital_signs\": {\"blood_pressure\": \"120/80\", \"heart_rate\": 75, \"temperature\": 98.6},\n  \"pregnancy_week\": 24\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Vital Signs Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/stats/{{patient_id}}?days=30",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "stats",
+            "{{patient_id}}"
+          ],
+          "query": [
+            {
+              "key": "days",
+              "value": "30"
+            }
+          ]
+        },
+        "description": "Get statistics"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Health Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/health-summary/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "health-summary",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get health summary"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Create Vital Alert",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/vitals/alerts",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "alerts"
+          ]
+        },
+        "description": "Create alert",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"alert_type\": \"high_blood_pressure\",\n  \"threshold\": {\"systolic\": 140, \"diastolic\": 90},\n  \"message\": \"Blood pressure alert\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Vital Alerts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/alerts/{{patient_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "alerts",
+            "{{patient_id}}"
+          ]
+        },
+        "description": "Get alerts"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Process Vital Signs OCR",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/ocr",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "ocr"
+          ]
+        },
+        "description": "Process OCR (file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            },
+            {
+              "key": "patient_id",
+              "value": "PAT_12345",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Process Vital Signs Text",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/vitals/process-text",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "process-text"
+          ]
+        },
+        "description": "Process text",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"BP: 120/80, HR: 75 bpm, Temp: 98.6°F\",\n  \"patient_id\": \"PAT_12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Vital OCR Upload",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/vital-ocr/upload",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "vital-ocr",
+            "upload"
+          ]
+        },
+        "description": "Upload for OCR",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Vital OCR Base64",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/vitals/vital-ocr/base64",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "vital-ocr",
+            "base64"
+          ]
+        },
+        "description": "Process base64",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"image\": \"base64_encoded_vital_signs_image\",\n  \"filename\": \"vitals.jpg\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Get Vital OCR Formats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/vital-ocr/formats",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "vital-ocr",
+            "formats"
+          ]
+        },
+        "description": "Get formats"
+      },
+      "response": []
+    },
+    {
+      "name": "13. Get Vital OCR Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/vitals/vital-ocr/status",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "vitals",
+            "vital-ocr",
+            "status"
+          ]
+        },
+        "description": "Get status"
+      },
+      "response": []
+    }
+  ]
+}

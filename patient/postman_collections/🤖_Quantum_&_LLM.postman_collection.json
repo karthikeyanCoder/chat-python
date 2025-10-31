@@ -1,0 +1,186 @@
+{
+  "info": {
+    "name": "🤖 Quantum & LLM",
+    "description": "AI/ML features, quantum search, knowledge base",
+    "_postman_id": "quantum_llm-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Quantum Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quantum/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quantum",
+            "health"
+          ]
+        },
+        "description": "Quantum service health check"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Quantum Collections",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quantum/collections",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quantum",
+            "collections"
+          ]
+        },
+        "description": "Get quantum collections"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Quantum Collection Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/quantum/collection-status/{{collection_name}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quantum",
+            "collection-status",
+            "{{collection_name}}"
+          ]
+        },
+        "description": "Get collection status"
+      },
+      "response": []
+    },
+    {
+      "name": "4. LLM Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/llm/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "llm",
+            "health"
+          ]
+        },
+        "description": "LLM service health check"
+      },
+      "response": []
+    },
+    {
+      "name": "5. LLM Test",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/llm/test",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "llm",
+            "test"
+          ]
+        },
+        "description": "Test LLM (LLMTestSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prompt\": \"What are common symptoms during the second trimester of pregnancy?\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Add Knowledge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/quantum/add-knowledge",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quantum",
+            "add-knowledge"
+          ]
+        },
+        "description": "Add knowledge (AddKnowledgeSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Folic acid is essential during pregnancy for neural tube development\",\n  \"source\": \"Medical journal\",\n  \"trimester\": \"first\",\n  \"tags\": [\"nutrition\", \"supplements\", \"folic_acid\"],\n  \"triage\": \"recommendation\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Search Knowledge",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/quantum/search-knowledge",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "quantum",
+            "search-knowledge"
+          ]
+        },
+        "description": "Search knowledge base (SearchKnowledgeSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"nutrition tips for pregnant women\",\n  \"weeks_pregnant\": 20,\n  \"limit\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    }
+  ]
+}

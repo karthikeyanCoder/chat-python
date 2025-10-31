@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "Nurse Management API Collection",
+    "description": "Complete collection of APIs for nurse management in the Pregnancy AI system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Nurse Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/doctor-login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"nurse@example.com\",\n    \"password\": \"password123\",\n    \"role\": \"nurse\"\n}"
+            },
+            "description": "Login endpoint for nurses."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nurse Management",
+      "item": [
+        {
+          "name": "Create Nurse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{base_url}}/api/nurses",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"nurse@example.com\",\n    \"phone\": \"1234567890\",\n    \"department\": \"Obstetrics\",\n    \"shift\": \"Morning\",\n    \"specialization\": \"Midwife\",\n    \"experience_years\": 5,\n    \"password\": \"password123\"\n}"
+            },
+            "description": "Create a new nurse account. Requires doctor authentication."
+          }
+        },
+        {
+          "name": "Get All Nurses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{base_url}}/api/nurses",
+            "description": "Get all nurses assigned to the logged-in doctor."
+          }
+        },
+        {
+          "name": "Delete Nurse",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{base_url}}/api/nurses/delete",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"nurse@example.com\"\n}"
+            },
+            "description": "Delete a nurse by email. Only the assigned doctor can delete their nurses."
+          }
+        },
+        {
+          "name": "Reset Nurse Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{base_url}}/api/nurses/{{nurse_id}}/reset-password",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"new_password\": \"newpassword123\"\n}"
+            },
+            "description": "Reset password for a specific nurse. Only the assigned doctor can reset their nurses' passwords."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    }
+  ]
+}

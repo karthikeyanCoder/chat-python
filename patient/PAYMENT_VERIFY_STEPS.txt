@@ -1,0 +1,86 @@
+==========================================
+HOW TO VERIFY PAYMENT IN POSTMAN
+==========================================
+
+STEP 1: CREATE ORDER
+---------------------
+POST http://localhost:5002/payments/create-order
+Header: Authorization: Bearer YOUR_JWT_TOKEN
+Body:
+{
+  "userName": "test_user",
+  "amount": 50000
+}
+
+Response: {
+  "order": {
+    "id": "order_RYuGHINFSkhAOk"  ← COPY THIS
+  },
+  "paymentId": "payment_12345"   ← COPY THIS
+}
+
+
+STEP 2: VERIFY PAYMENT
+-----------------------
+POST http://localhost:5002/payments/verify-payment
+NO TOKEN NEEDED!
+
+Body:
+{
+  "paymentId": "PASTE_paymentId_HERE",
+  "razorpay_order_id": "PASTE_order_id_HERE", 
+  "razorpay_payment_id": "pay_TEST123",
+  "razorpay_signature": "test_signature"
+}
+
+Expected Response:
+{
+  "success": true,
+  "message": "Payment verified successfully",
+  "userName": "test_user",
+  "premium": {
+    "validFrom": "2025-10-28T...",
+    "validTill": "2026-10-28T..."
+  }
+}
+
+
+STEP 3: CHECK PREMIUM STATUS
+-----------------------------
+GET http://localhost:5002/payments/premium-status?username=test_user
+Header: Authorization: Bearer YOUR_JWT_TOKEN
+
+Expected Response:
+{
+  "success": true,
+  "isPremium": true,
+  "premiumValidTill": "2026-10-28T...",
+  "daysRemaining": 365
+}
+
+
+STEP 4: CHECK PAYMENT HISTORY
+------------------------------
+GET http://localhost:5002/payments/history?username=test_user
+Header: Authorization: Bearer YOUR_JWT_TOKEN
+
+Expected Response:
+{
+  "success": true,
+  "payments": [
+    {
+      "userName": "test_user",
+      "razorpayOrderId": "order_RYuGHINFSkhAOk",
+      "status": "paid",
+      "validityEndDate": "2026-10-28T..."
+    }
+  ]
+}
+
+==========================================
+NOTE: 
+- razorpay_signature can be ANY value in test mode
+- No real payment needed for testing
+- Test mode enabled with ALLOW_TEST_MODE=true
+==========================================
+

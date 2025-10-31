@@ -1,0 +1,353 @@
+{
+  "info": {
+    "name": "🔐 Authentication",
+    "description": "User authentication, signup, login, OTP verification, profile management",
+    "_postman_id": "auth-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Signup",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/signup",
+          "host": ["{{base_url}}"],
+          "path": ["signup"]
+        },
+        "description": "Register a new patient",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"jane_smith\",\n  \"email\": \"jane@example.com\",\n  \"mobile\": \"+1234567890\",\n  \"password\": \"SecurePass123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Send OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/send-otp",
+          "host": ["{{base_url}}"],
+          "path": ["send-otp"]
+        },
+        "description": "Send OTP to email for verification",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Resend OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/resend-otp",
+          "host": ["{{base_url}}"],
+          "path": ["resend-otp"]
+        },
+        "description": "Resend OTP using signup token",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"signup_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAZXhhbXBsZS5jb20ifQ...\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Verify OTP",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/verify-otp",
+          "host": ["{{base_url}}"],
+          "path": ["verify-otp"]
+        },
+        "description": "Verify OTP to complete signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"signup_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmVAZXhhbXBsZS5jb20ifQ...\",\n  \"otp\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": ["{{base_url}}"],
+          "path": ["login"]
+        },
+        "description": "User login with email/patient_id and password",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login_identifier\": \"jane@example.com\",\n  \"password\": \"SecurePass123!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/logout",
+          "host": ["{{base_url}}"],
+          "path": ["logout"]
+        },
+        "description": "User logout - invalidates token"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Forgot Password",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/forgot-password",
+          "host": ["{{base_url}}"],
+          "path": ["forgot-password"]
+        },
+        "description": "Request password reset OTP",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8. Reset Password",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/reset-password",
+          "host": ["{{base_url}}"],
+          "path": ["reset-password"]
+        },
+        "description": "Reset password with OTP",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@example.com\",\n  \"otp\": \"123456\",\n  \"new_password\": \"NewSecurePass456!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Complete Profile",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/complete-profile",
+          "host": ["{{base_url}}"],
+          "path": ["complete-profile"]
+        },
+        "description": "Complete user profile after signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"date_of_birth\": \"1990-05-15\",\n  \"blood_type\": \"O+\",\n  \"gender\": \"Female\",\n  \"emergency_contact_name\": \"John Smith\",\n  \"emergency_contact_phone\": \"1987654321\",\n  \"emergency_contact_relationship\": \"Husband\",\n  \"address\": \"123 Main St, Cityville, State 12345\",\n  \"height\": 165.0,\n  \"weight\": 62.0,\n  \"is_pregnant\": true,\n  \"last_period_date\": \"2024-01-15\",\n  \"medical_conditions\": [],\n  \"allergies\": [],\n  \"current_medications\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Edit Profile",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/edit-profile",
+          "host": ["{{base_url}}"],
+          "path": ["edit-profile"]
+        },
+        "description": "Edit existing user profile",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith-Johnson\",\n  \"mobile\": \"+1234567890\",\n  \"address\": \"456 New Avenue, Cityville, State 12345\",\n  \"emergency_contact\": \"+0987654321\",\n  \"height\": 166.0,\n  \"weight\": 64.0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Verify Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/verify-token",
+          "host": ["{{base_url}}"],
+          "path": ["verify-token"]
+        },
+        "description": "Verify if a JWT token is valid",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXRpZW50X2lkIjoiUEFUXzEyMzQ1In0...\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Get Profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/profile/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["profile", "{{patient_id}}"]
+        },
+        "description": "Get user profile by patient ID"
+      },
+      "response": []
+    }
+  ]
+}

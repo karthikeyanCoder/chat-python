@@ -1,0 +1,473 @@
+{
+  "info": {
+    "name": "💊 Medication",
+    "description": "Medication logs, prescriptions, OCR processing, reminders",
+    "_postman_id": "medication-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Save Medication Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/save-medication-log",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "save-medication-log"]
+        },
+        "description": "Save medication log to patient profile (SaveMedicationLogSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"medication_name\": \"Prenatal Vitamins\",\n  \"date_taken\": \"2025-10-16\",\n  \"notes\": \"Take with food\",\n  \"prescribed_by\": \"Dr. Smith\",\n  \"medication_type\": \"vitamin\",\n  \"side_effects\": [],\n  \"is_prescription_mode\": true,\n  \"prescription_details\": \"One tablet daily with meals\",\n  \"dosages\": [\n    {\n      \"dosage\": \"1 tablet\",\n      \"time\": \"09:00\",\n      \"frequency\": \"Once daily\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Medication History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/get-medication-history/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "get-medication-history", "{{patient_id}}"]
+        },
+        "description": "Get medication history for a patient"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Upcoming Dosages",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/get-upcoming-dosages/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "get-upcoming-dosages", "{{patient_id}}"]
+        },
+        "description": "Get upcoming dosages and alerts for a patient"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Save Tablet Taken",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/save-tablet-taken",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "save-tablet-taken"]
+        },
+        "description": "Save daily tablet tracking (SaveTabletTakenSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"tablet_name\": \"Folic Acid\",\n  \"date_taken\": \"2025-10-16\",\n  \"time_taken\": \"08:00\",\n  \"notes\": \"Taken with breakfast\",\n  \"type\": \"vitamin\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Tablet History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/get-tablet-history/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "get-tablet-history", "{{patient_id}}"]
+        },
+        "description": "Get tablet tracking history for a patient"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Upload Prescription",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/upload-prescription",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "upload-prescription"]
+        },
+        "description": "Upload prescription details and dosage information (UploadPrescriptionSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"medication_name\": \"Iron Supplements\",\n  \"prescription_details\": \"Take 65mg elemental iron daily with vitamin C\",\n  \"prescribed_by\": \"Dr. Johnson\",\n  \"medication_type\": \"supplement\",\n  \"dosage_instructions\": \"One tablet daily\",\n  \"frequency\": \"Once daily\",\n  \"duration\": \"3 months\",\n  \"special_instructions\": \"Take with vitamin C for better absorption, avoid tea/coffee\",\n  \"pregnancy_week\": 20\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Prescription Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/get-prescription-details/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "get-prescription-details", "{{patient_id}}"]
+        },
+        "description": "Get prescription details and dosage information"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Update Prescription Status",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/update-prescription-status",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "update-prescription-status"]
+        },
+        "description": "Update prescription status - active/inactive/completed (UpdatePrescriptionStatusSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"prescription_id\": \"RX_67890\",\n  \"status\": \"completed\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Process Prescription Document",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/process-prescription-document",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "process-prescription-document"]
+        },
+        "description": "Process prescription document using PaddleOCR (file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Prescription document (PDF/image)"
+            },
+            {
+              "key": "patient_id",
+              "value": "PAT_12345",
+              "type": "text"
+            },
+            {
+              "key": "medication_name",
+              "value": "Prenatal Vitamins",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Process With PaddleOCR",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/process-with-paddleocr",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "process-with-paddleocr"]
+        },
+        "description": "Process prescription using PaddleOCR directly (file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Prescription document"
+            },
+            {
+              "key": "patient_id",
+              "value": "PAT_12345",
+              "type": "text"
+            },
+            {
+              "key": "medication_name",
+              "value": "Prescription Medicine",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "11. Process Prescription Text",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/process-prescription-text",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "process-prescription-text"]
+        },
+        "description": "Process raw prescription text (ProcessPrescriptionTextSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"Medication: Iron Supplement\\nDosage: 65mg\\nFrequency: Once daily\\nDuration: 3 months\\nSpecial Instructions: Take with vitamin C\",\n  \"patient_id\": \"PAT_12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Process With Mock N8N",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/process-with-mock-n8n",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "process-with-mock-n8n"]
+        },
+        "description": "Process prescription with N8N webhook (ProcessWithMockN8NSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"medication_name\": \"Calcium Supplement\",\n  \"extracted_text\": \"Medication: Calcium Carbonate 500mg\\nDosage: Take 2 tablets daily\\nFrequency: Morning and evening with meals\\nDuration: Throughout pregnancy\",\n  \"filename\": \"prescription_scan.pdf\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "13. Process With N8N Webhook",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/process-with-n8n-webhook",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "process-with-n8n-webhook"]
+        },
+        "description": "Process prescription with N8N webhook directly",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"extracted_text\": \"Medication: Vitamin D3\\nDosage: 1000 IU\\nFrequency: Once daily\\nDuration: Throughout pregnancy\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "14. Test Medication Status",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/test-status",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "test-status"]
+        },
+        "description": "Test medication service status"
+      },
+      "response": []
+    },
+    {
+      "name": "15. Test File Upload",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/test-file-upload",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "test-file-upload"]
+        },
+        "description": "Test file upload functionality (file upload)",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Test file"
+            },
+            {
+              "key": "patient_id",
+              "value": "PAT_12345",
+              "type": "text"
+            },
+            {
+              "key": "medication_name",
+              "value": "Test Medicine",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "16. Save Tablet Tracking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/medication/save-tablet-tracking",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "save-tablet-tracking"]
+        },
+        "description": "Save daily tablet tracking (SaveTabletTrackingSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_id\": \"PAT_12345\",\n  \"tablet_name\": \"Prenatal Vitamin\",\n  \"tablet_taken_today\": true,\n  \"is_prescribed\": true,\n  \"notes\": \"Taken at 9 AM with breakfast\",\n  \"date_taken\": \"2025-10-16\",\n  \"time_taken\": \"09:00\",\n  \"type\": \"vitamin\",\n  \"timestamp\": \"2025-10-16T09:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "17. Get Tablet Tracking History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/get-tablet-tracking-history/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "get-tablet-tracking-history", "{{patient_id}}"]
+        },
+        "description": "Get tablet tracking history"
+      },
+      "response": []
+    },
+    {
+      "name": "18. Send Medication Reminders",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/send-reminders",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "send-reminders"]
+        },
+        "description": "Manually trigger medication reminders (no body required)"
+      },
+      "response": []
+    },
+    {
+      "name": "19. Test Medication Reminder",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/test-reminder/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "test-reminder", "{{patient_id}}"]
+        },
+        "description": "Test medication reminder email (no body required)"
+      },
+      "response": []
+    },
+    {
+      "name": "20. Test N8N Webhook",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/medication/test-n8n-webhook",
+          "host": ["{{base_url}}"],
+          "path": ["medication", "test-n8n-webhook"]
+        },
+        "description": "Test N8N webhook directly (no body required)"
+      },
+      "response": []
+    }
+  ]
+}

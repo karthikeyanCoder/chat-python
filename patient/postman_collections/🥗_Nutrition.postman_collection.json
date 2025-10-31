@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "🥗 Nutrition",
+    "description": "Food tracking, GPT-4 analysis, nutrition insights",
+    "_postman_id": "nutrition-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/nutrition/health",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "health"]
+        },
+        "description": "Nutrition service health check"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Transcribe Audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/nutrition/transcribe",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "transcribe"]
+        },
+        "description": "Transcribe audio using N8N webhook (TranscribeAudioSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"audio\": \"base64_encoded_audio_data_here\",\n  \"use_n8n\": true,\n  \"method\": \"whisper\",\n  \"context\": \"food_tracking\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Analyze Food With GPT-4",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/nutrition/analyze-with-gpt4",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "analyze-with-gpt4"]
+        },
+        "description": "Analyze food using GPT-4 (AnalyzeFoodGPT4Schema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"food_input\": \"Grilled salmon with quinoa and steamed broccoli\",\n  \"pregnancy_week\": 24,\n  \"userId\": \"PAT_12345\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Save Food Entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/nutrition/save-food-entry",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "save-food-entry"]
+        },
+        "description": "Save basic food entry (SaveFoodEntrySchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"PAT_12345\",\n  \"food_input\": \"Oatmeal with berries and nuts\",\n  \"food_details\": \"Nutritious breakfast high in fiber\",\n  \"pregnancy_week\": 12,\n  \"meal_type\": \"breakfast\",\n  \"notes\": \"Healthy breakfast option\",\n  \"transcribed_text\": \"\",\n  \"nutritional_breakdown\": {},\n  \"gpt4_analysis\": {},\n  \"timestamp\": \"2025-10-16T08:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Food Entries",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/nutrition/get-food-entries/{{user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "get-food-entries", "{{user_id}}"]
+        },
+        "description": "Get food entries from patient's food_data array"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Debug Food Data",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/nutrition/debug-food-data/{{user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "debug-food-data", "{{user_id}}"]
+        },
+        "description": "Debug endpoint to check food data structure"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Food History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/nutrition/get-food-history/{{patient_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["nutrition", "get-food-history", "{{patient_id}}"]
+        },
+        "description": "Get food history for a patient"
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    GUNICORN QUICK START - PATIENT ALERT SYSTEM             ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ QUICK COMMANDS                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Windows:
+  start_gunicorn.bat
+
+Linux/Mac:
+  chmod +x start_gunicorn.sh
+  ./start_gunicorn.sh
+
+Manual:
+  gunicorn --config gunicorn_config.py wsgi:app
+
+Simple (no config):
+  gunicorn --bind 0.0.0.0:5002 --workers 4 wsgi:app
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ COMMON OPTIONS                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Workers:
+  gunicorn --workers 8 wsgi:app
+
+Bind to different port:
+  gunicorn --bind 0.0.0.0:8000 wsgi:app
+
+With auto-reload (dev):
+  gunicorn --reload wsgi:app
+
+Daemon mode (background):
+  gunicorn --daemon --bind 0.0.0.0:5002 wsgi:app
+
+Custom timeout:
+  gunicorn --timeout 300 wsgi:app
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROCESS MANAGEMENT                                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Stop all Gunicorn processes:
+  Windows: taskkill /F /IM gunicorn.exe
+  Linux:   pkill gunicorn
+
+View processes:
+  Windows: tasklist | findstr gunicorn
+  Linux:   ps aux | grep gunicorn
+
+Graceful restart:
+  kill -HUP <master_pid>
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ HEALTH CHECKS                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  curl http://localhost:5002/health
+  curl http://localhost:5002/health/database
+  curl http://localhost:5002/
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ FILE STRUCTURE                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  patient/
+  ├── wsgi.py                  # WSGI entry point
+  ├── gunicorn_config.py       # Gunicorn configuration
+  ├── start_gunicorn.bat       # Windows startup script
+  ├── start_gunicorn.sh        # Linux/Mac startup script
+  ├── Procfile                 # Heroku/Render deployment
+  ├── app/
+  │   └── main.py              # Flask app factory
+  └── .env                     # Environment variables
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TROUBLESHOOTING                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Port already in use:
+  Windows: netstat -ano | findstr :5002
+  Linux:   lsof -i :5002
+
+Module not found:
+  - Ensure you're in patient/ directory
+  - Check virtual environment is activated
+  - Verify PYTHONPATH: export PYTHONPATH=$(pwd)
+
+Worker timeout:
+  - Increase timeout in gunicorn_config.py
+  - Or use: gunicorn --timeout 300 wsgi:app
+
+Database connection:
+  - Check MongoDB is running
+  - Verify MONGO_URI in .env
+  - Test: curl http://localhost:5002/health/database
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ ADVANCED USAGE                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Custom config file:
+  gunicorn --config /path/to/config.py wsgi:app
+
+Environment-specific:
+  gunicorn --env ENVIRONMENT=production wsgi:app
+
+With logging:
+  gunicorn --access-logfile logs/access.log \
+           --error-logfile logs/error.log \
+           wsgi:app
+
+Behind nginx proxy:
+  gunicorn --bind 127.0.0.1:5002 wsgi:app
+
+Multiple worker classes:
+  # Sync (default)
+  gunicorn --worker-class sync wsgi:app
+  
+  # Gevent (async)
+  gunicorn --worker-class gevent --workers 4 wsgi:app
+  
+  # Eventlet (async)
+  gunicorn --worker-class eventlet --workers 4 wsgi:app
+
+═══════════════════════════════════════════════════════════════════════════════
+ For detailed information, see GUNICORN_SETUP.md
+═══════════════════════════════════════════════════════════════════════════════
+
+

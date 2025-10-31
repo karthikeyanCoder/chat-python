@@ -1,0 +1,697 @@
+{
+	"info": {
+		"_postman_id": "pregnancy-api-patient-app-2024",
+		"name": "Pregnancy API - Patient App (Enhanced)",
+		"description": "Complete collection for Patient App pregnancy endpoints with RAG enhancement.\n\n**Base URL:** http://localhost:5002/api\n**Endpoints:** /api/pregnancy/*\n\n**Features:**\n- Pregnancy week tracking (1-40 weeks)\n- RAG-based personalization\n- OpenAI integration for AI-powered insights\n- Semantic search using Qdrant\n- Trimester-based queries\n- Baby size comparison images\n- JWT authentication required\n- Auto patient_id from login token\n\n**Services:**\n- OpenAI API (for AI features)\n- Qdrant (for semantic search & RAG)\n- MongoDB (patient data)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Service Status & Info",
+			"item": [
+				{
+					"name": "Get Pregnancy API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy"]
+						},
+						"description": "Get API root information including available features and service status.\n\nReturns:\n- API version\n- Available endpoints\n- Feature availability (Qdrant, RAG, OpenAI)"
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/health",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "health"]
+						},
+						"description": "Health check endpoint to verify the pregnancy API is running."
+					},
+					"response": []
+				},
+				{
+					"name": "OpenAI Service Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/openai/status",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "openai", "status"]
+						},
+						"description": "Check if OpenAI service is available and configured.\n\nReturns:\n- OpenAI availability\n- Model being used\n- API key configuration status"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for checking service status and availability"
+		},
+		{
+			"name": "2. Week Information",
+			"item": [
+				{
+					"name": "Get Pregnancy Week",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/20?use_openai=false&include_fruit_image=true",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "20"],
+							"query": [
+								{
+									"key": "use_openai",
+									"value": "false",
+									"description": "Use OpenAI for baby size information"
+								},
+								{
+									"key": "include_fruit_image",
+									"value": "true",
+									"description": "Include real fruit comparison image"
+								}
+							]
+						},
+						"description": "Get comprehensive pregnancy week information.\n\n**Week Range:** 1-40\n\n**Query Parameters:**\n- `use_openai` (boolean): Use AI for baby size (default: false)\n- `include_fruit_image` (boolean): Include fruit image (default: true)\n\n**Returns:**\n- Week number and trimester\n- Baby size comparison\n- Key developments\n- Symptoms\n- Tips\n- Fruit comparison image (base64)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enhanced Week Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/20/enhanced?patient_id=PAT123&use_mock_data=true&include_rag_analysis=true&image_method=all",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "20", "enhanced"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT123",
+									"description": "Patient ID for personalization"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true",
+									"description": "Use mock patient data for testing"
+								},
+								{
+									"key": "include_rag_analysis",
+									"value": "true",
+									"description": "Include RAG-based analysis"
+								},
+								{
+									"key": "image_method",
+									"value": "all",
+									"description": "Image generation method: all, rag, openai, traditional, simple"
+								}
+							]
+						},
+						"description": "Get enhanced week data using RAG + OpenAI with multiple image generation options.\n\n**Requires:** RAG service (Qdrant) and/or OpenAI\n\n**Query Parameters:**\n- `patient_id`: Optional patient ID for personalized analysis\n- `use_mock_data`: Use mock data (default: true)\n- `include_rag_analysis`: Include RAG analysis (default: true)\n- `image_method`: Which images to generate (default: all)\n\n**Returns:**\n- Base week data\n- RAG personalized developments\n- Multiple image variations\n- Service status"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Pregnancy Weeks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/weeks",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "weeks"]
+						},
+						"description": "Get data for all 40 pregnancy weeks.\n\n**Returns:**\n- Array of all 40 weeks\n- Each week includes: developments, symptoms, tips, baby size"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Week Developments Only",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/15/developments",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "15", "developments"]
+						},
+						"description": "Get only the key developments for a specific week.\n\n**Week Range:** 1-40\n\n**Returns:**\n- Week number\n- List of key developments with titles, descriptions, and categories"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for retrieving pregnancy week information"
+		},
+		{
+			"name": "3. Trimester Queries",
+			"item": [
+				{
+					"name": "Get Trimester Weeks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/trimester/2?include_fruit_images=true",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "trimester", "2"],
+							"query": [
+								{
+									"key": "include_fruit_images",
+									"value": "true",
+									"description": "Include real fruit images for each week"
+								}
+							]
+						},
+						"description": "Get all weeks for a specific trimester with fruit images.\n\n**Trimester Values:** 1, 2, or 3\n- Trimester 1: Weeks 1-13\n- Trimester 2: Weeks 14-27\n- Trimester 3: Weeks 28-40\n\n**Query Parameters:**\n- `include_fruit_images` (boolean): Include fruit images (default: true)\n\n**Returns:**\n- Array of all weeks in the trimester\n- Each week includes fruit image if requested"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trimester Fruit Recommendations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/trimester/1/fruit-recommendations?patient_id=PAT123&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "trimester", "1", "fruit-recommendations"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT123",
+									"description": "Patient ID for personalized recommendations"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true",
+									"description": "Use mock patient data"
+								}
+							]
+						},
+						"description": "Get RAG-based fruit size recommendations for a specific trimester.\n\n**Requires:** RAG service (Qdrant)\n\n**Trimester Values:** 1, 2, or 3\n\n**Returns:**\n- Fruit recommendations based on baby size\n- Personalized based on patient history (if patient_id provided)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for trimester-based queries"
+		},
+		{
+			"name": "4. Baby Size & Images",
+			"item": [
+				{
+					"name": "Get Baby Size (OpenAI)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/25/baby-size",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "25", "baby-size"]
+						},
+						"description": "Get AI-powered baby size information for a specific week.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Returns:**\n- Baby size with fruit/object comparison\n- Detailed baby development information\n- AI-generated insights"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Baby Image (Base64)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/25/baby-image?format=base64&regenerate=false",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "25", "baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "base64",
+									"description": "Response format: stream or base64"
+								},
+								{
+									"key": "regenerate",
+									"value": "false",
+									"description": "Force regenerate from OpenAI"
+								}
+							]
+						},
+						"description": "Get baby size comparison image generated by OpenAI DALL-E.\n\n**Requires:** OpenAI API\n\n**Query Parameters:**\n- `format`: 'stream' (raw image) or 'base64' (JSON with base64 data)\n- `regenerate`: Force new generation (default: false, uses cache)\n\n**Returns:**\n- Base64 encoded image (if format=base64)\n- Raw PNG image stream (if format=stream)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Baby Image (Stream)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/25/baby-image?format=stream",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "25", "baby-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "stream",
+									"description": "Get raw image stream for <img> tags"
+								}
+							]
+						},
+						"description": "Get baby image as raw PNG stream (suitable for <img> tags).\n\n**Requires:** OpenAI API\n\n**Returns:** Raw PNG image data"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fruit Image (OpenAI) - JSON",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/3/fruit-image?format=json",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "3", "fruit-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"description": "Response format: json or stream"
+								},
+								{
+									"key": "fruit",
+									"value": "Poppy seed",
+									"description": "Optional: specific fruit name (default: week's fruit)"
+								},
+								{
+									"key": "regenerate",
+									"value": "false",
+									"description": "Force regeneration from OpenAI"
+								}
+							]
+						},
+						"description": "Get original fruit image generated by OpenAI DALL-E.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Parameters:**\n- format: json (default) or stream\n- fruit: Optional specific fruit name\n- regenerate: Force new generation\n\n**Returns:**\n- JSON with base64 image data\n- Fruit name used\n- Source information"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fruit Image (Real Photo) - Stream",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/3/fruit-image?format=stream&type=real",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "3", "fruit-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "stream",
+									"description": "Get raw image stream for <img> tags"
+								},
+								{
+									"key": "type",
+									"value": "real",
+									"description": "Image type: real (photographs) or ai (generated)"
+								},
+								{
+									"key": "fruit",
+									"value": "Apple",
+									"description": "Optional: specific fruit name"
+								}
+							]
+						},
+						"description": "Get real fruit photograph as raw JPEG stream.\n\n**Features:**\n- High-quality real fruit photos\n- Professional photography\n- No API costs\n- Fast loading\n- Beautiful natural colors\n- Perfect for baby size comparisons"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fruit Image (AI Generated) - Stream",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/3/fruit-image?format=stream&type=ai",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "3", "fruit-image"],
+							"query": [
+								{
+									"key": "format",
+									"value": "stream",
+									"description": "Get raw image stream for <img> tags"
+								},
+								{
+									"key": "type",
+									"value": "ai",
+									"description": "Image type: real (photographs) or ai (generated)"
+								},
+								{
+									"key": "fruit",
+									"value": "Apple",
+									"description": "Optional: specific fruit name"
+								}
+							]
+						},
+						"description": "Get AI-generated fruit image as raw PNG stream from OpenAI DALL-E.\n\n**Requires:** OpenAI API\n\n**Features:**\n- Professional medical illustration style\n- Clean white background\n- Accurate size representation\n- High quality (1024x1024)\n- AI-generated artwork"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for baby size information and image generation"
+		},
+		{
+			"name": "5. Quick Actions (OpenAI)",
+			"item": [
+				{
+					"name": "Get Early Symptoms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/12/symptoms",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "12", "symptoms"]
+						},
+						"description": "Get AI-powered early symptoms information for a specific week.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Returns:**\n- Common symptoms for the week\n- When to call doctor\n- Relief tips\n- Severity level"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Prenatal Screening",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/20/screening",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "20", "screening"]
+						},
+						"description": "Get AI-powered prenatal screening information.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Returns:**\n- Recommended tests for the week\n- Test descriptions\n- Timing information\n- Importance level"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wellness Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/16/wellness",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "16", "wellness"]
+						},
+						"description": "Get AI-powered wellness tips for a specific week.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Returns:**\n- Exercise tips\n- Sleep advice\n- Stress management\n- General wellness recommendations"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Nutrition Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/10/nutrition",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "10", "nutrition"]
+						},
+						"description": "Get AI-powered nutrition tips for a specific week.\n\n**Requires:** OpenAI API\n\n**Week Range:** 1-40\n\n**Returns:**\n- Essential nutrients\n- Foods to avoid\n- Meal suggestions\n- Hydration tips"
+					},
+					"response": []
+				}
+			],
+			"description": "Quick action endpoints powered by OpenAI for symptoms, screening, wellness, and nutrition"
+		},
+		{
+			"name": "6. Semantic Search & RAG",
+			"item": [
+				{
+					"name": "Semantic Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/search?query=nutrition tips&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "nutrition tips",
+									"description": "Search query (required, min 3 characters)"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "Number of results to return (default: 5)"
+								}
+							]
+						},
+						"description": "Perform semantic search on pregnancy data using Qdrant.\n\n**Requires:** Qdrant service\n\n**Query Parameters:**\n- `query` (required): Search query, minimum 3 characters\n- `limit` (optional): Max results to return (default: 5)\n\n**Example Queries:**\n- \"nutrition tips for second trimester\"\n- \"safe exercises during pregnancy\"\n- \"fetal development milestones\"\n- \"morning sickness remedies\"\n\n**Returns:**\n- Relevant pregnancy weeks with similarity scores\n- Matched content from each week"
+					},
+					"response": []
+				},
+				{
+					"name": "Search - Exercise Tips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/search?query=safe exercises second trimester&limit=3",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "safe exercises second trimester"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Example: Search for exercise information during second trimester"
+					},
+					"response": []
+				},
+				{
+					"name": "RAG Personalized Developments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/patient/18/rag?patient_id=PAT123&use_ai=true&use_mock_data=true",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "patient", "18", "rag"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT123",
+									"description": "Patient ID (required)"
+								},
+								{
+									"key": "use_ai",
+									"value": "true",
+									"description": "Use AI for personalization (default: true)"
+								},
+								{
+									"key": "use_mock_data",
+									"value": "true",
+									"description": "Use mock patient data (default: true)"
+								}
+							]
+						},
+						"description": "Get RAG-powered personalized pregnancy developments based on patient's disease history.\n\n**Requires:** RAG service (Qdrant)\n\n**Week Range:** 1-40\n\n**Query Parameters:**\n- `patient_id` (required): Patient identifier\n- `use_ai` (optional): Use AI for personalization (default: true)\n- `use_mock_data` (optional): Use mock data for testing (default: true)\n\n**Returns:**\n- Personalized key developments\n- Medical advisories based on patient history\n- Special monitoring recommendations\n- RAG context and confidence score"
+					},
+					"response": []
+				},
+				{
+					"name": "Personalized Week - Diabetes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/patient/15/personalized?patient_id=PAT456&diabetes=true",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "patient", "15", "personalized"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT456",
+									"description": "Patient ID (required)"
+								},
+								{
+									"key": "diabetes",
+									"value": "true",
+									"description": "Patient has diabetes"
+								}
+							]
+						},
+						"description": "Get personalized pregnancy information for patient with diabetes.\n\n**Query Parameters:**\n- `patient_id` (required)\n- `diabetes` (optional): Patient has diabetes\n- `cancer_history` (optional): Patient has cancer history\n- `hypertension` (optional): Patient has hypertension\n- `other_conditions` (optional): Array of other conditions\n\n**Returns:**\n- Base week data\n- Personalized developments with medical considerations\n- Risk levels\n- Monitoring recommendations"
+					},
+					"response": []
+				},
+				{
+					"name": "Personalized Week - Multiple Conditions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/patient/20/personalized?patient_id=PAT789&diabetes=true&hypertension=true&cancer_history=false",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "patient", "20", "personalized"],
+							"query": [
+								{
+									"key": "patient_id",
+									"value": "PAT789"
+								},
+								{
+									"key": "diabetes",
+									"value": "true"
+								},
+								{
+									"key": "hypertension",
+									"value": "true"
+								},
+								{
+									"key": "cancer_history",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Example: Get personalized info for patient with multiple conditions (diabetes + hypertension)"
+					},
+					"response": []
+				}
+			],
+			"description": "Semantic search and RAG-based personalization endpoints"
+		},
+		{
+			"name": "7. Test Cases",
+			"item": [
+				{
+					"name": "Test - Invalid Week (Error)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/50",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "50"]
+						},
+						"description": "Test error handling with invalid week number.\n\n**Expected:** 400 Bad Request\n**Message:** \"Week must be between 1 and 40\""
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Week 1 (First Week)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/1",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "1"]
+						},
+						"description": "Test first week of pregnancy"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Week 40 (Last Week)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/week/40",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "week", "40"]
+						},
+						"description": "Test last week of pregnancy"
+					},
+					"response": []
+				},
+				{
+					"name": "Test - Search Empty Query (Error)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pregnancy/search?query=ab",
+							"host": ["{{base_url}}"],
+							"path": ["pregnancy", "search"],
+							"query": [
+								{
+									"key": "query",
+									"value": "ab",
+									"description": "Query too short"
+								}
+							]
+						},
+						"description": "Test search with query that's too short.\n\n**Expected:** 400 Bad Request\n**Message:** \"Query must be at least 3 characters long\""
+					},
+					"response": []
+				}
+			],
+			"description": "Test cases for error handling and edge cases"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Set default headers",
+					"pm.request.headers.add({",
+					"    key: 'Content-Type',",
+					"    value: 'application/json'",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Common tests for all requests",
+					"pm.test('Response time is less than 5000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(5000);",
+					"});",
+					"",
+					"pm.test('Response is JSON', function () {",
+					"    pm.response.to.be.json;",
+					"});",
+					"",
+					"// Test for successful responses",
+					"if (pm.response.code === 200) {",
+					"    pm.test('Success field is true', function () {",
+					"        var jsonData = pm.response.json();",
+					"        pm.expect(jsonData.success).to.eql(true);",
+					"    });",
+					"}",
+					"",
+					"// Test for error responses",
+					"if (pm.response.code >= 400) {",
+					"    pm.test('Error response has error field', function () {",
+					"        var jsonData = pm.response.json();",
+					"        pm.expect(jsonData).to.have.property('error');",
+					"    });",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5002/api",
+			"type": "string"
+		}
+	]
+}

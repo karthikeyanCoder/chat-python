@@ -1,0 +1,430 @@
+{
+  "info": {
+    "name": "Patient AI Summary API Collection",
+    "description": "Collection for Patient AI Summary endpoints with OpenAI integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "doctor_id",
+      "value": "D17589491885545840",
+      "type": "string"
+    },
+    {
+      "key": "patient_id",
+      "value": "PAT1758712159E182A3",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Doctor Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.token) {",
+                  "        pm.collectionVariables.set('auth_token', response.token);",
+                  "        pm.collectionVariables.set('doctor_id', response.doctor_id);",
+                  "        console.log('Auth token saved:', response.token);",
+                  "        console.log('Doctor ID saved:', response.doctor_id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testdoctor@example.com\",\n  \"password\": \"testpass123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor-login",
+              "host": ["{{base_url}}"],
+              "path": ["doctor-login"]
+            },
+            "description": "Login as a doctor to get authentication token and doctor ID"
+          },
+          "response": [
+            {
+              "name": "Successful Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"testdoctor@example.com\",\n  \"password\": \"testpass123\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor-login",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor-login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"doctor_id\": \"D17589491885545840\",\n  \"email\": \"testdoctor@example.com\",\n  \"message\": \"Login successful\",\n  \"success\": true,\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Patient AI Summary",
+      "item": [
+        {
+          "name": "Get Patient AI Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.ai_summary) {",
+                  "        console.log('AI Summary Generated Successfully');",
+                  "        console.log('Patient:', response.patient_name);",
+                  "        console.log('Summary Length:', response.ai_summary.length);",
+                  "        console.log('Health Stats:', JSON.stringify(response.summary_stats, null, 2));",
+                  "        ",
+                  "        // Test AI summary content",
+                  "        pm.test('AI Summary contains patient overview', function () {",
+                  "            pm.expect(response.ai_summary.toLowerCase()).to.include('patient');",
+                  "        });",
+                  "        ",
+                  "        pm.test('Summary stats are present', function () {",
+                  "            pm.expect(response.summary_stats).to.be.an('object');",
+                  "            pm.expect(response.summary_stats).to.have.property('total_medications');",
+                  "        });",
+                  "    } else {",
+                  "        console.log('AI Summary Failed:', response.message);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/ai-summary",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "ai-summary"]
+            },
+            "description": "Generate AI-powered medical summary for a specific patient using OpenAI GPT-3.5-turbo"
+          },
+          "response": [
+            {
+              "name": "Successful AI Summary",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/ai-summary",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "ai-summary"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patient_id\": \"PAT1758712159E182A3\",\n  \"patient_name\": \"John Doe\",\n  \"ai_summary\": \"COMPREHENSIVE MEDICAL SUMMARY\\n\\nPATIENT OVERVIEW:\\nJohn Doe is a 28-year-old male patient with a comprehensive health profile. Based on the available data, the patient shows active engagement with health monitoring through multiple channels.\\n\\nHEALTH DATA ANALYSIS:\\n- The patient has logged 3 food entries, indicating good nutrition tracking habits\\n- 1 symptom analysis report suggests proactive health monitoring\\n- 1 mental health log entry shows attention to mental well-being\\n- 1 medication entry indicates current medication management\\n- 1 appointment scheduled demonstrates regular medical care\\n\\nKEY CONCERNS & RECOMMENDATIONS:\\n1. Continue regular health monitoring through the platform\\n2. Maintain consistent medication adherence as indicated by the single medication entry\\n3. Consider expanding mental health logging for better trend analysis\\n4. Regular follow-up appointments are recommended\\n\\nOVERALL HEALTH ASSESSMENT:\\nThe patient demonstrates good health awareness and proactive monitoring. The data suggests a well-engaged patient with multiple health tracking activities.\\n\\nPRIORITY AREAS FOR MEDICAL ATTENTION:\\n- Monitor medication compliance and effectiveness\\n- Review symptom patterns for any emerging health concerns\\n- Assess mental health trends for overall well-being\\n- Ensure regular medical check-ups continue\",\n  \"summary_stats\": {\n    \"total_medications\": 1,\n    \"total_symptoms\": 1,\n    \"total_food_entries\": 3,\n    \"total_tablet_logs\": 0,\n    \"total_kick_logs\": 0,\n    \"total_mental_health\": 1,\n    \"total_prescriptions\": 0,\n    \"total_vital_signs\": 0,\n    \"total_appointments\": 1\n  }\n}"
+            },
+            {
+              "name": "OpenAI API Key Missing",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/ai-summary",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "ai-summary"]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Failed to generate AI summary\"\n}"
+            },
+            {
+              "name": "Patient Not Found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/INVALID_PATIENT_ID/ai-summary",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "INVALID_PATIENT_ID", "ai-summary"]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Patient not found\"\n}"
+            },
+            {
+              "name": "Unauthorized Access",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer invalid_token"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/ai-summary",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "ai-summary"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"error\": \"Unauthorized access\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Patient Full Details (Prerequisite)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/full-details",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "full-details"]
+            },
+            "description": "Get comprehensive patient details that serve as input for AI summary generation"
+          },
+          "response": [
+            {
+              "name": "Patient Full Details",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/full-details",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "full-details"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"patient_info\": {\n    \"patient_id\": \"PAT1758712159E182A3\",\n    \"full_name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"age\": 28,\n    \"blood_type\": \"O+\",\n    \"gender\": \"Male\",\n    \"is_pregnant\": false,\n    \"status\": \"Active\",\n    \"date_of_birth\": \"1995-03-15\",\n    \"mobile\": \"+1234567890\",\n    \"address\": \"123 Main St, City, State\",\n    \"emergency_contact\": {\n      \"name\": \"Jane Doe\",\n      \"phone\": \"+0987654321\",\n      \"relationship\": \"Spouse\"\n    }\n  },\n  \"health_data\": {\n    \"appointments\": [\n      {\n        \"appointment_id\": \"APT001\",\n        \"appointment_date\": \"2025-09-28\",\n        \"appointment_time\": \"10:00 AM\",\n        \"appointment_type\": \"Regular Checkup\",\n        \"status\": \"Scheduled\"\n      }\n    ],\n    \"food_data\": [\n      {\n        \"entry_id\": \"FOOD001\",\n        \"date\": \"2025-09-27\",\n        \"meal_type\": \"Breakfast\",\n        \"food_items\": [\"Oatmeal\", \"Banana\", \"Milk\"],\n        \"calories\": 350\n      }\n    ],\n    \"symptoms\": [\n      {\n        \"symptom_id\": \"SYM001\",\n        \"date\": \"2025-09-26\",\n        \"symptoms\": [\"Headache\", \"Fatigue\"],\n        \"severity\": \"Moderate\",\n        \"duration\": \"2 days\",\n        \"notes\": \"Started after work stress\"\n      }\n    ],\n    \"medications\": [\n      {\n        \"medication_id\": \"MED001\",\n        \"name\": \"Paracetamol\",\n        \"dosage\": \"500mg\",\n        \"frequency\": \"Twice daily\",\n        \"start_date\": \"2025-09-25\",\n        \"status\": \"Active\"\n      }\n    ],\n    \"mental_health\": [\n      {\n        \"log_id\": \"MH001\",\n        \"date\": \"2025-09-25\",\n        \"mood_score\": 7,\n        \"anxiety_level\": 3,\n        \"sleep_quality\": 8,\n        \"notes\": \"Feeling good today, good sleep last night\"\n      }\n    ]\n  },\n  \"summary\": {\n    \"total_medications\": 1,\n    \"total_symptoms\": 1,\n    \"total_food_entries\": 3,\n    \"total_tablet_logs\": 0,\n    \"total_kick_logs\": 0,\n    \"total_mental_health\": 1,\n    \"total_prescriptions\": 0,\n    \"total_vital_signs\": 0,\n    \"total_appointments\": 1\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Related Endpoints",
+      "item": [
+        {
+          "name": "Get Symptom Analysis Reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/symptoms/get-analysis-reports/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["symptoms", "get-analysis-reports", "{{patient_id}}"]
+            },
+            "description": "Get symptom analysis reports for a patient (used in AI summary generation)"
+          }
+        },
+        {
+          "name": "Get Medication History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/medication/get-medication-history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["medication", "get-medication-history", "{{patient_id}}"]
+            },
+            "description": "Get medication history for a patient (used in AI summary generation)"
+          }
+        },
+        {
+          "name": "Get Mental Health History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/mental-health/history/{{patient_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["mental-health", "history", "{{patient_id}}"]
+            },
+            "description": "Get mental health history for a patient (used in AI summary generation)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check if the API server is running"
+          },
+          "response": [
+            {
+              "name": "API Healthy",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/health",
+                  "host": ["{{base_url}}"],
+                  "path": ["health"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-28T11:26:26.792722\",\n  \"version\": \"1.0.0\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+==========================================
+COPY THIS EXACT BODY INTO POSTMAN
+==========================================
+
+{
+  "paymentId": "YOUR_paymentId_FROM_CREATE_ORDER_RESPONSE",
+  "razorpay_order_id": "YOUR_order_id_FROM_CREATE_ORDER_RESPONSE",
+  "razorpay_payment_id": "pay_TEST123",
+  "razorpay_signature": "test_signature_12345"
+}
+
+==========================================
+INSTRUCTIONS:
+==========================================
+
+1. In Postman, create a NEW request (don't use the collection)
+2. Set URL: http://localhost:5002/payments/verify-payment
+3. Set Method: POST
+4. Set Header: Content-Type: application/json
+5. In Body tab, select "raw" and "JSON"
+6. Paste the body above
+7. Replace YOUR_paymentId_FROM_CREATE_ORDER_RESPONSE with actual value
+8. Replace YOUR_order_id_FROM_CREATE_ORDER_RESPONSE with actual value
+9. Leave razorpay_signature as "test_signature_12345"
+10. Send request
+
+==========================================
+EXAMPLE WITH ACTUAL VALUES:
+==========================================
+
+Based on your logs:
+{
+  "paymentId": "payment_12345",
+  "razorpay_order_id": "order_RYuGHINFSkhAOk",
+  "razorpay_payment_id": "pay_TEST123",
+  "razorpay_signature": "test_signature_12345"
+}
+
+==========================================
+

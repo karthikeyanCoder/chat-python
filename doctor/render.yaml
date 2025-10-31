@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: doctor-patient-management
+    env: python
+    buildCommand: |
+      pip install --upgrade pip==24.0
+      pip install setuptools==69.0.3 wheel==0.43.0
+      pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app_mvc:app
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: doctor-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+        # IMPORTANT: Set this value in Render Dashboard Environment tab
+        # Go to: Render Dashboard > Your Service > Environment > OPENAI_API_KEY
+        # Value should be: sk-your-openai-api-key-here
+    healthCheckPath: /health
+    plan: free
+
+databases:
+  - name: doctor-db
+    databaseName: doctor_db
+    user: doctor_user
+    plan: free

@@ -1,0 +1,448 @@
+{
+  "info": {
+    "name": "📅 Appointments",
+    "description": "Patient and doctor appointment management, scheduling, approval workflow",
+    "_postman_id": "appointments-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Get Patient Appointments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments?date=&status=&type=&appointment_type=",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments"],
+          "query": [
+            {"key": "date", "value": "", "description": "Optional: Filter by date"},
+            {"key": "status", "value": "", "description": "Optional: Filter by status"},
+            {"key": "type", "value": "", "description": "Optional: Filter by consultation type"},
+            {"key": "appointment_type", "value": "", "description": "Optional: Filter by appointment type"}
+          ]
+        },
+        "description": "Get all appointments for authenticated patient with optional filters"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Create Patient Appointment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments"]
+        },
+        "description": "Create new appointment request (CreateAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-10-20\",\n  \"appointment_time\": \"10:00\",\n  \"type\": \"Routine Checkup\",\n  \"appointment_type\": \"Video Call\",\n  \"notes\": \"First trimester checkup\",\n  \"patient_notes\": \"Experiencing mild morning sickness\",\n  \"doctor_id\": \"doctor123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Patient Appointment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Get specific appointment details for authenticated patient"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update Patient Appointment",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Update appointment details - ONLY for pending appointments (UpdateAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-10-21\",\n  \"appointment_time\": \"14:00\",\n  \"type\": \"Follow-up\",\n  \"appointment_type\": \"In-person\",\n  \"appointment_status\": \"pending\",\n  \"notes\": \"Rescheduled appointment\",\n  \"patient_notes\": \"Need ultrasound results discussion\",\n  \"doctor_notes\": \"Patient requested time change\",\n  \"doctor_id\": \"doctor123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Cancel Patient Appointment",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Cancel/delete appointment - works for both pending and approved"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Upcoming Appointments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments/upcoming",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments", "upcoming"]
+        },
+        "description": "Get upcoming appointments for authenticated patient"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Appointment History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/patient/appointments/history?status=&type=&appointment_type=&date=",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "patient", "appointments", "history"],
+          "query": [
+            {"key": "status", "value": "", "description": "Optional: Filter by status"},
+            {"key": "type", "value": "", "description": "Optional: Filter by consultation type"},
+            {"key": "appointment_type", "value": "", "description": "Optional: Filter by appointment type"},
+            {"key": "date", "value": "", "description": "Optional: Filter by date"}
+          ]
+        },
+        "description": "Get appointment history with filtering support"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get Doctor Appointments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments?date=&status=&appointment_type=&patient_id=",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments"],
+          "query": [
+            {"key": "date", "value": "", "description": "Optional: Filter by date"},
+            {"key": "status", "value": "", "description": "Optional: Filter by status"},
+            {"key": "appointment_type", "value": "", "description": "Optional: Filter by appointment type"},
+            {"key": "patient_id", "value": "", "description": "Optional: Filter by patient"}
+          ]
+        },
+        "description": "Get all appointments for doctor management"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Create Doctor Appointment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments"]
+        },
+        "description": "Create new appointment by doctor (CreateAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-10-22\",\n  \"appointment_time\": \"15:30\",\n  \"type\": \"Emergency Consultation\",\n  \"appointment_type\": \"Video Call\",\n  \"notes\": \"Urgent appointment for high-risk patient\",\n  \"patient_notes\": \"Patient reports severe symptoms\",\n  \"doctor_id\": \"doctor123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10. Get Doctor Appointment",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Get specific appointment details for doctor"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Update Doctor Appointment",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Update appointment - doctor can update all fields (UpdateAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"appointment_date\": \"2025-10-23\",\n  \"appointment_time\": \"09:00\",\n  \"type\": \"Post-Surgery Follow-up\",\n  \"appointment_type\": \"In-person\",\n  \"appointment_status\": \"confirmed\",\n  \"notes\": \"Post-op checkup required\",\n  \"patient_notes\": \"Recovery progressing well\",\n  \"doctor_notes\": \"Monitor surgical site\",\n  \"doctor_id\": \"doctor456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "12. Delete Doctor Appointment",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/{{appointment_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "{{appointment_id}}"]
+        },
+        "description": "Delete appointment - doctor can delete appointments"
+      },
+      "response": []
+    },
+    {
+      "name": "13. Approve Appointment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/{{appointment_id}}/approve",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "{{appointment_id}}", "approve"]
+        },
+        "description": "Approve pending appointment (ApproveAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"doctor_notes\": \"Appointment confirmed. Please arrive 15 minutes early for check-in.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "14. Reject Appointment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/{{appointment_id}}/reject",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "{{appointment_id}}", "reject"]
+        },
+        "description": "Reject pending appointment (RejectAppointmentSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"doctor_notes\": \"Unable to accommodate this time slot\",\n  \"rejection_reason\": \"Schedule conflict - please select another available date\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "15. Get Pending Appointments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/pending",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "pending"]
+        },
+        "description": "Get all pending appointments for doctor approval"
+      },
+      "response": []
+    },
+    {
+      "name": "16. Get Appointment Statistics",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{auth_token}}",
+            "type": "text",
+            "description": "JWT token from login"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/appointments/doctor/appointments/statistics",
+          "host": ["{{base_url}}"],
+          "path": ["appointments", "doctor", "appointments", "statistics"]
+        },
+        "description": "Get appointment statistics for doctor dashboard"
+      },
+      "response": []
+    }
+  ]
+}

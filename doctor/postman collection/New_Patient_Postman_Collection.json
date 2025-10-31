@@ -1,0 +1,1678 @@
+{
+  "info": {
+    "name": "New Patient CRUD API",
+    "description": "Complete API collection for testing patient creation, retrieval, update, and deletion operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-26T18:41:36.247325\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create New Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Created Successfully",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient created successfully\",\n  \"patient_id\": \"PAT1758892220123456\",\n  \"status\": \"success\"\n}"
+        },
+        {
+          "name": "Validation Error - Missing Required Fields",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Missing required field: date_of_birth\"\n}"
+        },
+        {
+          "name": "Validation Error - Invalid Email",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"invalid-email\",\n  \"gender\": \"Male\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Invalid email format\"\n}"
+        },
+        {
+          "name": "Duplicate Email Error",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Jane Smith\",\n  \"date_of_birth\": \"22/07/1990\",\n  \"contact_number\": \"9876543212\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Female\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient with this email already exists\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patient by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patient\": {\n    \"_id\": \"675a1b2c3d4e5f6789012345\",\n    \"patient_id\": \"PAT1758892220123456\",\n    \"full_name\": \"John Doe\",\n    \"date_of_birth\": \"15/03/1985\",\n    \"contact_number\": \"9876543210\",\n    \"email\": \"john.doe@example.com\",\n    \"gender\": \"Male\",\n    \"address\": \"123 Main Street, Downtown\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pincode\": \"10001\",\n    \"emergency_contact_name\": \"Jane Doe\",\n    \"emergency_contact_number\": \"9876543211\",\n    \"medical_notes\": \"No known medical conditions\",\n    \"allergies\": \"None\",\n    \"blood_type\": \"O+\",\n    \"assigned_doctor_id\": \"\",\n    \"is_active\": true,\n    \"created_at\": \"2025-09-26T18:41:36.247325Z\",\n    \"updated_at\": \"2025-09-26T18:41:36.247325Z\"\n  }\n}"
+        },
+        {
+          "name": "Patient Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?page=1&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Patients Retrieved Successfully",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?search=John",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "search",
+              "value": "John"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search Results",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?search=John",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "John"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 20\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Patient",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Updated Successfully",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient updated successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Update",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Patient",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Deleted Successfully",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient deleted successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Deletion",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patients by Doctor",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["doctors", "D17587987732214", "patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Doctor Patients Retrieved",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "D17587987732214", "patients"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"assigned_doctor_id\": \"D17587987732214\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"doctor_id\": \"D17587987732214\"\n}"
+        }
+      ]
+    }
+  ]
+}
+
+    "name": "New Patient CRUD API",
+    "description": "Complete API collection for testing patient creation, retrieval, update, and deletion operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-26T18:41:36.247325\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create New Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Created Successfully",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient created successfully\",\n  \"patient_id\": \"PAT1758892220123456\",\n  \"status\": \"success\"\n}"
+        },
+        {
+          "name": "Validation Error - Missing Required Fields",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Missing required field: date_of_birth\"\n}"
+        },
+        {
+          "name": "Validation Error - Invalid Email",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"invalid-email\",\n  \"gender\": \"Male\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Invalid email format\"\n}"
+        },
+        {
+          "name": "Duplicate Email Error",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Jane Smith\",\n  \"date_of_birth\": \"22/07/1990\",\n  \"contact_number\": \"9876543212\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Female\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient with this email already exists\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patient by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patient\": {\n    \"_id\": \"675a1b2c3d4e5f6789012345\",\n    \"patient_id\": \"PAT1758892220123456\",\n    \"full_name\": \"John Doe\",\n    \"date_of_birth\": \"15/03/1985\",\n    \"contact_number\": \"9876543210\",\n    \"email\": \"john.doe@example.com\",\n    \"gender\": \"Male\",\n    \"address\": \"123 Main Street, Downtown\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pincode\": \"10001\",\n    \"emergency_contact_name\": \"Jane Doe\",\n    \"emergency_contact_number\": \"9876543211\",\n    \"medical_notes\": \"No known medical conditions\",\n    \"allergies\": \"None\",\n    \"blood_type\": \"O+\",\n    \"assigned_doctor_id\": \"\",\n    \"is_active\": true,\n    \"created_at\": \"2025-09-26T18:41:36.247325Z\",\n    \"updated_at\": \"2025-09-26T18:41:36.247325Z\"\n  }\n}"
+        },
+        {
+          "name": "Patient Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?page=1&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Patients Retrieved Successfully",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?search=John",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "search",
+              "value": "John"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search Results",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?search=John",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "John"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 20\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Patient",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Updated Successfully",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient updated successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Update",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Patient",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Deleted Successfully",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient deleted successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Deletion",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patients by Doctor",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["doctors", "D17587987732214", "patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Doctor Patients Retrieved",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "D17587987732214", "patients"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"assigned_doctor_id\": \"D17587987732214\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"doctor_id\": \"D17587987732214\"\n}"
+        }
+      ]
+    }
+  ]
+}
+
+    "name": "New Patient CRUD API",
+    "description": "Complete API collection for testing patient creation, retrieval, update, and deletion operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "patientId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      },
+      "response": [
+        {
+          "name": "Health Check Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-09-26T18:41:36.247325\",\n  \"version\": \"1.0.0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create New Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Created Successfully",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Male\",\n  \"address\": \"123 Main Street, Downtown\",\n  \"city\": \"New York\",\n  \"state\": \"NY\",\n  \"pincode\": \"10001\",\n  \"emergency_contact_name\": \"Jane Doe\",\n  \"emergency_contact_number\": \"9876543211\",\n  \"medical_notes\": \"No known medical conditions\",\n  \"allergies\": \"None\",\n  \"blood_type\": \"O+\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient created successfully\",\n  \"patient_id\": \"PAT1758892220123456\",\n  \"status\": \"success\"\n}"
+        },
+        {
+          "name": "Validation Error - Missing Required Fields",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Missing required field: date_of_birth\"\n}"
+        },
+        {
+          "name": "Validation Error - Invalid Email",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Doe\",\n  \"date_of_birth\": \"15/03/1985\",\n  \"contact_number\": \"9876543210\",\n  \"email\": \"invalid-email\",\n  \"gender\": \"Male\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Invalid email format\"\n}"
+        },
+        {
+          "name": "Duplicate Email Error",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Jane Smith\",\n  \"date_of_birth\": \"22/07/1990\",\n  \"contact_number\": \"9876543212\",\n  \"email\": \"john.doe@example.com\",\n  \"gender\": \"Female\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient with this email already exists\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patient by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patient\": {\n    \"_id\": \"675a1b2c3d4e5f6789012345\",\n    \"patient_id\": \"PAT1758892220123456\",\n    \"full_name\": \"John Doe\",\n    \"date_of_birth\": \"15/03/1985\",\n    \"contact_number\": \"9876543210\",\n    \"email\": \"john.doe@example.com\",\n    \"gender\": \"Male\",\n    \"address\": \"123 Main Street, Downtown\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"pincode\": \"10001\",\n    \"emergency_contact_name\": \"Jane Doe\",\n    \"emergency_contact_number\": \"9876543211\",\n    \"medical_notes\": \"No known medical conditions\",\n    \"allergies\": \"None\",\n    \"blood_type\": \"O+\",\n    \"assigned_doctor_id\": \"\",\n    \"is_active\": true,\n    \"created_at\": \"2025-09-26T18:41:36.247325Z\",\n    \"updated_at\": \"2025-09-26T18:41:36.247325Z\"\n  }\n}"
+        },
+        {
+          "name": "Patient Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get All Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?page=1&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Patients Retrieved Successfully",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search Patients",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients?search=John",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients"],
+          "query": [
+            {
+              "key": "search",
+              "value": "John"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search Results",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients?search=John",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "John"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"city\": \"New York\",\n      \"state\": \"NY\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 20\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Patient",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Updated Successfully",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\",\n  \"state\": \"CA\",\n  \"pincode\": \"90210\",\n  \"medical_notes\": \"Updated: Patient has mild asthma\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient updated successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Update",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"city\": \"Los Angeles\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Patient",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/patients/{{patientId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["patients", "{{patientId}}"]
+        }
+      },
+      "response": [
+        {
+          "name": "Patient Deleted Successfully",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/PAT1758892220123456",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "PAT1758892220123456"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"message\": \"Patient deleted successfully\"\n}"
+        },
+        {
+          "name": "Patient Not Found for Deletion",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/patients/invalid-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "invalid-id"]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Patient not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Patients by Doctor",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+          "host": ["{{baseUrl}}"],
+          "path": ["doctors", "D17587987732214", "patients"]
+        }
+      },
+      "response": [
+        {
+          "name": "Doctor Patients Retrieved",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/D17587987732214/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "D17587987732214", "patients"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"patients\": [\n    {\n      \"_id\": \"675a1b2c3d4e5f6789012345\",\n      \"patient_id\": \"PAT1758892220123456\",\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"contact_number\": \"9876543210\",\n      \"assigned_doctor_id\": \"D17587987732214\",\n      \"is_active\": true,\n      \"created_at\": \"2025-09-26T18:41:36.247325Z\"\n    }\n  ],\n  \"total\": 1,\n  \"doctor_id\": \"D17587987732214\"\n}"
+        }
+      ]
+    }
+  ]
+}

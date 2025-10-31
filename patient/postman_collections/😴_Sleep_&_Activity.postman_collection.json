@@ -1,0 +1,216 @@
+{
+  "info": {
+    "name": "😴 Sleep & Activity",
+    "description": "Sleep tracking, activity logs, smart alarm",
+    "_postman_id": "sleep_activity-20251016",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Save Sleep Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/save-sleep-log",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "save-sleep-log"
+          ]
+        },
+        "description": "Save sleep log (SaveSleepLogSchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"PAT_12345\",\n  \"userRole\": \"patient\",\n  \"username\": \"jane_smith\",\n  \"email\": \"jane@example.com\",\n  \"startTime\": \"22:00\",\n  \"endTime\": \"06:00\",\n  \"totalSleep\": \"8 hours\",\n  \"smartAlarmEnabled\": true,\n  \"optimalWakeUpTime\": \"06:00\",\n  \"sleepRating\": 4,\n  \"notes\": \"Good sleep quality\",\n  \"timestamp\": \"2025-10-16T06:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Sleep Logs",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/get-sleep-logs/{{username}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "get-sleep-logs",
+            "{{username}}"
+          ]
+        },
+        "description": "Get sleep logs by username"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Sleep Logs By Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/get-sleep-logs-by-email/{{email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "get-sleep-logs-by-email",
+            "{{email}}"
+          ]
+        },
+        "description": "Get sleep logs by email"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Patient Complete Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/patient-complete-profile/{{email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "patient-complete-profile",
+            "{{email}}"
+          ]
+        },
+        "description": "Get complete profile"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get User Activities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/user-activities/{{email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "user-activities",
+            "{{email}}"
+          ]
+        },
+        "description": "Get user activities"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Session Activities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/session-activities/{{session_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "session-activities",
+            "{{session_id}}"
+          ]
+        },
+        "description": "Get session activities"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Activity Summary",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/activity-summary/{{email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "activity-summary",
+            "{{email}}"
+          ]
+        },
+        "description": "Get activity summary"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Track Activity",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/track-activity",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "track-activity"
+          ]
+        },
+        "description": "Track activity (TrackActivitySchema)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"patient@example.com\",\n  \"activity_type\": \"exercise\",\n  \"activity_data\": {\"duration\": \"30 minutes\", \"type\": \"walking\", \"intensity\": \"moderate\"},\n  \"session_id\": \"session_123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9. Get Active Sessions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/sleep-activity/active-sessions/{{email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "sleep-activity",
+            "active-sessions",
+            "{{email}}"
+          ]
+        },
+        "description": "Get active sessions"
+      },
+      "response": []
+    }
+  ]
+}

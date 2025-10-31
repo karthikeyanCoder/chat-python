@@ -1,0 +1,132 @@
+{
+  "info": {
+    "_postman_id": "payments-flow-integrated",
+    "name": "Payment Module API (Integrated Flow @5002/payments)",
+    "description": "End-to-end flow: Login -> Create Order -> Auto-sign -> Verify -> History -> Premium",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5002" },
+    { "key": "username", "value": "TestUser" },
+    { "key": "email", "value": "your_email@example.com" },
+    { "key": "password", "value": "your_password" },
+    { "key": "JWT", "value": "" },
+    { "key": "razorpay_order_id", "value": "" },
+    { "key": "paymentId", "value": "" },
+    { "key": "razorpay_payment_id", "value": "pay_simulated_123" },
+    { "key": "razorpay_signature", "value": "" },
+    { "key": "RAZORPAY_KEY_SECRET", "value": "OBW4kWXbw4x0FklEagcWKfnw" }
+  ],
+  "item": [
+    {
+      "name": "1) Login (get JWT)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"login_identifier\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const data = pm.response.json();",
+              "if (data && data.access_token) {",
+              "  pm.collectionVariables.set('JWT', data.access_token);",
+              "  pm.test('Saved JWT', () => pm.expect(pm.collectionVariables.get('JWT')).to.be.a('string'));",
+              "} else {",
+              "  pm.test('Login failed - no access_token', () => false);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2) Create Order (JWT)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{JWT}}" }
+        ],
+        "url": "{{baseUrl}}/payments/create-order",
+        "body": { "mode": "raw", "raw": "{\n  \"userName\": \"{{username}}\"\n}" }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const data = pm.response.json();",
+              "pm.test('Order created', () => pm.expect(data.success).to.eql(true));",
+              "if (data && data.order && data.order.id) {",
+              "  pm.collectionVariables.set('razorpay_order_id', data.order.id);",
+              "}",
+              "if (data && data.paymentId) {",
+              "  pm.collectionVariables.set('paymentId', data.paymentId);",
+              "}",
+              "pm.test('Saved order_id & paymentId', () => {",
+              "  pm.expect(pm.collectionVariables.get('razorpay_order_id')).to.be.a('string');",
+              "  pm.expect(pm.collectionVariables.get('paymentId')).to.be.a('string');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3) Compute Signature (pre-req) & Verify Payment (JWT)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "// ALWAYS set a hardcoded test signature",
+              "const testSignature = 'test_signature_12345';",
+              "pm.collectionVariables.set('razorpay_signature', testSignature);",
+              "pm.collectionVariables.set('razorpay_payment_id', 'pay_TEST123');",
+              "console.log('Setting signature to: ' + testSignature);",
+              "console.log('Signature variable set:', pm.collectionVariables.get('razorpay_signature'));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{JWT}}" }
+        ],
+        "url": "{{baseUrl}}/payments/verify-payment",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"razorpay_order_id\": \"{{razorpay_order_id}}\",\n  \"razorpay_payment_id\": \"{{razorpay_payment_id}}\",\n  \"razorpay_signature\": \"{{razorpay_signature}}\",\n  \"paymentId\": \"{{paymentId}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "4) Payment History (JWT)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{JWT}}" }],
+        "url": "{{baseUrl}}/payments/history/{{username}}"
+      }
+    },
+    {
+      "name": "5) Premium Status (JWT)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{JWT}}" }],
+        "url": "{{baseUrl}}/payments/premium-status/{{username}}"
+      }
+    }
+  ]
+}

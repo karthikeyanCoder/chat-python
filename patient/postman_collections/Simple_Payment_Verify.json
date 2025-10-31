@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "Simple Payment Verify - No Variables Needed",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Verify Payment (Simple - Copy & Paste)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"paymentId\": \"PASTE_YOUR_paymentId_HERE\",\n  \"razorpay_order_id\": \"PASTE_YOUR_order_id_HERE\",\n  \"razorpay_payment_id\": \"pay_TEST123\",\n  \"razorpay_signature\": \"test_signature_works_in_test_mode\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5002/payments/verify-payment",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5002",
+          "path": ["payments", "verify-payment"]
+        },
+        "description": "## How to Use:\n\n1. Run 'Create Order' request first\n2. Copy the `paymentId` from response\n3. Copy the `order.id` from response\n4. Replace PASTE_YOUR_paymentId_HERE with actual paymentId\n5. Replace PASTE_YOUR_order_id_HERE with actual order.id\n6. razorpay_signature can be ANY value (e.g., 'test')\n7. Send request\n\n## Expected Response:\n```json\n{\n  \"success\": true,\n  \"message\": \"Payment verified successfully\"\n}\n```"
+      }
+    }
+  ]
+}
+
+

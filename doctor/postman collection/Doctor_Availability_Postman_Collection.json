@@ -1,0 +1,901 @@
+{
+	"info": {
+		"_postman_id": "availability-system-collection",
+		"name": "Doctor Availability System",
+		"description": "Complete API collection for Doctor Availability Management using the user's proposed model structure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "availability-system"
+	},
+	"item": [
+		{
+			"name": "🔐 Authentication",
+			"item": [
+				{
+					"name": "Doctor Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"login_identifier\": \"doctor@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor-login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor-login"
+							]
+						},
+						"description": "Login as a doctor to get JWT token"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for getting JWT tokens"
+		},
+		{
+			"name": "👨‍⚕️ Doctor Availability Management",
+			"item": [
+				{
+					"name": "1. Create Daily Availability",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date\": \"{{test_date}}\",\n  \"work_hours\": {\n    \"start_time\": \"09:00\",\n    \"end_time\": \"17:00\"\n  },\n  \"consultation_type\": \"Online\",\n  \"types\": [\n    {\n      \"type\": \"Consultation\",\n      \"duration_mins\": 30,\n      \"price\": 150.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"09:00\", \"end_time\": \"09:30\", \"is_booked\": false },\n        { \"start_time\": \"09:30\", \"end_time\": \"10:00\", \"is_booked\": false },\n        { \"start_time\": \"10:00\", \"end_time\": \"10:30\", \"is_booked\": true, \"patient_id\": \"PAT123\", \"appointment_id\": \"APT123\" }\n      ]\n    },\n    {\n      \"type\": \"Follow-up\",\n      \"duration_mins\": 20,\n      \"price\": 100.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"11:00\", \"end_time\": \"11:20\", \"is_booked\": false },\n        { \"start_time\": \"11:20\", \"end_time\": \"11:40\", \"is_booked\": false }\n      ]\n    },\n    {\n      \"type\": \"First Visit\",\n      \"duration_mins\": 45,\n      \"price\": 200.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"14:00\", \"end_time\": \"14:45\", \"is_booked\": false },\n        { \"start_time\": \"15:00\", \"end_time\": \"15:45\", \"is_booked\": true, \"patient_id\": \"PAT456\", \"appointment_id\": \"APT456\" }\n      ]\n    },\n    {\n      \"type\": \"Report Review\",\n      \"duration_mins\": 15,\n      \"price\": 75.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"16:00\", \"end_time\": \"16:15\", \"is_booked\": false },\n        { \"start_time\": \"16:15\", \"end_time\": \"16:30\", \"is_booked\": false }\n      ]\n    }\n  ],\n  \"breaks\": [\n    {\n      \"start_time\": \"12:00\",\n      \"end_time\": \"13:00\",\n      \"type\": \"lunch\",\n      \"is_blocked\": true\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Create availability slots for a specific date using the user's proposed model structure"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Get All Doctor Availability",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Get all availability records for a doctor"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get Availability by Date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}"
+							]
+						},
+						"description": "Get availability for a specific date"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Get Available Slots by Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/Consultation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"Consultation"
+							]
+						},
+						"description": "Get available slots for a specific appointment type"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Update Availability",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"consultation_type\": \"In-Person\",\n  \"work_hours\": {\n    \"start_time\": \"08:00\",\n    \"end_time\": \"18:00\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/availability/{{availability_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"availability",
+								"{{availability_id}}"
+							]
+						},
+						"description": "Update availability document"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Delete Availability",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/availability/{{availability_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"availability",
+								"{{availability_id}}"
+							]
+						},
+						"description": "Delete availability document (soft delete)"
+					},
+					"response": []
+				}
+			],
+			"description": "Doctor-specific availability management endpoints (requires JWT authentication)"
+		},
+		{
+			"name": "🌐 Public Availability (Patient View)",
+			"item": [
+				{
+					"name": "1. Public - Get Doctor Availability",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/public/doctor/{{doctor_id}}/availability/{{test_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}"
+							]
+						},
+						"description": "Public endpoint for patients to view doctor availability (no authentication required)"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Public - Get Available Slots by Type",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/public/doctor/{{doctor_id}}/availability/{{test_date}}/Consultation",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"Consultation"
+							]
+						},
+						"description": "Public endpoint for patients to view available slots for specific appointment type"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Public - Get Follow-up Slots",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/public/doctor/{{doctor_id}}/availability/{{test_date}}/Follow-up",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"Follow-up"
+							]
+						},
+						"description": "Get available Follow-up appointment slots"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Public - Get First Visit Slots",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/public/doctor/{{doctor_id}}/availability/{{test_date}}/First Visit",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"First Visit"
+							]
+						},
+						"description": "Get available First Visit appointment slots"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Public - Get Report Review Slots",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/public/doctor/{{doctor_id}}/availability/{{test_date}}/Report Review",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"public",
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"Report Review"
+							]
+						},
+						"description": "Get available Report Review appointment slots"
+					},
+					"response": []
+				}
+			],
+			"description": "Public endpoints for patients to view doctor availability without authentication"
+		},
+		{
+			"name": "🧪 Test Scenarios",
+			"item": [
+				{
+					"name": "1. Test Invalid Date Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date\": \"2025/10/26\",\n  \"work_hours\": {\n    \"start_time\": \"09:00\",\n    \"end_time\": \"17:00\"\n  },\n  \"consultation_type\": \"Online\",\n  \"types\": [\n    {\n      \"type\": \"Consultation\",\n      \"duration_mins\": 30,\n      \"price\": 150.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"09:00\", \"end_time\": \"09:30\", \"is_booked\": false }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Test with invalid date format (should return 400 error)"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Test Missing Required Fields",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"work_hours\": {\n    \"start_time\": \"09:00\",\n    \"end_time\": \"17:00\"\n  },\n  \"consultation_type\": \"Online\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Test with missing required fields (should return 400 error)"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Test Invalid Time Format",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date\": \"2025-10-26\",\n  \"work_hours\": {\n    \"start_time\": \"9:00\",\n    \"end_time\": \"17:00\"\n  },\n  \"consultation_type\": \"Online\",\n  \"types\": [\n    {\n      \"type\": \"Consultation\",\n      \"duration_mins\": 30,\n      \"price\": 150.0,\n      \"currency\": \"USD\",\n      \"slots\": [\n        { \"start_time\": \"09:00\", \"end_time\": \"09:30\", \"is_booked\": false }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Test with invalid time format (should return 400 error)"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Test Unauthorized Access",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability"
+							]
+						},
+						"description": "Test without authorization header (should return 401 error)"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Test Invalid Doctor ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/DOC999/availability",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"DOC999",
+								"availability"
+							]
+						},
+						"description": "Test with invalid doctor ID (should return 401 error if token doesn't match)"
+					},
+					"response": []
+				}
+			],
+			"description": "Test scenarios for error handling and validation"
+		},
+		{
+			"name": "📊 Sample Responses",
+			"item": [
+				{
+					"name": "Successful Creation Response",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/sample/success-response",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sample",
+								"success-response"
+							]
+						},
+						"description": "Sample successful response format"
+					},
+					"response": [
+						{
+							"name": "Success Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{base_url}}/doctor/{{doctor_id}}/availability",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctor",
+										"{{doctor_id}}",
+										"availability"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"Availability created successfully\",\n  \"availability_id\": \"AVAIL_17325648001234567890\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Availability Data Response",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/sample/availability-response",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sample",
+								"availability-response"
+							]
+						},
+						"description": "Sample availability data response format"
+					},
+					"response": [
+						{
+							"name": "Availability Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctor",
+										"{{doctor_id}}",
+										"availability",
+										"{{test_date}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"availability\": [\n    {\n      \"availability_id\": \"AVAIL_17325648001234567890\",\n      \"doctor_id\": \"DOC123\",\n      \"date\": \"2025-10-26\",\n      \"work_hours\": {\n        \"start_time\": \"09:00\",\n        \"end_time\": \"17:00\"\n      },\n      \"consultation_type\": \"Online\",\n      \"types\": [\n        {\n          \"type\": \"Consultation\",\n          \"duration_mins\": 30,\n          \"price\": 150.0,\n          \"currency\": \"USD\",\n          \"available_slots_count\": 2,\n          \"total_slots_count\": 3,\n          \"slots\": [\n            {\n              \"slot_id\": \"SLOT_CONSULTATION_001\",\n              \"start_time\": \"09:00\",\n              \"end_time\": \"09:30\",\n              \"is_booked\": false,\n              \"patient_id\": null,\n              \"appointment_id\": null,\n              \"booking_timestamp\": null,\n              \"cancellation_reason\": null,\n              \"notes\": \"\"\n            },\n            {\n              \"slot_id\": \"SLOT_CONSULTATION_002\",\n              \"start_time\": \"09:30\",\n              \"end_time\": \"10:00\",\n              \"is_booked\": false,\n              \"patient_id\": null,\n              \"appointment_id\": null,\n              \"booking_timestamp\": null,\n              \"cancellation_reason\": null,\n              \"notes\": \"\"\n            },\n            {\n              \"slot_id\": \"SLOT_CONSULTATION_003\",\n              \"start_time\": \"10:00\",\n              \"end_time\": \"10:30\",\n              \"is_booked\": true,\n              \"patient_id\": \"PAT123\",\n              \"appointment_id\": \"APT123\",\n              \"booking_timestamp\": \"2025-10-24T10:00:00Z\",\n              \"cancellation_reason\": null,\n              \"notes\": \"\"\n            }\n          ]\n        }\n      ],\n      \"breaks\": [\n        {\n          \"start_time\": \"12:00\",\n          \"end_time\": \"13:00\",\n          \"type\": \"lunch\",\n          \"is_blocked\": true\n        }\n      ],\n      \"is_active\": true,\n      \"created_at\": \"2025-10-24T10:00:00Z\",\n      \"updated_at\": \"2025-10-24T10:00:00Z\"\n    }\n  ],\n  \"total_count\": 1\n}"
+						}
+					]
+				}
+			],
+			"description": "Sample response formats for reference"
+		},
+		{
+			"name": "❌ Doctor Appointment Cancellation",
+			"item": [
+				{
+					"name": "1. Get Booked Slots for Date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/booked-slots",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"booked-slots"
+							]
+						},
+						"description": "Get all booked slots for a specific date to see which appointments can be cancelled"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Cancel Individual Appointment Slot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointment_id\": \"{{appointment_id}}\",\n  \"cancellation_reason\": \"Patient requested reschedule\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/{{slot_id}}/cancel",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"{{slot_id}}",
+								"cancel"
+							]
+						},
+						"description": "Cancel a specific appointment slot and make it available again"
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get Appointment Summary for Date",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/summary",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"summary"
+							]
+						},
+						"description": "Get appointment summary for a specific date before cancelling all appointments"
+					},
+					"response": []
+				},
+				{
+					"name": "4. Cancel All Appointments for Date",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cancellation_reason\": \"Emergency - Doctor unavailable for the day\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/cancel-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"cancel-all"
+							]
+						},
+						"description": "Cancel all appointments for a specific date and make all slots available"
+					},
+					"response": []
+				},
+				{
+					"name": "5. Test Cancel Invalid Slot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointment_id\": \"INVALID_APT\",\n  \"cancellation_reason\": \"Test invalid cancellation\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/INVALID_SLOT/cancel",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"INVALID_SLOT",
+								"cancel"
+							]
+						},
+						"description": "Test cancelling a non-existent slot (should return 400 error)"
+					},
+					"response": []
+				},
+				{
+					"name": "6. Test Cancel All - No Appointments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cancellation_reason\": \"Test cancellation with no appointments\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/2023-01-01/cancel-all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"2023-01-01",
+								"cancel-all"
+							]
+						},
+						"description": "Test cancelling all appointments for a date with no appointments (should return success with 0 cancelled)"
+					},
+					"response": []
+				},
+				{
+					"name": "7. Test Unauthorized Cancellation",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer invalid_token",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"appointment_id\": \"{{appointment_id}}\",\n  \"cancellation_reason\": \"Unauthorized test\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/doctor/{{doctor_id}}/availability/{{test_date}}/{{slot_id}}/cancel",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"doctor",
+								"{{doctor_id}}",
+								"availability",
+								"{{test_date}}",
+								"{{slot_id}}",
+								"cancel"
+							]
+						},
+						"description": "Test cancellation with invalid JWT token (should return 401 error)"
+					},
+					"response": []
+				}
+			],
+			"description": "Doctor appointment cancellation endpoints for managing individual slots and full-date cancellations"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "doctor_id",
+			"value": "DOC123",
+			"type": "string"
+		},
+		{
+			"key": "test_date",
+			"value": "2025-10-26",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "availability_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "slot_id",
+			"value": "SLOT_CONSULTATION_003",
+			"type": "string"
+		},
+		{
+			"key": "appointment_id",
+			"value": "APT123",
+			"type": "string"
+		}
+	]
+}
+

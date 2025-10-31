@@ -1,0 +1,840 @@
+{
+  "info": {
+    "name": "Dictation API - Doctor Storage System",
+    "description": "Complete API collection for Dictation endpoints with doctor-based storage\n\nBase URL: http://localhost:8000\nStorage: Dictations stored in doctor_v2 collection\nAuthentication: JWT Bearer token required",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "patient_id",
+      "value": "PAT175820015455746A",
+      "type": "string"
+    },
+    {
+      "key": "doctor_jwt_token",
+      "value": "YOUR_DOCTOR_JWT_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "patient_jwt_token",
+      "value": "YOUR_PATIENT_JWT_TOKEN_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Dictation",
+      "item": [
+        {
+          "name": "Create Dictation - English",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Create a new dictation for a patient (English)"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"dictation\": {\n    \"dictation_id\": \"dict_1737542400000\",\n    \"patient_id\": \"PAT175820015455746A\",\n    \"language\": \"en\",\n    \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\",\n    \"source\": \"doctor_dictation\",\n    \"created_at\": \"2025-10-22T10:30:00.000Z\",\n    \"updated_at\": \"2025-10-22T10:30:00.000Z\"\n  },\n  \"message\": \"Dictation saved\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Dictation - Tamil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"ta\",\n  \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Create a new dictation for a patient (Tamil)"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"ta\",\n  \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"dictation\": {\n    \"dictation_id\": \"dict_1737542460000\",\n    \"patient_id\": \"PAT175820015455746A\",\n    \"language\": \"ta\",\n    \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\",\n    \"source\": \"doctor_dictation\",\n    \"created_at\": \"2025-10-22T10:31:00.000Z\",\n    \"updated_at\": \"2025-10-22T10:31:00.000Z\"\n  },\n  \"message\": \"Dictation saved\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Dictation - Error (Missing Language)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Patient reports feeling better today\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Error case: Missing language field"
+          },
+          "response": [
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"text\": \"Patient reports feeling better today\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"language and text are required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Dictation - Error (No Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient reports feeling better today\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Error case: Missing Authorization token"
+          },
+          "response": [
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient reports feeling better today\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing Bearer token\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. List Dictations - Doctor View",
+      "item": [
+        {
+          "name": "Get All Dictations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Get all dictations for a patient (Doctor view)"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"items\": [\n      {\n        \"dictation_id\": \"dict_1737542460000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"ta\",\n        \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:31:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:31:00.000Z\"\n      },\n      {\n        \"dictation_id\": \"dict_1737542400000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"en\",\n        \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:30:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:30:00.000Z\"\n      }\n    ],\n    \"count\": 2\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Dictations with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?limit=5&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            },
+            "description": "Get dictations with pagination (limit=5, offset=0)"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?limit=5&offset=0",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"items\": [\n      {\n        \"dictation_id\": \"dict_1737542460000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"ta\",\n        \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:31:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:31:00.000Z\"\n      }\n    ],\n    \"count\": 2\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Dictations by Language",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?language=en",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+              "query": [
+                {
+                  "key": "language",
+                  "value": "en"
+                }
+              ]
+            },
+            "description": "Get dictations filtered by language (English only)"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?language=en",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+                  "query": [
+                    {
+                      "key": "language",
+                      "value": "en"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"items\": [\n      {\n        \"dictation_id\": \"dict_1737542400000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"en\",\n        \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:30:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:30:00.000Z\"\n      }\n    ],\n    \"count\": 1\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Dictations by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?from=2025-10-22T00:00:00Z&to=2025-10-22T23:59:59Z",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2025-10-22T00:00:00Z"
+                },
+                {
+                  "key": "to",
+                  "value": "2025-10-22T23:59:59Z"
+                }
+              ]
+            },
+            "description": "Get dictations filtered by date range"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations?from=2025-10-22T00:00:00Z&to=2025-10-22T23:59:59Z",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2025-10-22T00:00:00Z"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2025-10-22T23:59:59Z"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"items\": [\n      {\n        \"dictation_id\": \"dict_1737542460000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"ta\",\n        \"text\": \"நோயாளி இன்று நன்றாக உணர்கிறார். இரத்த அழுத்தம் 120/80 இல் நிலையானது. கவலைக்குரிய அறிகுறிகள் எதுவும் இல்லை. தற்போதைய மருந்து முறையைத் தொடரவும்.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:31:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:31:00.000Z\"\n      },\n      {\n        \"dictation_id\": \"dict_1737542400000\",\n        \"patient_id\": \"PAT175820015455746A\",\n        \"language\": \"en\",\n        \"text\": \"Patient reports feeling better today. Blood pressure is stable at 120/80. No concerning symptoms reported. Continue current medication regimen.\",\n        \"source\": \"doctor_dictation\",\n        \"created_at\": \"2025-10-22T10:30:00.000Z\",\n        \"updated_at\": \"2025-10-22T10:30:00.000Z\"\n      }\n    ],\n    \"count\": 2\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Dictations - Error (No Token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Error case: Missing Authorization token"
+          },
+          "response": [
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Missing Bearer token\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Dictations - Error (Invalid Role)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Error case: Patient trying to access doctor endpoint"
+          },
+          "response": [
+            {
+              "name": "Error Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{patient_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Doctor role required\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. List Dictations - Patient View",
+      "item": [
+        {
+          "name": "Get Patient Dictations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Get dictations for a patient (Patient view) - Currently returns 501 Not Implemented"
+          },
+          "response": [
+            {
+              "name": "Not Implemented Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{patient_jwt_token}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Not Implemented",
+              "code": 501,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Patient view of dictations not yet implemented with new storage system\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Test Cases",
+      "item": [
+        {
+          "name": "Test Multiple Languages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"hi\",\n  \"text\": \"मरीज़ आज बेहतर महसूस कर रहे हैं। रक्तचाप 120/80 पर स्थिर है। कोई चिंताजनक लक्षण नहीं हैं। वर्तमान दवा कार्यक्रम जारी रखें।\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Test dictation in Hindi language"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"hi\",\n  \"text\": \"मरीज़ आज बेहतर महसूस कर रहे हैं। रक्तचाप 120/80 पर स्थिर है। कोई चिंताजनक लक्षण नहीं हैं। वर्तमान दवा कार्यक्रम जारी रखें।\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"dictation\": {\n    \"dictation_id\": \"dict_1737542520000\",\n    \"patient_id\": \"PAT175820015455746A\",\n    \"language\": \"hi\",\n    \"text\": \"मरीज़ आज बेहतर महसूस कर रहे हैं। रक्तचाप 120/80 पर स्थिर है। कोई चिंताजनक लक्षण नहीं हैं। वर्तमान दवा कार्यक्रम जारी रखें।\",\n    \"source\": \"doctor_dictation\",\n    \"created_at\": \"2025-10-22T10:32:00.000Z\",\n    \"updated_at\": \"2025-10-22T10:32:00.000Z\"\n  },\n  \"message\": \"Dictation saved\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Test Long Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_jwt_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient presents with comprehensive medical history. Current symptoms include mild fatigue and occasional headaches. Blood pressure readings over the past week show 118/76, 122/80, 120/78, 119/79, and 121/81. Heart rate has been stable at 72-78 BPM. Patient reports good sleep quality with 7-8 hours per night. Appetite is normal with no nausea or vomiting. No signs of infection or fever. Patient is compliant with prescribed medications including prenatal vitamins and iron supplements. Next follow-up scheduled for next week. Patient education provided regarding nutrition and exercise during pregnancy. No immediate concerns identified. Continue current treatment plan.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+              "host": ["{{base_url}}"],
+              "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+            },
+            "description": "Test with long medical text"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{doctor_jwt_token}}",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"language\": \"en\",\n  \"text\": \"Patient presents with comprehensive medical history. Current symptoms include mild fatigue and occasional headaches. Blood pressure readings over the past week show 118/76, 122/80, 120/78, 119/79, and 121/81. Heart rate has been stable at 72-78 BPM. Patient reports good sleep quality with 7-8 hours per night. Appetite is normal with no nausea or vomiting. No signs of infection or fever. Patient is compliant with prescribed medications including prenatal vitamins and iron supplements. Next follow-up scheduled for next week. Patient education provided regarding nutrition and exercise during pregnancy. No immediate concerns identified. Continue current treatment plan.\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/doctor/patient/{{patient_id}}/dictations",
+                  "host": ["{{base_url}}"],
+                  "path": ["doctor", "patient", "{{patient_id}}", "dictations"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"dictation\": {\n    \"dictation_id\": \"dict_1737542580000\",\n    \"patient_id\": \"PAT175820015455746A\",\n    \"language\": \"en\",\n    \"text\": \"Patient presents with comprehensive medical history. Current symptoms include mild fatigue and occasional headaches. Blood pressure readings over the past week show 118/76, 122/80, 120/78, 119/79, and 121/81. Heart rate has been stable at 72-78 BPM. Patient reports good sleep quality with 7-8 hours per night. Appetite is normal with no nausea or vomiting. No signs of infection or fever. Patient is compliant with prescribed medications including prenatal vitamins and iron supplements. Next follow-up scheduled for next week. Patient education provided regarding nutrition and exercise during pregnancy. No immediate concerns identified. Continue current treatment plan.\",\n    \"source\": \"doctor_dictation\",\n    \"created_at\": \"2025-10-22T10:33:00.000Z\",\n    \"updated_at\": \"2025-10-22T10:33:00.000Z\"\n  },\n  \"message\": \"Dictation saved\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
