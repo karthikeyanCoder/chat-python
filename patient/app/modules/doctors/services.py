@@ -315,7 +315,7 @@ def get_doctor_availability_service(doctor_id: str, date: str, patient_token: st
         print(f"[*] Getting doctor availability for doctor {doctor_id} on {date}")
         
         # Get doctor module URL from environment or use default
-        doctor_module_url = os.getenv('DOCTOR_MODULE_URL', 'http://localhost:5000')
+        doctor_module_url = os.getenv('DOCTOR_MODULE_URL')
         
         # Prepare headers with JWT token
         headers = {

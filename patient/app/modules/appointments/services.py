@@ -16,21 +16,28 @@ import os
 
 # SLOT VALIDATION SERVICE
 
-def validate_slot_availability(doctor_id, appointment_date, slot_id, appointment_type):
-    """Validate slot availability by calling doctor availability API"""
+def validate_slot_availability(doctor_id, appointment_date, slot_id, consultation_type=None):
+    """Validate slot availability by calling doctor availability API - uses consultation_type"""
     try:
         # Validate required inputs
-        if not doctor_id or not appointment_date or not slot_id or not appointment_type:
+        if not doctor_id or not appointment_date or not slot_id:
             return {
                 'success': False,
                 'error': 'Missing required parameters for slot validation'
             }
 
-        # Get doctor module URL (default to localhost)
-        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL', 'http://localhost:5000')
+        # Get doctor module URL
+        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL')
+        if not doctor_module_url:
+            return {
+                'success': False,
+                'error': 'DOCTOR_MODULE_URL not configured'
+            }
 
-        # Construct API URL for fetching availability
-        url = f"{doctor_module_url}/public/doctor/{doctor_id}/availability/{appointment_date}/{appointment_type}"
+        # Use date-level endpoint (not by-type) and pass consultation_type as query param
+        url = f"{doctor_module_url}/public/doctor/{doctor_id}/availability/{appointment_date}"
+        if consultation_type:
+            url += f"?consultation_type={consultation_type}"
         print(f"[*] Validating slot {slot_id} via: {url}")
 
         # Make API request
@@ -40,17 +47,24 @@ def validate_slot_availability(doctor_id, appointment_date, slot_id, appointment
             data = response.json()
             print(f"[DEBUG] Response data: {data}")
 
-            # Directly check if 'slots' exist and are non-empty
-            slots = data.get('slots', [])
-            if isinstance(slots, list) and len(slots) > 0:
-                for slot in slots:
-                    print(f"[DEBUG] Checking slot_id: {slot.get('slot_id')}")
-                    if slot.get('slot_id') == slot_id:
-                        print(f"[OK] Slot {slot_id} found and available")
-                        return {
-                            'success': True,
-                            'slot': slot
-                        }
+            # Search for slot_id across all types in availability response
+            availability_list = data.get('availability', [])
+            if isinstance(availability_list, list) and len(availability_list) > 0:
+                for avail_doc in availability_list:
+                    types_list = avail_doc.get('types', [])
+                    for type_obj in types_list:
+                        slots = type_obj.get('slots', [])
+                        for slot in slots:
+                            print(f"[DEBUG] Checking slot_id: {slot.get('slot_id')}")
+                            if slot.get('slot_id') == slot_id:
+                                print(f"[OK] Slot {slot_id} found and available")
+                                # Extract appointment type from found slot's parent
+                                slot_with_type = slot.copy()
+                                slot_with_type['appointment_type'] = type_obj.get('type')
+                                return {
+                                    'success': True,
+                                    'slot': slot_with_type
+                                }
 
                 # Slot not found
                 return {
@@ -84,7 +98,7 @@ def validate_slot_availability(doctor_id, appointment_date, slot_id, appointment
             'error': f'Validation error: {str(e)}'
         }
 
-def book_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, patient_id, appointment_id):
+def book_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, patient_id, appointment_id, consultation_type=None):
     """Book a slot in the doctor availability system"""
     try:
         if not doctor_id or not appointment_date or not slot_id or not patient_id or not appointment_id:
@@ -94,10 +108,12 @@ def book_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, patie
             }
         
         # Get doctor module URL from environment or use default
-        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL', 'http://localhost:5000')
+        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL')
         
-        # Call doctor availability API to book the slot
+        # Call doctor availability API to book the slot - pass consultation_type as query param
         url = f"{doctor_module_url}/doctor/{doctor_id}/availability/{appointment_date}/book-slot"
+        if consultation_type:
+            url += f"?consultation_type={consultation_type}"
         
         booking_data = {
             "slot_id": slot_id,
@@ -141,7 +157,7 @@ def book_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, patie
             'error': f'Booking error: {str(e)}'
         }
 
-def cancel_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, appointment_id, cancellation_reason="Cancelled by patient", patient_token=None):
+def cancel_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, appointment_id, cancellation_reason="Cancelled by patient", patient_token=None, consultation_type=None):
     """Cancel/unbook a slot in the doctor availability system"""
     try:
         if not doctor_id or not appointment_date or not slot_id or not appointment_id:
@@ -151,10 +167,12 @@ def cancel_slot_in_doctor_availability(doctor_id, appointment_date, slot_id, app
             }
         
         # Get doctor module URL from environment or use default
-        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL', 'http://localhost:5000')
+        doctor_module_url = os.environ.get('DOCTOR_MODULE_URL')
         
         # Call doctor availability API to cancel the slot
         url = f"{doctor_module_url}/doctor/{doctor_id}/availability/{appointment_date}/{slot_id}/cancel"
+        if consultation_type:
+            url += f"?consultation_type={consultation_type}"
         
         cancel_data = {
             "appointment_id": appointment_id,
@@ -272,8 +290,8 @@ def create_patient_appointment_service(data, patient_id):
         
         print(f"[*] Patient {patient_id} creating appointment request - data: {data}")
         
-        # Validate required fields - NOW INCLUDES BOTH type AND appointment_type
-        required_fields = ['appointment_date', 'appointment_time', 'type', 'appointment_type']
+        # Validate required fields - type is optional
+        required_fields = ['appointment_date', 'appointment_time', 'appointment_type']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({"error": f"{field} is required"}), 400
@@ -286,7 +304,7 @@ def create_patient_appointment_service(data, patient_id):
                 data.get('doctor_id', ''),
                 data['appointment_date'],
                 data['slot_id'],
-                data['type']
+                consultation_type=data.get('appointment_type')  # Pass appointment_type as consultation_type
             )
             
             if not slot_validation['success']:
@@ -294,6 +312,12 @@ def create_patient_appointment_service(data, patient_id):
             
             slot_data = slot_validation['slot']
             print(f"[OK] Slot validated: {slot_data['start_time']} - {slot_data['end_time']}")
+            
+            # Extract appointment type from validated slot if type not provided
+            if not data.get('type') and slot_data.get('appointment_type'):
+                inferred_type = slot_data.get('appointment_type')
+                data['type'] = inferred_type
+                print(f"[*] Inferred appointment type from slot: {inferred_type}")
             
             # Use slot timing if available
             if slot_data.get('start_time'):
@@ -314,12 +338,14 @@ def create_patient_appointment_service(data, patient_id):
         appointment_id = str(ObjectId())
         
         # Create appointment object with SEPARATE type and appointment_type
+        # type is optional - use inferred from slot or default to "General Consultation"
+        appointment_type_value = data.get('type', 'General Consultation')
         appointment = {
             "appointment_id": appointment_id,
             "appointment_date": data["appointment_date"],
             "appointment_time": data["appointment_time"],
-            "type": data["type"],  # Consultation type: "Follow-up", "Consultation", "Check-up", "Emergency"
-            "appointment_type": data["appointment_type"],  # Mode: "Video Call", "In-person"
+            "type": appointment_type_value,  # Consultation type: "Follow-up", "Consultation", "Check-up", "Emergency" (optional)
+            "appointment_type": data["appointment_type"],  # Mode: "Online", "In-Person"
             "appointment_status": "pending",  # Patient requests start as pending
             "notes": data.get("notes", ""),
             "patient_notes": data.get("patient_notes", ""),
@@ -360,7 +386,8 @@ def create_patient_appointment_service(data, patient_id):
                     data['appointment_date'],
                     data['slot_id'],
                     patient_id,
-                    appointment_id
+                    appointment_id,
+                    consultation_type=data.get('appointment_type')
                 )
                 
                 if booking_result.get('success'):
@@ -379,7 +406,7 @@ def create_patient_appointment_service(data, patient_id):
                 "appointment_id": appointment_id,
                 "message": "Appointment request created successfully",
                 "status": final_status,
-                "type": data["type"],
+                "type": data.get("type", "General Consultation"),
                 "appointment_type": data["appointment_type"]
             }
             
@@ -496,7 +523,8 @@ def update_patient_appointment_service(appointment_id, data, patient_id, patient
                 old_slot_id,
                 appointment_id,
                 "Rescheduled by patient",
-                patient_token
+                patient_token,
+                consultation_type=current_appointment.get('appointment_type')
             )
             
             if not cancel_result['success']:
@@ -513,16 +541,21 @@ def update_patient_appointment_service(appointment_id, data, patient_id, patient
         
         # Handle new slot booking if new_slot_id provided
         if new_slot_id and new_appointment_date:
-            # Validate and book new slot
+            # Validate and book new slot - use appointment_type as consultation_type
+            consultation_type_for_new = data.get('appointment_type') or current_appointment.get('appointment_type')
             slot_validation = validate_slot_availability(
                 current_appointment.get('doctor_id', ''),
                 new_appointment_date,
                 new_slot_id,
-                data.get('type', current_appointment.get('type'))
+                consultation_type=consultation_type_for_new
             )
             
             if not slot_validation['success']:
                 return jsonify({"error": f"New slot validation failed: {slot_validation['error']}"}), 400
+            
+            # Extract type from slot if not provided
+            if not data.get('type') and slot_validation['slot'].get('appointment_type'):
+                data['type'] = slot_validation['slot'].get('appointment_type')
             
             # Book new slot in doctor module
             booking_result = book_slot_in_doctor_availability(
@@ -530,7 +563,8 @@ def update_patient_appointment_service(appointment_id, data, patient_id, patient
                 new_appointment_date,
                 new_slot_id,
                 patient_id,
-                appointment_id
+                appointment_id,
+                consultation_type=consultation_type_for_new
             )
             
             if not booking_result['success']:
@@ -624,7 +658,8 @@ def cancel_patient_appointment_service(appointment_id, patient_id, patient_token
                 appointment_to_cancel.get('slot_id'),
                 appointment_id,
                 "Cancelled by patient",
-                patient_token
+                patient_token,
+                consultation_type=appointment_to_cancel.get('appointment_type')
             )
             
             if not cancel_result['success']:

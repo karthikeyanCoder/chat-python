@@ -23,6 +23,47 @@ from app.core.config import JWT_SECRET_KEY, JWT_ALGORITHM
 from app.core.database import db
 
 
+def capitalize_string_value(value):
+    """Capitalize first letter of a string value"""
+    if isinstance(value, str) and value:
+        return value[0].upper() + value[1:] if len(value) > 1 else value.upper()
+    return value
+
+
+def capitalize_data_for_storage(data: Dict[str, Any], exclude_fields: list = None) -> Dict[str, Any]:
+    """
+    Capitalize first letter of string values in data dictionary before storing in database.
+    Excludes specified fields like email, mobile, password, etc.
+    
+    Args:
+        data: Dictionary containing data to be stored
+        exclude_fields: List of field names to exclude from capitalization
+        
+    Returns:
+        Dictionary with capitalized string values
+    """
+    if exclude_fields is None:
+        exclude_fields = ['email', 'password', 'mobile', 'password_hash', 'patient_id', 
+                         'otp', 'signup_token', 'login_identifier', 'emergency_contact_phone']
+    
+    capitalized_data = {}
+    for key, value in data.items():
+        if key in exclude_fields:
+            capitalized_data[key] = value
+        elif isinstance(value, str) and value:
+            capitalized_data[key] = capitalize_string_value(value)
+        elif isinstance(value, list):
+            # Capitalize strings in lists (for medical_conditions, allergies, medications)
+            capitalized_data[key] = [
+                capitalize_string_value(v) if isinstance(v, str) and v else v 
+                for v in value
+            ]
+        else:
+            capitalized_data[key] = value
+    
+    return capitalized_data
+
+
 # Error messages constants for consistency
 class AuthErrorMessages:
     """Centralized error messages for authentication"""
@@ -52,8 +93,11 @@ def signup_service(data: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
         Tuple of (response_dict, http_status_code)
     """
     try:
-        if db.patients_collection is None:
-            return jsonify({"error": "Database not connected"}), 500
+        # Check database connection and attempt reconnection if needed
+        if not db.is_connected() or db.patients_collection is None:
+            print("[WARN] Database not connected during signup, attempting reconnection...")
+            if not db.reconnect():
+                return jsonify({"error": "Database connection error - unable to connect. Please check your MONGO_URI and DB_NAME in .env file."}), 503
         
         # Validate required fields
         required_fields = ['username', 'email', 'mobile', 'password']
@@ -61,7 +105,7 @@ def signup_service(data: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
             if field not in data or not data[field]:
                 return jsonify({"error": f"Missing required field: {field}"}), 400
         
-        username = data['username'].strip()
+        username = capitalize_string_value(data['username'].strip())
         email = data['email'].strip()
         mobile = data['mobile'].strip()
         password = data['password']
@@ -670,6 +714,12 @@ def complete_profile_service(patient_id, data):
             "updated_at": datetime.now()
         }
         
+        # Capitalize string fields before storing (excluding IDs, dates, numbers, phone)
+        exclude_fields = ['patient_id', 'date_of_birth', 'last_period_date', 'expected_delivery_date',
+                         'height', 'weight', 'is_pregnant', 'pregnancy_week', 'emergency_contact_phone',
+                         'profile_completed', 'profile_completed_at', 'updated_at']
+        profile_data = capitalize_data_for_storage(profile_data, exclude_fields=exclude_fields)
+        
         # Update patient profile
         result = db.patients_collection.update_one(
             {"patient_id": patient_id},
@@ -715,10 +765,18 @@ def edit_profile_service(data):
         
         for field in updatable_fields:
             if field in data:
-                update_data[field] = data[field]
+                # Strip strings if they are strings
+                if isinstance(data[field], str):
+                    update_data[field] = data[field].strip()
+                else:
+                    update_data[field] = data[field]
         
         # Add timestamp
         update_data['updated_at'] = datetime.now()
+        
+        # Capitalize string fields before storing (excluding patient_id, mobile, height, weight, dates)
+        exclude_fields = ['patient_id', 'mobile', 'height', 'weight', 'updated_at']
+        update_data = capitalize_data_for_storage(update_data, exclude_fields=exclude_fields)
         
         # Update patient profile
         result = db.patients_collection.update_one(

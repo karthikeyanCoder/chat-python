@@ -11,11 +11,19 @@ class ConversationModel:
     
     def __init__(self, db):
         self.db = db
-        self.conversations_collection = db.db.conversations
-        self._create_indexes()
+        # Check if database connection is valid
+        is_connected = getattr(db, 'is_connected', False)
+        if db is not None and db.db is not None and is_connected:
+            self.conversations_collection = db.db.conversations
+            self._create_indexes()
+        else:
+            self.conversations_collection = None
+            print("⚠️ Warning: Database not connected. ConversationModel operating in fallback mode.")
     
     def _create_indexes(self):
         """Create database indexes for conversations collection"""
+        if self.conversations_collection is None:
+            return
         try:
             # Create indexes for conversations collection
             self.conversations_collection.create_index("conversation_id", unique=True)
@@ -25,7 +33,11 @@ class ConversationModel:
             self.conversations_collection.create_index("created_at")
             self.conversations_collection.create_index("updated_at")
         except Exception as e:
-            print(f"Warning: Could not create conversation indexes: {e}")
+            error_msg = str(e)
+            if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                pass  # Index already exists, that's fine
+            else:
+                print(f"Warning: Could not create conversation indexes: {e}")
     
     def create_conversation(self, conversation_data: Dict[str, Any]) -> str:
         """Create a new conversation"""

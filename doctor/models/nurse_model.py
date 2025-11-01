@@ -21,10 +21,22 @@ class NurseModel:
         else:
             self.db = db
         
-        self.nurses_collection = self.db.db.nurses
-        
-        # Ensure index on nurse_id for uniqueness
-        self.nurses_collection.create_index('nurse_id', unique=True)
+        # Check if database connection is valid
+        is_connected = getattr(self.db, 'is_connected', False)
+        if self.db is not None and self.db.db is not None and is_connected:
+            self.nurses_collection = self.db.db.nurses
+            # Ensure index on nurse_id for uniqueness
+            try:
+                self.nurses_collection.create_index('nurse_id', unique=True)
+            except Exception as e:
+                error_msg = str(e)
+                if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                    pass  # Index already exists, that's fine
+                else:
+                    print(f"⚠️ Warning: Failed to create nurse_id index: {e}")
+        else:
+            self.nurses_collection = None
+            print("⚠️ Warning: Database not connected. NurseModel operating in fallback mode.")
     
     def _hash_password(self, password: str) -> bytes:
         """Hash password using bcrypt"""

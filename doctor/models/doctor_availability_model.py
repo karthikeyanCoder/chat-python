@@ -23,6 +23,23 @@ class DoctorAvailabilityModel:
             if self.db and hasattr(self.db, 'doctor_availability_collection'):
                 self.collection = self.db.doctor_availability_collection
                 print(f"✅ Doctor availability collection updated")
+                # Ensure required indexes exist (idempotent)
+                if self.collection is not None:
+                    try:
+                        self.collection.create_index(
+                            [("doctor_id", 1), ("date", 1), ("consultation_type", 1)],
+                            unique=True,
+                            name="uniq_doctor_date_type"
+                        )
+                    except Exception as e:
+                        error_msg = str(e)
+                        # Non-fatal; continue if index already exists or cannot be created now
+                        if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                            pass  # Index already exists, that's fine
+                        else:
+                            print(f"⚠️  Could not ensure unique index uniq_doctor_date_type: {e}")
+                else:
+                    print(f"⚠️  Doctor availability collection is None, skipping index creation")
             else:
                 print(f"❌ Doctor availability collection not available")
                 self.collection = None
@@ -41,16 +58,17 @@ class DoctorAvailabilityModel:
                     'error': 'Database not connected'
                 }
             
-            # Check if availability already exists for this date
+            # Check if availability already exists for this date and consultation type
             existing = self.collection.find_one({
                 'doctor_id': doctor_id,
-                'date': date
+                'date': date,
+                'consultation_type': availability_data['consultation_type']
             })
             
             if existing:
                 return {
                     'success': False,
-                    'error': 'Availability already exists for this date'
+                    'error': 'Availability already exists for this date and consultation type'
                 }
             
             # Generate unique availability ID
@@ -129,7 +147,7 @@ class DoctorAvailabilityModel:
         if predefined_slots:
             # Use predefined slots
             for i, slot in enumerate(predefined_slots):
-                slot_id = slot.get('slot_id', f"SLOT_{appointment_type['type'].upper()}_{i+1:03d}")
+                slot_id = slot.get('slot_id', f"slot_{i+1:03d}")
                 processed_slot = {
                     'slot_id': slot_id,
                     'start_time': slot['start_time'],
@@ -154,7 +172,7 @@ class DoctorAvailabilityModel:
         # For now, return empty list - slots should be predefined
         return []
     
-    def get_doctor_availability(self, doctor_id: str, date: str = None, date_range: Dict[str, str] = None) -> Dict[str, Any]:
+    def get_doctor_availability(self, doctor_id: str, date: str = None, date_range: Dict[str, str] = None, consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Get doctor's availability"""
         try:
             self._update_collection()
@@ -175,6 +193,9 @@ class DoctorAvailabilityModel:
                     '$gte': date_range['start_date'],
                     '$lte': date_range['end_date']
                 }
+
+            if consultation_type:
+                query['consultation_type'] = consultation_type
             
             # Get availability
             availability_cursor = self.collection.find(query).sort('date', 1)
@@ -197,7 +218,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def get_available_slots_by_type(self, doctor_id: str, date: str, appointment_type: str) -> Dict[str, Any]:
+    def get_available_slots_by_type(self, doctor_id: str, date: str, appointment_type: str, consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Get available slots for specific appointment type"""
         try:
             self._update_collection()
@@ -217,6 +238,12 @@ class DoctorAvailabilityModel:
                         "is_active": True
                     }
                 },
+            ]
+
+            if consultation_type:
+                pipeline[0]["$match"]["consultation_type"] = consultation_type
+
+            pipeline.extend([
                 {
                     "$unwind": "$types"
                 },
@@ -255,7 +282,7 @@ class DoctorAvailabilityModel:
                         "notes": "$types.slots.notes"
                     }
                 }
-            ]
+            ])
             
             available_slots = list(self.collection.aggregate(pipeline))
             
@@ -276,7 +303,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def book_slot(self, doctor_id: str, date: str, slot_id: str, patient_id: str, appointment_id: str) -> Dict[str, Any]:
+    def book_slot(self, doctor_id: str, date: str, slot_id: str, patient_id: str, appointment_id: str, consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Book a specific availability slot"""
         try:
             self._update_collection()
@@ -288,11 +315,15 @@ class DoctorAvailabilityModel:
                 }
             
             # Find and update the specific slot
+            match_query = {
+                'doctor_id': doctor_id,
+                'date': date
+            }
+            if consultation_type:
+                match_query['consultation_type'] = consultation_type
+
             result = self.collection.update_one(
-                {
-                    'doctor_id': doctor_id,
-                    'date': date
-                },
+                match_query,
                 {
                     '$set': {
                         'types.$[type].slots.$[slot].is_booked': True,
@@ -455,7 +486,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def cancel_appointment_slot(self, doctor_id: str, date: str, slot_id: str, appointment_id: str, cancellation_reason: str = "Cancelled by doctor") -> Dict[str, Any]:
+    def cancel_appointment_slot(self, doctor_id: str, date: str, slot_id: str, appointment_id: str, cancellation_reason: str = "Cancelled by doctor", consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Cancel a specific appointment slot and make it available again"""
         try:
             self._update_collection()
@@ -467,11 +498,15 @@ class DoctorAvailabilityModel:
                 }
             
             # Find and update the specific slot
+            match_query = {
+                'doctor_id': doctor_id,
+                'date': date
+            }
+            if consultation_type:
+                match_query['consultation_type'] = consultation_type
+
             result = self.collection.update_one(
-                {
-                    'doctor_id': doctor_id,
-                    'date': date
-                },
+                match_query,
                 {
                     '$set': {
                         'types.$[type].slots.$[slot].is_booked': False,
@@ -508,7 +543,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def get_booked_slots_by_date(self, doctor_id: str, date: str) -> Dict[str, Any]:
+    def get_booked_slots_by_date(self, doctor_id: str, date: str, consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Get all booked slots for a specific date"""
         try:
             self._update_collection()
@@ -528,6 +563,12 @@ class DoctorAvailabilityModel:
                         "is_active": True
                     }
                 },
+            ]
+
+            if consultation_type:
+                pipeline[0]["$match"]["consultation_type"] = consultation_type
+
+            pipeline.extend([
                 {
                     "$unwind": "$types"
                 },
@@ -555,7 +596,7 @@ class DoctorAvailabilityModel:
                         "notes": "$types.slots.notes"
                     }
                 }
-            ]
+            ])
             
             booked_slots = list(self.collection.aggregate(pipeline))
             
@@ -576,7 +617,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def cancel_all_appointments_for_date(self, doctor_id: str, date: str, cancellation_reason: str = "Full day cancelled by doctor") -> Dict[str, Any]:
+    def cancel_all_appointments_for_date(self, doctor_id: str, date: str, cancellation_reason: str = "Full day cancelled by doctor", consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Cancel all appointments for a specific date and make all slots available"""
         try:
             self._update_collection()
@@ -588,11 +629,15 @@ class DoctorAvailabilityModel:
                 }
             
             # Find the availability document for this date
-            availability_doc = self.collection.find_one({
+            find_query = {
                 'doctor_id': doctor_id,
                 'date': date,
                 'is_active': True
-            })
+            }
+            if consultation_type:
+                find_query['consultation_type'] = consultation_type
+
+            availability_doc = self.collection.find_one(find_query)
             
             if not availability_doc:
                 return {
@@ -642,12 +687,16 @@ class DoctorAvailabilityModel:
                 }
             
             # Cancel all booked slots for this date and soft-disable the day
+            match_query = {
+                'doctor_id': doctor_id,
+                'date': date,
+                'is_active': True
+            }
+            if consultation_type:
+                match_query['consultation_type'] = consultation_type
+
             result = self.collection.update_one(
-                {
-                    'doctor_id': doctor_id,
-                    'date': date,
-                    'is_active': True
-                },
+                match_query,
                 {
                     '$set': {
                         'types.$[].slots.$[slot].is_booked': False,
@@ -688,7 +737,7 @@ class DoctorAvailabilityModel:
                 'error': f'Database error: {str(e)}'
             }
     
-    def get_date_appointment_summary(self, doctor_id: str, date: str) -> Dict[str, Any]:
+    def get_date_appointment_summary(self, doctor_id: str, date: str, consultation_type: Optional[str] = None) -> Dict[str, Any]:
         """Get summary of all appointments for a specific date"""
         try:
             self._update_collection()
@@ -700,11 +749,15 @@ class DoctorAvailabilityModel:
                 }
             
             # Find the availability document for this date
-            availability_doc = self.collection.find_one({
+            find_query = {
                 'doctor_id': doctor_id,
                 'date': date,
                 'is_active': True
-            })
+            }
+            if consultation_type:
+                find_query['consultation_type'] = consultation_type
+
+            availability_doc = self.collection.find_one(find_query)
             
             if not availability_doc:
                 return {

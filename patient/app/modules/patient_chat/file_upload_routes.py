@@ -247,10 +247,10 @@ def upload_service_health():
                 "status": "operational" if is_enabled else "disabled",
                 "enabled": is_enabled,
                 "endpoints": {
-                    "upload": "/chat/files/upload",
-                    "delete": "/chat/files/delete",
-                    "info": "/chat/files/info",
-                    "health": "/chat/files/health"
+                    "upload": "/chat/upload",
+                    "delete": "/chat/delete",
+                    "info": "/chat/info",
+                    "health": "/chat/health"
                 }
             }
         }), 200

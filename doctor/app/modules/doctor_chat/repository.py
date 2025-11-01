@@ -33,6 +33,14 @@ class DoctorChatRepository:
         try:
             logger.info(f"Initializing collections with db type: {type(self.db)}")
             
+            # Check if database is connected first
+            is_connected = getattr(self.db, 'is_connected', False)
+            if not is_connected or (hasattr(self.db, 'db') and self.db.db is None):
+                logger.warning("Database not connected, chat collections will be unavailable")
+                self.messages_collection = None
+                self.chat_rooms_collection = None
+                return
+            
             # Get or create collections
             if hasattr(self.db, 'chat_messages_collection') and hasattr(self.db, 'chat_rooms_collection'):
                 # Our custom Database class
@@ -41,8 +49,13 @@ class DoctorChatRepository:
                 self.chat_rooms_collection = self.db.chat_rooms_collection
             elif hasattr(self.db, 'get_collection'):
                 logger.info("Using get_collection method")
-                self.messages_collection = self.db.get_collection('chat_messages')
-                self.chat_rooms_collection = self.db.get_collection('chat_rooms')
+                try:
+                    self.messages_collection = self.db.get_collection('chat_messages')
+                    self.chat_rooms_collection = self.db.get_collection('chat_rooms')
+                except Exception as e:
+                    logger.warning(f"Failed to get collections: {e}")
+                    self.messages_collection = None
+                    self.chat_rooms_collection = None
             elif hasattr(self.db, 'db') and hasattr(self.db, 'client'):
                 # If database instance has db and client attributes (our Database class)
                 logger.info("Using db and client attributes")
@@ -76,18 +89,24 @@ class DoctorChatRepository:
             logger.info(f"Messages collection initialized: {self.messages_collection is not None}")
             logger.info(f"Chat rooms collection initialized: {self.chat_rooms_collection is not None}")
             
-            # Create indexes for better performance
-            self._create_indexes()
-            
-            logger.info("Doctor chat collections initialized successfully")
+            # Create indexes for better performance (only if collections are available)
+            if self.messages_collection is not None and self.chat_rooms_collection is not None:
+                self._create_indexes()
+                logger.info("Doctor chat collections initialized successfully")
+            else:
+                logger.warning("Doctor chat collections not fully initialized - operating in fallback mode")
         except Exception as e:
             logger.error(f"Failed to initialize chat collections: {str(e)}")
-            import traceback
-            logger.error(f"Traceback: {traceback.format_exc()}")
-            raise
+            logger.warning("Doctor chat will operate in fallback mode (no database access)")
+            # Don't raise - allow application to continue without chat functionality
+            # Collections will remain None, methods should check for None before use
     
     def _create_indexes(self):
         """Create database indexes for chat collections"""
+        if self.messages_collection is None or self.chat_rooms_collection is None:
+            logger.warning("Collections not available, skipping index creation")
+            return
+        
         try:
             # Message indexes
             self.messages_collection.create_index([("chat_room_id", ASCENDING)])

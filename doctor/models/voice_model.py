@@ -13,18 +13,30 @@ class VoiceModel:
     
     def __init__(self, db):
         self.db = db
-        self.voice_collection = db.db.voice_users
-        self._create_indexes()
+        # Check if database connection is valid
+        is_connected = getattr(db, 'is_connected', False)
+        if db is not None and db.db is not None and is_connected:
+            self.voice_collection = db.db.voice_users
+            self._create_indexes()
+        else:
+            self.voice_collection = None
+            print("⚠️ Warning: Database not connected. VoiceModel operating in fallback mode.")
     
     def _create_indexes(self):
         """Create database indexes for voice collections"""
+        if self.voice_collection is None:
+            return
         try:
             # Create indexes for voice_users collection
             self.voice_collection.create_index("email", unique=True)
             self.voice_collection.create_index("username", unique=True)
             self.voice_collection.create_index("created_at")
         except Exception as e:
-            print(f"Warning: Could not create voice indexes: {e}")
+            error_msg = str(e)
+            if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                pass  # Index already exists, that's fine
+            else:
+                print(f"Warning: Could not create voice indexes: {e}")
     
     def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, Any]]:
         """Authenticate user with email and password"""

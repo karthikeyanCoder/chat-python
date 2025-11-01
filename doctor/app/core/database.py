@@ -29,7 +29,8 @@ class Database:
             try:
                 logger.info(f"MongoDB connection attempt {attempt + 1}/{max_retries}")
                 
-                # Create MongoDB client
+                # Create MongoDB client with optimized connection pool settings
+                # This reduces background connection errors by adjusting heartbeat and timeout settings
                 self.client = MongoClient(
                     MONGO_URI,
                     serverSelectionTimeoutMS=30000,
@@ -38,8 +39,15 @@ class Database:
                     retryWrites=True,
                     retryReads=True,
                     maxPoolSize=10,
-                    minPoolSize=1
+                    minPoolSize=1,
+                    heartbeatFrequencyMS=30000,     # Less frequent heartbeats
+                    maxIdleTimeMS=300000,           # 5 minutes idle timeout
+                    waitQueueTimeoutMS=60000
                 )
+                
+                # Suppress background periodic task connection errors
+                pymongo_logger = logging.getLogger('pymongo')
+                pymongo_logger.setLevel(logging.WARNING)
                 
                 # Test connection
                 self.client.admin.command('ping')
@@ -88,12 +96,18 @@ class Database:
             # Patient indexes
             if self.patients_collection is not None:
                 try:
-                    self.patients_collection.create_index("patient_id", unique=True)
+                    # Use sparse=True to match existing index and handle null values
+                    self.patients_collection.create_index("patient_id", unique=True, sparse=True)
                     self.patients_collection.create_index("email", unique=True, sparse=True)
                     self.patients_collection.create_index("doctor_id")
                     logger.info("Patient indexes created")
                 except Exception as e:
-                    logger.warning(f"Patient indexes may already exist: {e}")
+                    error_msg = str(e)
+                    # Check if it's just a conflict with existing index (which is acceptable)
+                    if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                        logger.info("Patient indexes already exist with compatible settings")
+                    else:
+                        logger.warning(f"Patient indexes may already exist: {e}")
             
             # Doctor indexes
             if self.doctors_collection is not None:

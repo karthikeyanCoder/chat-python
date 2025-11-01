@@ -41,8 +41,15 @@ class Database:
     
     def connect(self):
         """Connect to MongoDB with retry logic"""
+        # Check if already connected and active
         if self.client and self.patients_collection:
-            return  # Already connected
+            try:
+                self.client.admin.command('ping')
+                return  # Already connected and active
+            except:
+                # Connection exists but is dead, reset it
+                self.client = None
+                self.patients_collection = None
         
         max_retries = 3
         retry_count = 0
@@ -121,13 +128,21 @@ class Database:
                 
             except Exception as e:
                 retry_count += 1
-                print(f"    |-- Attempt {retry_count} failed: {str(e)[:80]}")
+                error_msg = str(e)[:200] if len(str(e)) > 200 else str(e)
+                print(f"    |-- Attempt {retry_count} failed: {error_msg}")
                 
                 if retry_count >= max_retries:
                     print(f"    |-- Status: [FAILED] after {max_retries} attempts")
+                    print(f"    |-- Last error: {error_msg}")
+                    print(f"    |-- Please check:")
+                    print(f"    |--   1. MONGO_URI is correct in .env file")
+                    print(f"    |--   2. Database server is accessible")
+                    print(f"    |--   3. Network connection is stable")
+                    print(f"    |--   4. MongoDB credentials are valid")
                     print("")
                     self.patients_collection = None
                     self.mental_health_collection = None
+                    self.client = None
                 else:
                     time.sleep(2)
     

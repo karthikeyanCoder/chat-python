@@ -11,11 +11,19 @@ class TranscriptionModel:
     
     def __init__(self, db):
         self.db = db
-        self.transcriptions_collection = db.db.transcriptions
-        self._create_indexes()
+        # Check if database connection is valid
+        is_connected = getattr(db, 'is_connected', False)
+        if db is not None and db.db is not None and is_connected:
+            self.transcriptions_collection = db.db.transcriptions
+            self._create_indexes()
+        else:
+            self.transcriptions_collection = None
+            print("⚠️ Warning: Database not connected. TranscriptionModel operating in fallback mode.")
     
     def _create_indexes(self):
         """Create database indexes for transcriptions collection"""
+        if self.transcriptions_collection is None:
+            return
         try:
             # Create indexes for transcriptions collection
             self.transcriptions_collection.create_index("transcription_id", unique=True)
@@ -25,7 +33,11 @@ class TranscriptionModel:
             self.transcriptions_collection.create_index("speaker_id")
             self.transcriptions_collection.create_index("created_at")
         except Exception as e:
-            print(f"Warning: Could not create transcription indexes: {e}")
+            error_msg = str(e)
+            if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                pass  # Index already exists, that's fine
+            else:
+                print(f"Warning: Could not create transcription indexes: {e}")
     
     def create_transcription(self, transcription_data: Dict[str, Any]) -> str:
         """Create a new transcription"""

@@ -311,6 +311,13 @@ class Database:
                 
                 if retry_count >= max_retries:
                     print(f"❌ All {max_retries} connection attempts failed")
+                    # Clean up failed connection
+                    if self.client:
+                        try:
+                            self.client.close()
+                        except:
+                            pass
+                    self.client = None
                     self.patients_collection = None
                     self.mental_health_collection = None
                     self.doctors_collection = None
@@ -954,14 +961,54 @@ class UserActivityTracker:
     
     def __init__(self, db):
         self.db = db
-        self.activities_collection = db.client[os.getenv("DB_NAME", "patients_db")]["user_activities"]
+        self.activities_collection = None
         
-        # Create indexes for efficient querying
-        self.activities_collection.create_index("user_email")
-        self.activities_collection.create_index("session_id")
-        self.activities_collection.create_index("timestamp")
-        self.activities_collection.create_index("activity_type")
-        print("✅ User Activity Tracker initialized")
+        # Check if database connection is valid before initializing
+        try:
+            # Check if db exists and has a client
+            if not db or not hasattr(db, 'client') or db.client is None:
+                print("⚠️ Database not connected, activity tracker using fallback mode")
+                return
+            
+            # Check if database is connected using is_connected method if available
+            is_connected = True
+            if hasattr(db, 'is_connected'):
+                is_connected = db.is_connected()
+            
+            if is_connected:
+                # Verify client is not closed by attempting a ping
+                try:
+                    db.client.admin.command('ping')
+                except Exception as ping_error:
+                    print(f"⚠️ Database client is closed or unreachable: {ping_error}")
+                    print("⚠️ Activity tracker will use fallback mode")
+                    return
+                
+                # Get database and collection
+                db_name = os.getenv("DB_NAME", "patients_db")
+                self.activities_collection = db.client[db_name]["user_activities"]
+                
+                # Create indexes for efficient querying with error handling
+                try:
+                    self.activities_collection.create_index("user_email")
+                    self.activities_collection.create_index("session_id")
+                    self.activities_collection.create_index("timestamp")
+                    self.activities_collection.create_index("activity_type")
+                    print("✅ User Activity Tracker initialized")
+                except Exception as e:
+                    error_msg = str(e)
+                    if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                        print("✅ User Activity Tracker initialized (indexes already exist)")
+                    else:
+                        print(f"⚠️ Activity tracker index creation warning: {e}")
+                        # Continue anyway - collection is still usable
+            else:
+                print("⚠️ Database connection check failed, activity tracker using fallback mode")
+                return
+        except Exception as e:
+            print(f"⚠️ Activity tracker initialization failed: {e}")
+            print("⚠️ Activity tracker will use fallback mode (no database tracking)")
+            self.activities_collection = None
     
     def start_user_session(self, user_email, user_role, username, user_id):
         """Start tracking a new user session"""
@@ -981,12 +1028,23 @@ class UserActivityTracker:
             "created_at": session_start
         }
         
-        result = self.activities_collection.insert_one(session_data)
-        print(f"🔍 Started tracking session {session_id} for user {user_email}")
-        return session_id
+        if self.activities_collection is None:
+            print(f"⚠️ Activity tracker not initialized, skipping session tracking for {user_email}")
+            return None
+        
+        try:
+            result = self.activities_collection.insert_one(session_data)
+            print(f"🔍 Started tracking session {session_id} for user {user_email}")
+            return session_id
+        except Exception as e:
+            print(f"⚠️ Failed to start session tracking: {e}")
+            return None
     
     def end_user_session(self, user_email, session_id=None):
         """End a user session"""
+        if self.activities_collection is None:
+            return 0
+        
         if session_id:
             # End specific session
             result = self.activities_collection.update_one(
@@ -1015,6 +1073,9 @@ class UserActivityTracker:
     
     def log_activity(self, user_email, activity_type, activity_data, session_id=None):
         """Log a user activity"""
+        if self.activities_collection is None:
+            return None
+        
         if not session_id:
             # Find active session for user
             active_session = self.activities_collection.find_one(
@@ -1045,39 +1106,77 @@ class UserActivityTracker:
     
     def get_user_activities(self, user_email, limit=100):
         """Get all activities for a user"""
-        sessions = list(self.activities_collection.find(
-            {"user_email": user_email},
-            {"_id": 0}
-        ).sort("created_at", -1).limit(limit))
+        if self.activities_collection is None:
+            return []
         
-        return sessions
+        try:
+            sessions = list(self.activities_collection.find(
+                {"user_email": user_email},
+                {"_id": 0}
+            ).sort("created_at", -1).limit(limit))
+            return sessions
+        except Exception as e:
+            print(f"⚠️ Failed to get user activities: {e}")
+            return []
     
     def get_session_activities(self, session_id):
         """Get all activities for a specific session"""
-        session = self.activities_collection.find_one(
-            {"session_id": session_id},
-            {"_id": 0}
-        )
-        return session
+        if self.activities_collection is None:
+            return None
+        
+        try:
+            session = self.activities_collection.find_one(
+                {"session_id": session_id},
+                {"_id": 0}
+            )
+            return session
+        except Exception as e:
+            print(f"⚠️ Failed to get session activities: {e}")
+            return None
     
     def get_activity_summary(self, user_email):
         """Get summary of user activities"""
-        pipeline = [
-            {"$match": {"user_email": user_email}},
-            {"$unwind": "$activities"},
-            {"$group": {
-                "_id": "$activities.activity_type",
-                "count": {"$sum": 1},
-                "last_activity": {"$max": "$activities.timestamp"}
-            }},
-            {"$sort": {"count": -1}}
-        ]
+        if self.activities_collection is None:
+            return []
         
-        summary = list(self.activities_collection.aggregate(pipeline))
-        return summary
+        try:
+            pipeline = [
+                {"$match": {"user_email": user_email}},
+                {"$unwind": "$activities"},
+                {"$group": {
+                    "_id": "$activities.activity_type",
+                    "count": {"$sum": 1},
+                    "last_activity": {"$max": "$activities.timestamp"}
+                }},
+                {"$sort": {"count": -1}}
+            ]
+            
+            summary = list(self.activities_collection.aggregate(pipeline))
+            return summary
+        except Exception as e:
+            print(f"⚠️ Failed to get activity summary: {e}")
+            return []
 
-# Initialize activity tracker
-activity_tracker = UserActivityTracker(db)
+# Initialize activity tracker - deferred initialization with error handling
+def get_activity_tracker():
+    """Get or create activity tracker instance"""
+    global activity_tracker
+    if activity_tracker is None:
+        try:
+            activity_tracker = UserActivityTracker(db)
+        except Exception as e:
+            print(f"⚠️ Failed to initialize activity tracker: {e}")
+            # Create a dummy tracker that won't cause errors
+            activity_tracker = UserActivityTracker.__new__(UserActivityTracker)
+            activity_tracker.activities_collection = None
+    return activity_tracker
+
+# Initialize activity tracker at module load (with fallback)
+try:
+    activity_tracker = UserActivityTracker(db)
+except Exception as e:
+    print(f"⚠️ Activity tracker initialization failed at module load: {e}")
+    activity_tracker = None
 
 # JWT Configuration
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-this-in-production")
@@ -3738,6 +3837,14 @@ def track_activity():
 def get_active_sessions(email):
     """Get all active sessions for a user"""
     try:
+        if not activity_tracker or not activity_tracker.activities_collection:
+            return jsonify({
+                'success': True,
+                'user_email': email,
+                'active_sessions': [],
+                'count': 0
+            }), 200
+        
         active_sessions = list(activity_tracker.activities_collection.find(
             {"user_email": email, "is_active": True},
             {"_id": 0}

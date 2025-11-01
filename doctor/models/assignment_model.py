@@ -18,7 +18,13 @@ class AssignmentModel:
         else:
             self.db = db
         
-        self.assignments_collection = self.db.db.nurse_patient_assignments
+        # Check if database connection is valid
+        is_connected = getattr(self.db, 'is_connected', False)
+        if self.db is not None and self.db.db is not None and is_connected:
+            self.assignments_collection = self.db.db.nurse_patient_assignments
+        else:
+            self.assignments_collection = None
+            print("⚠️ Warning: Database not connected. AssignmentModel operating in fallback mode.")
     
     def _convert_to_dict(self, assignment_doc) -> Dict[str, Any]:
         """Convert MongoDB document to dictionary"""

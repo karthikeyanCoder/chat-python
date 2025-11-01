@@ -25,13 +25,30 @@ class MessageAttachment:
         self.mime_type = mime_type
         self.s3_key = s3_key  # S3 storage key
     
+    def _serialize_datetime(self, dt):
+        """Helper to serialize datetime objects as UTC ISO strings with timezone info"""
+        if dt is None:
+            return None
+        if isinstance(dt, str):
+            return dt
+        if hasattr(dt, 'isoformat'):
+            try:
+                if dt.tzinfo is None:
+                    dt = pytz.utc.localize(dt)
+                elif dt.tzinfo != pytz.utc:
+                    dt = dt.astimezone(pytz.utc)
+                return dt.isoformat()
+            except Exception:
+                return dt.isoformat() if hasattr(dt, 'isoformat') else str(dt)
+        return str(dt)
+    
     def to_dict(self):
         return {
             'file_name': self.file_name,
             'file_type': self.file_type,
             'file_url': self.file_url,
             'file_size': self.file_size,
-            'uploaded_at': self.uploaded_at,
+            'uploaded_at': self._serialize_datetime(self.uploaded_at),
             'thumbnail_url': self.thumbnail_url,
             'duration': self.duration,
             'mime_type': self.mime_type,
@@ -63,22 +80,32 @@ class MessageReaction:
         self.reaction = reaction  # emoji or reaction type
         self.created_at = created_at or datetime.utcnow()
     
+    def _serialize_datetime(self, dt):
+        """Helper to serialize datetime objects as UTC ISO strings with timezone info"""
+        if dt is None:
+            return None
+        if isinstance(dt, str):
+            return dt
+        if hasattr(dt, 'isoformat'):
+            try:
+                if dt.tzinfo is None:
+                    dt = pytz.utc.localize(dt)
+                elif dt.tzinfo != pytz.utc:
+                    dt = dt.astimezone(pytz.utc)
+                return dt.isoformat()
+            except Exception:
+                return dt.isoformat() if hasattr(dt, 'isoformat') else str(dt)
+        return str(dt)
+    
     def to_dict(self):
         return {
             'user_id': self.user_id,
             'user_type': self.user_type,
             'reaction': self.reaction,
-            'created_at': self.created_at
+            'created_at': self._serialize_datetime(self.created_at)
         }
     
     @classmethod
-    def from_dict(cls, data: dict):
-        return cls(
-            user_id=data.get('user_id'),
-            user_type=data.get('user_type'),
-            reaction=data.get('reaction'),
-            created_at=data.get('created_at')
-        )
     def from_dict(cls, data: dict):
         return cls(
             user_id=data.get('user_id'),
@@ -176,23 +203,27 @@ class Message:
         return errors
     
     def _serialize_datetime(self, dt):
-        """Helper to serialize datetime objects or strings with IST timezone"""
+        """Helper to serialize datetime objects as UTC ISO strings with timezone info"""
         if dt is None:
             return None
         if isinstance(dt, str):
             return dt
         if hasattr(dt, 'isoformat'):
-            # Convert UTC to IST (India Standard Time - UTC+5:30)
             try:
-                ist_tz = pytz.timezone('Asia/Kolkata')
+                # Ensure datetime is timezone-aware (UTC)
                 if dt.tzinfo is None:
                     # Assume naive datetime is UTC
                     dt = pytz.utc.localize(dt)
-                ist_time = dt.astimezone(ist_tz)
-                return ist_time.isoformat()
-            except:
-                # Fallback to original if conversion fails
+                elif dt.tzinfo != pytz.utc:
+                    # Convert to UTC if it's in another timezone
+                    dt = dt.astimezone(pytz.utc)
+                
+                # Return UTC timestamp with timezone indicator (+00:00)
+                # This allows frontend to properly convert to user's local timezone
                 return dt.isoformat()
+            except Exception as e:
+                # Fallback to ISO format if conversion fails
+                return dt.isoformat() if hasattr(dt, 'isoformat') else str(dt)
         return str(dt)
     
     def to_dict(self):
@@ -319,20 +350,37 @@ class ChatRoom:
         
         return errors
     
+    def _serialize_datetime(self, dt):
+        """Helper to serialize datetime objects as UTC ISO strings with timezone info"""
+        if dt is None:
+            return None
+        if isinstance(dt, str):
+            return dt
+        if hasattr(dt, 'isoformat'):
+            try:
+                if dt.tzinfo is None:
+                    dt = pytz.utc.localize(dt)
+                elif dt.tzinfo != pytz.utc:
+                    dt = dt.astimezone(pytz.utc)
+                return dt.isoformat()
+            except Exception:
+                return dt.isoformat() if hasattr(dt, 'isoformat') else str(dt)
+        return str(dt)
+    
     def to_dict(self):
         return {
             'room_id': self.room_id,
             'doctor_id': self.doctor_id,
             'patient_id': self.patient_id,
             'last_message': self.last_message,
-            'last_message_time': self.last_message_time,
+            'last_message_time': self._serialize_datetime(self.last_message_time),
             'last_message_id': self.last_message_id,
             'unread_count_doctor': self.unread_count_doctor,
             'unread_count_patient': self.unread_count_patient,
             'is_active': self.is_active,
             'is_archived': self.is_archived,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
+            'created_at': self._serialize_datetime(self.created_at),
+            'updated_at': self._serialize_datetime(self.updated_at),
             'room_name': self.room_name,
             'room_description': self.room_description,
             'tags': self.tags,

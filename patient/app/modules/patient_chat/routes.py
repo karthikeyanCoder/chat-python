@@ -156,10 +156,18 @@ def send_message():
         try:
             schema = SendMessageSchema(**data)
         except ValidationError as e:
+            logger.error(f"Validation error in send_message: {e}")
             return jsonify({
                 "success": False,
                 "message": "Validation error",
                 "data": {"errors": e.errors()}
+            }), 400
+        except ValueError as ve:
+            logger.error(f"Value error in send_message: {str(ve)}")
+            return jsonify({
+                "success": False,
+                "message": f"Validation error: {str(ve)}",
+                "data": None
             }), 400
         
         service = get_chat_service()
@@ -180,10 +188,10 @@ def send_message():
         return handle_response(result, success_code=201)
         
     except Exception as e:
-        logger.error(f"Error in send_message: {str(e)}")
+        logger.error(f"Error in send_message: {str(e)}", exc_info=True)
         return jsonify({
             "success": False,
-            "message": "Internal server error",
+            "message": f"Internal server error: {str(e)}",
             "data": None
         }), 500
 

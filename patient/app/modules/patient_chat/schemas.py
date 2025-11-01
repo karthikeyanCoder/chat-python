@@ -18,7 +18,7 @@ class SendMessageSchema(BaseModel):
     
     @validator('message_type')
     def validate_message_type(cls, v):
-        allowed_types = ['text', 'image', 'file', 'audio', 'video']
+        allowed_types = ['text', 'image', 'file', 'document', 'audio', 'video', 'voice']
         if v not in allowed_types:
             raise ValueError(f"message_type must be one of {allowed_types}")
         return v

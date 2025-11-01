@@ -34,6 +34,7 @@ class Database:
                 print(f"[INFO] Environment: {'Production' if 'render' in str(mongodb_uri).lower() else 'Development'}")
                 
                 # Create MongoDB client with better connection parameters
+                # Suppress background periodic task errors by adjusting timeouts and pool settings
                 self.client = MongoClient(
                     mongodb_uri, 
                     serverSelectionTimeoutMS=60000,  # 60 seconds
@@ -43,9 +44,14 @@ class Database:
                     retryReads=True,
                     maxPoolSize=10,
                     minPoolSize=1,
-                    heartbeatFrequencyMS=10000,      # Send heartbeats every 10 seconds
-                    maxIdleTimeMS=45000             # Close connections after 45s idle
+                    heartbeatFrequencyMS=30000,     # Send heartbeats every 30 seconds (less frequent)
+                    maxIdleTimeMS=300000,           # Close connections after 5 minutes idle
+                    waitQueueTimeoutMS=60000       # Wait up to 60s for connection from pool
                 )
+                
+                # Suppress background periodic task errors
+                pymongo_logger = logging.getLogger('pymongo')
+                pymongo_logger.setLevel(logging.WARNING)  # Only show warnings and errors
                 
                 # Test connection
                 self.client.admin.command('ping')
@@ -127,10 +133,18 @@ class Database:
             # Patient indexes
             if self.patients_collection is not None:
                 try:
-                    self.patients_collection.create_index("patient_id", unique=True)
+                    # Create index with sparse=True to match existing database index
+                    # This allows null values and matches the existing index specification
+                    self.patients_collection.create_index("patient_id", unique=True, sparse=True)
                     print("[SUCCESS] patient_id index created")
                 except Exception as e:
-                    print(f"[WARNING] patient_id index: {e}")
+                    error_msg = str(e)
+                    # Check if it's just a conflict with existing index (which is acceptable)
+                    # If index already exists with compatible settings, this is fine
+                    if 'IndexKeySpecsConflict' in error_msg or 'already exists' in error_msg.lower():
+                        print("[INFO] patient_id index already exists with compatible settings")
+                    else:
+                        print(f"[WARNING] patient_id index: {e}")
                 
                 try:
                     self.patients_collection.create_index("email", unique=True, sparse=True)
@@ -207,7 +221,7 @@ class Database:
     
     def get_collection(self, collection_name):
         """Get a specific collection"""
-        if not self.is_connected:
+        if not self.is_connected or not self.db:
             raise Exception("Database not connected")
         
         return self.db[collection_name]

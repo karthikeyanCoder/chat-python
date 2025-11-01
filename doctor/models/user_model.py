@@ -21,7 +21,13 @@ class UserModel:
         else:
             self.db = db
         
-        self.users_collection = self.db.db.users
+        # Check if database connection is valid
+        is_connected = getattr(self.db, 'is_connected', False)
+        if self.db is not None and self.db.db is not None and is_connected:
+            self.users_collection = self.db.db.users
+        else:
+            self.users_collection = None
+            print("⚠️ Warning: Database not connected. UserModel operating in fallback mode.")
     
     def _hash_password(self, password: str) -> str:
         """Hash password using SHA-256"""

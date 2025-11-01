@@ -18,6 +18,73 @@ class DoctorAvailabilityController:
         """Create availability slots for doctor"""
         try:
             data = request.get_json()
+
+            # Adapter A: If neither 'types' nor 'slots' provided, auto-generate 30-min slots from work_hours and breaks
+            def _generate_slots_30m(work_hours: dict, breaks: list):
+                import datetime as dt
+                def to_time(s):
+                    return dt.datetime.strptime(s, "%H:%M").time()
+                def minutes(t):
+                    return t.hour * 60 + t.minute
+                def overlap(a_start, a_end, b_start, b_end):
+                    return not (a_end <= b_start or a_start >= b_end)
+
+                if not isinstance(work_hours, dict) or 'start_time' not in work_hours or 'end_time' not in work_hours:
+                    return []
+                start = to_time(work_hours['start_time'])
+                end = to_time(work_hours['end_time'])
+                work_start, work_end = minutes(start), minutes(end)
+                blocked = []
+                for br in (breaks or []):
+                    try:
+                        bs, be = minutes(to_time(br['start_time'])), minutes(to_time(br['end_time']))
+                        blocked.append((bs, be))
+                    except Exception:
+                        continue
+
+                slots = []
+                cur = work_start
+                slot_index = 1
+                while cur + 30 <= work_end:
+                    ns = cur
+                    ne = cur + 30
+                    if not any(overlap(ns, ne, b[0], b[1]) for b in blocked):
+                        s_h, s_m = divmod(ns, 60)
+                        e_h, e_m = divmod(ne, 60)
+                        slots.append({
+                            'slot_id': f"slot_{slot_index:03d}",
+                            'start_time': f"{s_h:02d}:{s_m:02d}",
+                            'end_time': f"{e_h:02d}:{e_m:02d}",
+                            'is_booked': False
+                        })
+                        slot_index += 1
+                    cur += 30
+                return slots
+
+            if 'types' not in data and 'slots' not in data:
+                auto_slots = _generate_slots_30m(data.get('work_hours') or {}, data.get('breaks', []))
+                if auto_slots:
+                    data['slots'] = auto_slots
+
+            # Adapter B: Accept top-level slots and wrap into a default appointment type
+            if 'types' not in data and isinstance(data.get('slots'), list):
+                wrapped_slots = []
+                slot_counter = 1
+                for s in data['slots']:
+                    slot = dict(s)
+                    if 'slot_id' not in slot or not slot.get('slot_id'):
+                        slot['slot_id'] = f"slot_{slot_counter:03d}"
+                    wrapped_slots.append(slot)
+                    slot_counter += 1
+                
+                data['types'] = [{
+                    'type': data.get('appointment_type', 'General Consultation'),
+                    'duration_mins': data.get('duration_mins', 30),
+                    'price': data.get('price', 0.0),
+                    'currency': data.get('currency', 'USD'),
+                    'slots': wrapped_slots
+                }]
+                data.pop('slots', None)
             
             # Validate required fields
             required_fields = ['date', 'work_hours', 'types', 'consultation_type']
@@ -84,6 +151,8 @@ class DoctorAvailabilityController:
             date = request.args.get('date')
             start_date = request.args.get('start_date')
             end_date = request.args.get('end_date')
+            consultation_type = request.args.get('consultation_type')
+            appointment_type = request.args.get('appointment_type')  # optional filter for types.type
             
             # Validate date parameters
             if date and not self._validate_date_format(date):
@@ -103,8 +172,22 @@ class DoctorAvailabilityController:
             else:
                 date_range = None
             
-            # Get availability
-            result = self.availability_model.get_doctor_availability(doctor_id, date, date_range)
+            # Get availability (optionally filter by consultation type)
+            result = self.availability_model.get_doctor_availability(doctor_id, date, date_range, consultation_type)
+
+            # If appointment_type provided, filter types within each availability doc
+            if result.get('success') and appointment_type:
+                filtered = []
+                for avail in result.get('availability', []):
+                    types_arr = avail.get('types', [])
+                    kept_types = [t for t in types_arr if str(t.get('type', '')).strip() == appointment_type]
+                    if kept_types:
+                        # Make a shallow copy to avoid mutating original
+                        new_avail = dict(avail)
+                        new_avail['types'] = kept_types
+                        filtered.append(new_avail)
+                result['availability'] = filtered
+                result['total_count'] = len(filtered)
             
             if result['success']:
                 return jsonify({
@@ -127,6 +210,7 @@ class DoctorAvailabilityController:
     def get_availability_by_date(self, request, doctor_id: str, date: str):
         """Get doctor's availability for specific date"""
         try:
+            consultation_type = request.args.get('consultation_type')
             # Validate date format
             if not self._validate_date_format(date):
                 return jsonify({
@@ -134,8 +218,8 @@ class DoctorAvailabilityController:
                     'error': 'Invalid date format. Use YYYY-MM-DD'
                 }), 400
             
-            # Get availability for specific date
-            result = self.availability_model.get_doctor_availability(doctor_id, date)
+            # Get availability for specific date (optionally filter by consultation type)
+            result = self.availability_model.get_doctor_availability(doctor_id, date, None, consultation_type)
             
             if result['success']:
                 return jsonify({
@@ -158,6 +242,7 @@ class DoctorAvailabilityController:
     def get_available_slots_by_type(self, request, doctor_id: str, date: str, appointment_type: str):
         """Get available slots for specific appointment type"""
         try:
+            consultation_type = request.args.get('consultation_type')
             # Validate date format
             if not self._validate_date_format(date):
                 return jsonify({
@@ -165,8 +250,8 @@ class DoctorAvailabilityController:
                     'error': 'Invalid date format. Use YYYY-MM-DD'
                 }), 400
             
-            # Get available slots
-            result = self.availability_model.get_available_slots_by_type(doctor_id, date, appointment_type)
+            # Get available slots (optionally filter by consultation type)
+            result = self.availability_model.get_available_slots_by_type(doctor_id, date, appointment_type, consultation_type)
             
             if result['success']:
                 return jsonify({
@@ -308,6 +393,7 @@ class DoctorAvailabilityController:
             data = request.get_json()
             appointment_id = data.get('appointment_id')
             cancellation_reason = data.get('cancellation_reason', 'Cancelled by doctor')
+            consultation_type = request.args.get('consultation_type')
             
             if not appointment_id:
                 return jsonify({
@@ -322,9 +408,9 @@ class DoctorAvailabilityController:
                     'error': 'Invalid date format. Use YYYY-MM-DD'
                 }), 400
             
-            # Cancel the slot
+            # Cancel the slot (optionally filter by consultation type)
             result = self.availability_model.cancel_appointment_slot(
-                doctor_id, date, slot_id, appointment_id, cancellation_reason
+                doctor_id, date, slot_id, appointment_id, cancellation_reason, consultation_type
             )
             
             if result['success']:
@@ -350,6 +436,7 @@ class DoctorAvailabilityController:
         """Book a specific availability slot"""
         try:
             data = request.get_json()
+            consultation_type = request.args.get('consultation_type')
             
             # Validate required fields
             required_fields = ['slot_id', 'patient_id', 'appointment_id']
@@ -377,7 +464,8 @@ class DoctorAvailabilityController:
                 date=date,
                 slot_id=slot_id,
                 patient_id=patient_id,
-                appointment_id=appointment_id
+                appointment_id=appointment_id,
+                consultation_type=consultation_type
             )
             
             if result['success']:
@@ -405,6 +493,7 @@ class DoctorAvailabilityController:
     def get_booked_slots(self, request, doctor_id: str, date: str):
         """Get all booked slots for a specific date"""
         try:
+            consultation_type = request.args.get('consultation_type')
             # Validate date format
             if not self._validate_date_format(date):
                 return jsonify({
@@ -412,8 +501,8 @@ class DoctorAvailabilityController:
                     'error': 'Invalid date format. Use YYYY-MM-DD'
                 }), 400
             
-            # Get booked slots
-            result = self.availability_model.get_booked_slots_by_date(doctor_id, date)
+            # Get booked slots (optionally filter by consultation type)
+            result = self.availability_model.get_booked_slots_by_date(doctor_id, date, consultation_type)
             
             if result['success']:
                 return jsonify({
@@ -435,11 +524,58 @@ class DoctorAvailabilityController:
                 'error': f'Failed to get booked slots: {str(e)}'
             }), 500
     
+    def get_available_slots_only(self, request, doctor_id: str, date: str):
+        """Get only unbooked slots for a date in simple format"""
+        try:
+            consultation_type = request.args.get('consultation_type')
+            
+            # Validate date format
+            if not self._validate_date_format(date):
+                return jsonify({
+                    'success': False,
+                    'error': 'Invalid date format. Use YYYY-MM-DD'
+                }), 400
+            
+            # Get availability for the date
+            result = self.availability_model.get_doctor_availability(
+                doctor_id, date, None, consultation_type
+            )
+            
+            if not result.get('success'):
+                return jsonify({
+                    'success': False,
+                    'error': result.get('error', 'Failed to get availability')
+                }), 500
+            
+            # Collect all unbooked slots
+            all_slots = []
+            for avail in result.get('availability', []):
+                for t in avail.get('types', []):
+                    for slot in t.get('slots', []):
+                        if not slot.get('is_booked'):
+                            all_slots.append({
+                                'start_time': slot.get('start_time'),
+                                'end_time': slot.get('end_time'),
+                                'is_booked': False
+                            })
+            
+            return jsonify({
+                'success': True,
+                'slots': all_slots
+            }), 200
+                
+        except Exception as e:
+            return jsonify({
+                'success': False,
+                'error': f'Failed to get available slots: {str(e)}'
+            }), 500
+    
     def cancel_all_appointments_for_date(self, request, doctor_id: str, date: str):
         """Cancel all appointments for a specific date"""
         try:
             data = request.get_json() or {}
             cancellation_reason = data.get('cancellation_reason', 'Full day cancelled by doctor')
+            consultation_type = request.args.get('consultation_type')
             
             # Validate date format
             if not self._validate_date_format(date):
@@ -458,7 +594,7 @@ class DoctorAvailabilityController:
             
             # Cancel all appointments
             result = self.availability_model.cancel_all_appointments_for_date(
-                doctor_id, date, cancellation_reason
+                doctor_id, date, cancellation_reason, consultation_type
             )
             
             if result['success']:
@@ -486,6 +622,7 @@ class DoctorAvailabilityController:
     def get_date_appointment_summary(self, request, doctor_id: str, date: str):
         """Get summary of all appointments for a specific date"""
         try:
+            consultation_type = request.args.get('consultation_type')
             # Validate date format
             if not self._validate_date_format(date):
                 return jsonify({
@@ -494,7 +631,7 @@ class DoctorAvailabilityController:
                 }), 400
             
             # Get appointment summary
-            result = self.availability_model.get_date_appointment_summary(doctor_id, date)
+            result = self.availability_model.get_date_appointment_summary(doctor_id, date, consultation_type)
             
             if result['success']:
                 return jsonify({

@@ -1926,6 +1926,30 @@ def get_doctor_booked_slots(doctor_id, date):
     except Exception as e:
         return jsonify({'success': False, 'error': f'Failed to get booked slots: {str(e)}'}), 500
 
+@app.route('/doctor/<doctor_id>/availability/<date>/available-slots', methods=['GET'])
+def get_doctor_available_slots_only(doctor_id, date):
+    """Get only unbooked slots for a specific date"""
+    try:
+        # Verify JWT token
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({'success': False, 'error': 'Authorization header required'}), 401
+        
+        token = auth_header.split(' ')[1] if auth_header.startswith('Bearer ') else auth_header
+        verification_result = jwt_service.verify_access_token(token)
+        if verification_result['success']:
+            decoded_token = verification_result['data']
+        else:
+            decoded_token = None
+        
+        if not decoded_token or decoded_token.get('user_id') != doctor_id:
+            return jsonify({'success': False, 'error': 'Invalid or unauthorized token'}), 401
+        
+        return availability_controller.get_available_slots_only(request, doctor_id, date)
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to get available slots: {str(e)}'}), 500
+
 @app.route('/doctor/<doctor_id>/availability/<date>/book-slot', methods=['POST'])
 def book_doctor_slot(doctor_id, date):
     """Book a specific slot - called by patient module"""
@@ -2032,6 +2056,76 @@ def get_public_available_slots(doctor_id, date, appointment_type):
 # ============================================================================
 # PATIENT AUTHENTICATED AVAILABILITY ROUTES (JWT Required)
 # ============================================================================
+
+@app.route('/patient/doctor/<doctor_id>/availability', methods=['GET'])
+def get_patient_doctor_availability_overall(doctor_id):
+    """Patient-authenticated: overall availability (optional filters)
+    Query params:
+      - date=YYYY-MM-DD (optional)
+      - start_date=YYYY-MM-DD & end_date=YYYY-MM-DD (optional)
+      - consultation_type=Online|In-Person (optional)
+      - appointment_type=... (optional, filters types.type)
+    If no date/range provided, returns all active availability for the doctor.
+    """
+    try:
+        # Verify patient JWT token
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({'success': False, 'error': 'Authorization header required'}), 401
+
+        token = auth_header.split(' ')[1] if auth_header.startswith('Bearer ') else auth_header
+        verification_result = jwt_service.verify_access_token(token)
+        if verification_result['success']:
+            decoded_token = verification_result['data']
+        else:
+            decoded_token = None
+        if not decoded_token:
+            return jsonify({'success': False, 'error': 'Invalid or expired token'}), 401
+
+        # Parse filters
+        date = request.args.get('date')
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+        consultation_type = request.args.get('consultation_type')
+        appointment_type = request.args.get('appointment_type')
+
+        date_range = None
+        if not date and start_date and end_date:
+            date_range = {'start_date': start_date, 'end_date': end_date}
+
+        # Get availability using model directly (patient context)
+        result = availability_model.get_doctor_availability(
+            doctor_id=doctor_id,
+            date=date,
+            date_range=date_range,
+            consultation_type=consultation_type
+        )
+
+        if not result.get('success'):
+            return jsonify({'success': False, 'error': result.get('error', 'Unknown error')}), 500
+
+        availability_list = result.get('availability', [])
+
+        # Optional filter by appointment_type (filter types list inside each doc)
+        if appointment_type:
+            filtered = []
+            for avail in availability_list:
+                types_arr = avail.get('types', [])
+                kept_types = [t for t in types_arr if str(t.get('type', '')).strip() == appointment_type]
+                if kept_types:
+                    new_avail = dict(avail)
+                    new_avail['types'] = kept_types
+                    filtered.append(new_avail)
+            availability_list = filtered
+
+        return jsonify({
+            'success': True,
+            'availability': availability_list,
+            'total_count': len(availability_list)
+        }), 200
+
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Failed to get availability: {str(e)}'}), 500
 
 @app.route('/patient/doctor/<doctor_id>/availability/<date>', methods=['GET'])
 def get_patient_doctor_availability(doctor_id, date):
