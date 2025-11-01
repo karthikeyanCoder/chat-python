@@ -4,7 +4,6 @@
 
 The patient-side doctor availability system has been successfully implemented with JWT authentication. Here's what was accomplished:
 
-
 ### **🔧 Changes Made:**
 
 #### **1. Patient Module (`patient/`)**
